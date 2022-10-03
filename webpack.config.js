@@ -5,9 +5,9 @@ const { argv } = require("process");
 module.exports = {
     entry: path.join(__dirname, "src", "index.tsx"),
     output: {
+        publicPath: argv.mode !== "development" ? "/courseProject-front" : "/",
         path: path.join(__dirname, "build"),
         filename: "index.bundle.js",
-        publicPath: argv.mode === "production" ? "/courseProject-front" : "/",
     },
     mode: process.env.NODE_ENV || "development",
     resolve: {

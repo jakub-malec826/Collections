@@ -49,7 +49,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: path.join(__dirname, "src", "index.html"),
             publicPath:
-                argv.mode === "production" ? "/CourseProject-front" : "/",
+                argv.mode === "production" ? "/courseProject-front" : "/",
         }),
     ],
 };

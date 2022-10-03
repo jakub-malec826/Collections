@@ -24,7 +24,7 @@
     "bugs": {
         "url": "https://github.com/jakub-malec826/courseProject-front/issues"
     },
-    "homepage": "https://github.com/jakub-malec826/courseProject-front#readme",
+    "homepage": ".",
     "dependencies": {
         "@reduxjs/toolkit": "^1.8.5",
         "@types/react": "^18.0.21",

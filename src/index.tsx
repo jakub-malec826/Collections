@@ -1,20 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 
 import { Provider } from "react-redux";
 import store from "./store/Store";
 
 import "bootstrap/dist/css/bootstrap.css";
 
-import HomePage from "./routes/HomePage";
-
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <HomePage />,
-    },
-]);
+import NavigationBar from "./components/NavigationBar";
+import Router from "./routes/Router";
 
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
@@ -22,8 +16,11 @@ const root = ReactDOM.createRoot(
 
 root.render(
     <React.StrictMode>
-        <Provider store={store}>
-            <RouterProvider router={router} />
-        </Provider>
+        <HashRouter>
+            <Provider store={store}>
+                <NavigationBar />
+                <Router />
+            </Provider>
+        </HashRouter>
     </React.StrictMode>
 );

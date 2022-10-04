@@ -14,9 +14,11 @@ const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
 );
 
+const baseName = "/courseProject_front";
+
 root.render(
     <React.StrictMode>
-        <HashRouter>
+        <HashRouter basename={baseName}>
             <Provider store={store}>
                 <NavigationBar />
                 <Router />

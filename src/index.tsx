@@ -2,9 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { HashRouter } from "react-router-dom";
 
-import { Provider } from "react-redux";
-import store from "./store/Store";
-
 import "bootstrap/dist/css/bootstrap.css";
 
 import NavigationBar from "./components/NavigationBar";
@@ -19,10 +16,8 @@ const baseName = "/";
 root.render(
     <React.StrictMode>
         <HashRouter basename={baseName}>
-            <Provider store={store}>
-                <NavigationBar />
-                <Router />
-            </Provider>
+            <NavigationBar />
+            <Router />
         </HashRouter>
     </React.StrictMode>
 );

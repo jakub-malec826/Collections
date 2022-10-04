@@ -14,7 +14,7 @@ const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
 );
 
-const baseName = "/courseProject_front/";
+const baseName = "/";
 
 root.render(
     <React.StrictMode>

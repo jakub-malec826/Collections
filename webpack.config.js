@@ -6,7 +6,7 @@ module.exports = {
     output: {
         path: path.join(__dirname, "build"),
         filename: "index.bundle.js",
-        publicPath: `${process.env.PUBLIC_URL}/`,
+        publicPath: process.env.PUBLIC_URL,
     },
     mode: process.env.NODE_ENV || "development",
     resolve: {

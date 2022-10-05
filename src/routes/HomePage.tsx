@@ -1,7 +1,3 @@
 export default function HomePage() {
-    return (
-        <div>
-            eeee
-        </div>
-    );
+    return <div>{localStorage.getItem("user")}</div>;
 }

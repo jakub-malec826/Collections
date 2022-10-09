@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import ValidateFormWithDb from "../connectWithServer/ValidateFormWithDb";
 import { useNavigate } from "react-router-dom";
+import FormRow from "../components/FormRow";
 
 interface FormsIF {
     formType: string;
@@ -57,43 +58,29 @@ export default function Forms({ formType }: FormsIF) {
             )}
 
             {formType === "signup" && (
-                <Row className="mx-auto w-50 m-1">
-                    <Form.Floating>
-                        <Form.Control
-                            type="email"
-                            placeholder="email"
-                            name="email"
-                            value={state.email}
-                            onChange={handleChange}
-                        />
-                        <Form.Label>Email</Form.Label>
-                    </Form.Floating>
-                </Row>
+                <FormRow
+                    type="email"
+                    name="email"
+                    value={state.email}
+                    placeholder="Email"
+                    onChange={handleChange}
+                />
             )}
-            <Row className="mx-auto w-50 m-1">
-                <Form.Floating>
-                    <Form.Control
-                        type="text"
-                        placeholder="userName"
-                        name="userName"
-                        value={state.userName}
-                        onChange={handleChange}
-                    />
-                    <Form.Label>User Name</Form.Label>
-                </Form.Floating>
-            </Row>
-            <Row className="mx-auto w-50 m-1">
-                <Form.Floating>
-                    <Form.Control
-                        type="password"
-                        placeholder="Password"
-                        name="password"
-                        value={state.password}
-                        onChange={handleChange}
-                    />
-                    <Form.Label>Password</Form.Label>
-                </Form.Floating>
-            </Row>
+            <FormRow
+                type="text"
+                name="userName"
+                value={state.userName}
+                placeholder="User Name"
+                onChange={handleChange}
+            />
+            <FormRow
+                type="password"
+                name="password"
+                value={state.password}
+                placeholder="Password"
+                onChange={handleChange}
+            />
+
             <Row className="mx-auto w-50 m-1">
                 <Button type="submit" variant="primary" className="w-auto m-1">
                     {formType === "signin" ? "Sign In" : "Sign up"}
@@ -101,7 +88,11 @@ export default function Forms({ formType }: FormsIF) {
                 <Button
                     variant="secondary"
                     onClick={() =>
-                        nav(`/${formType === "signin" ? "signup" : "signin"}`)
+                        nav(
+                            `/auth/${
+                                formType === "signin" ? "signup" : "signin"
+                            }`
+                        )
                     }
                     className="w-auto ms-auto m-1"
                 >

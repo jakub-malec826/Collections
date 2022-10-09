@@ -1,34 +1,55 @@
 import { useEffect, useState } from "react";
 import { Navbar, Nav } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { UsersState } from "../store/Store";
 
 export default function NavigationBar() {
     const [isHidden, setIsHidden] = useState(true);
     const nav = useNavigate();
 
+    const users = useSelector((state: UsersState) => state.userReducer.users);
+
     useEffect(() => {
-        if (localStorage.getItem("user") === null) {
+        if (sessionStorage.getItem("user") === null) {
             setIsHidden(true);
         } else setIsHidden(false);
-    }, [localStorage.getItem("user"), setIsHidden]);
+    }, [sessionStorage.getItem("user"), setIsHidden]);
 
     return (
-        <Navbar expand="lg" bg="light" variant="light">
+        <Navbar expand="md" bg="light" variant="light">
             <Navbar.Brand className="ms-3" onClick={() => nav("/")}>
                 Collections
             </Navbar.Brand>
-            <Nav>
-                <Nav.Link>Your Site</Nav.Link>
-                <Nav.Link>Admin Panel</Nav.Link>
+            <Nav
+                onSelect={(selectedKey) =>
+                    selectedKey &&
+                    nav(selectedKey, {
+                        state: { name: sessionStorage.getItem("user") },
+                    })
+                }
+                hidden={isHidden}
+            >
+                <Nav.Link eventKey={`/${sessionStorage.getItem("user")}`}>
+                    Your Site
+                </Nav.Link>
+                <Nav.Link eventKey={`/${sessionStorage.getItem("user")}/admin`}>
+                    Admin Panel
+                </Nav.Link>
             </Nav>
-            <Nav className="ms-auto me-3">
-                <Nav.Link onClick={() => nav("/signin")}>Sign in</Nav.Link>
-                <Nav.Link onClick={() => nav("/signup")}>Sign up</Nav.Link>
+            <Nav
+                className="ms-auto me-3"
+                onSelect={(selectedKey) => selectedKey && nav(selectedKey)}
+            >
+                <Nav.Link eventKey="/auth/signin" hidden={!isHidden}>
+                    Sign in
+                </Nav.Link>
+                <Nav.Link eventKey="/auth/signup" hidden={!isHidden}>
+                    Sign up
+                </Nav.Link>
                 <Nav.Link
-                    onClick={() => {
-                        localStorage.clear();
-                        nav("/");
-                    }}
+                    eventKey="/"
+                    onClick={() => sessionStorage.clear()}
                     hidden={isHidden}
                 >
                     Log out

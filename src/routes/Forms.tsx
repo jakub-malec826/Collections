@@ -31,8 +31,10 @@ export default function Forms({ formType }: FormsIF) {
         if (data !== "OK") setErr(data);
         else {
             setErr("");
-            localStorage.setItem("user", state.userName);
-            nav(`/`);
+            sessionStorage.setItem("user", state.userName);
+            nav(`/${state.userName}`, {
+                state: { name: sessionStorage.getItem("user") },
+            });
         }
     };
 

@@ -7,6 +7,9 @@ import "bootstrap/dist/css/bootstrap.css";
 import NavigationBar from "./components/NavigationBar";
 import Router from "./routes/Router";
 
+import store from "./store/Store";
+import { Provider } from "react-redux";
+
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
 );
@@ -14,10 +17,10 @@ const root = ReactDOM.createRoot(
 const baseName = "/";
 
 root.render(
-    <React.StrictMode>
+    <Provider store={store}>
         <HashRouter basename={baseName}>
             <NavigationBar />
             <Router />
         </HashRouter>
-    </React.StrictMode>
+    </Provider>
 );

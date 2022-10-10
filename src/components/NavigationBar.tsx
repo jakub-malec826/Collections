@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Dispatch } from "react";
 import { Navbar, Nav } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { UsersState } from "../store/Store";
+import { setUserToNull } from "../store/features/user/OneUserSlice";
 
 export default function NavigationBar() {
     const [isHidden, setIsHidden] = useState(true);
     const nav = useNavigate();
-
-    const users = useSelector((state: UsersState) => state.userReducer.users);
+    const dispatch = useDispatch();
+    const user = useSelector((state: UsersState) => state.oneUserReducer.user);
 
     useEffect(() => {
         if (sessionStorage.getItem("user") === null) {
@@ -33,7 +34,10 @@ export default function NavigationBar() {
                 <Nav.Link eventKey={`/${sessionStorage.getItem("user")}`}>
                     Your Site
                 </Nav.Link>
-                <Nav.Link eventKey={`/${sessionStorage.getItem("user")}/admin`}>
+                <Nav.Link
+                    eventKey={`/${sessionStorage.getItem("user")}/admin`}
+                    hidden={!user.isAdmin}
+                >
                     Admin Panel
                 </Nav.Link>
             </Nav>
@@ -49,7 +53,10 @@ export default function NavigationBar() {
                 </Nav.Link>
                 <Nav.Link
                     eventKey="/"
-                    onClick={() => sessionStorage.clear()}
+                    onClick={() => {
+                        sessionStorage.clear();
+                        dispatch(setUserToNull());
+                    }}
                     hidden={isHidden}
                 >
                     Log out

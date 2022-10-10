@@ -3,7 +3,7 @@ import serverUrl from "./serverUrl";
 export default async function ChangeUsersStatus(
     name: string,
     id: string[],
-    callback?: Function
+    callback?: Function,
 ) {
     await fetch(`${serverUrl}admin/${name}`, {
         method: "post",
@@ -14,5 +14,5 @@ export default async function ChangeUsersStatus(
         body: JSON.stringify(id),
     })
         .then((res) => res.json())
-        .then((data) => (callback && callback(data)) || console.log(data));
+        .then((data) => (callback && callback(data)));
 }

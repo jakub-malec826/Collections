@@ -1,9 +1,13 @@
 import { Form, Row, Button, Alert } from "react-bootstrap";
-import { useState } from "react";
+import { useState, Dispatch } from "react";
 
 import ValidateFormWithDb from "../connectWithServer/ValidateFormWithDb";
 import { useNavigate } from "react-router-dom";
 import FormRow from "../components/FormRow";
+import { useDispatch, useSelector } from "react-redux";
+import { UsersState } from "../store/Store";
+import { setUser } from "../store/features/user/OneUserSlice";
+import UserDataIF from "../interfaces/UserDataIF";
 
 interface FormsIF {
     formType: string;
@@ -15,6 +19,9 @@ interface valuesIF {
 }
 
 export default function Forms({ formType }: FormsIF) {
+    const dispatch = useDispatch();
+    const user = useSelector((state: UsersState) => state.oneUserReducer.user);
+
     const [err, setErr] = useState("");
     const stateObj: valuesIF = {
         email: "",
@@ -28,14 +35,18 @@ export default function Forms({ formType }: FormsIF) {
         setState({ ...state, [e.target.name]: e.target.value });
     };
 
-    const SetErrMessCallback = (data: string) => {
-        if (data !== "OK") setErr(data);
+    const SetErrMessCallback = (data: {
+        message: string;
+        body: UserDataIF | null;
+    }) => {
+        if (data.message !== "OK") setErr(data.message);
         else {
             setErr("");
             sessionStorage.setItem("user", state.userName);
             nav(`/${state.userName}`, {
                 state: { name: sessionStorage.getItem("user") },
             });
+            dispatch(setUser(data.body));
         }
     };
 

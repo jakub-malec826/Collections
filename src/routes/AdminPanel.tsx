@@ -4,9 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { UsersState } from "../store/Store";
 
-import GetAllUsers from "../connectWithServer/GetAllUsers";
-import { getUsers } from "../store/features/users/UsersSlice";
 import ChangeUsersStatus from "../connectWithServer/ChangeUsersStatus";
+
+import { GetAllDataUsers } from "../store/features/users/UsersSlice";
+import UserInAdminPanel from "../components/UserInAdminPanel";
+import { AnyAction } from "redux";
 
 export default function AdminPanel() {
     const users = useSelector((state: UsersState) => state.userReducer.users);
@@ -16,10 +18,7 @@ export default function AdminPanel() {
     const [isCheck, setIsCheck] = useState<string[]>(users.map((u) => u._id));
 
     useEffect(() => {
-        const getData = async () => {
-            users.length === 0 && dispatch(getUsers(await GetAllUsers()));
-        };
-        getData();
+        dispatch(GetAllDataUsers() as unknown as AnyAction);
     }, [users]);
 
     const handleSelectAll = () => {
@@ -29,8 +28,6 @@ export default function AdminPanel() {
     };
 
     const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (isCheck.length === users.length - 1) setCheckAll(true);
-        else setCheckAll(false);
         const { id, checked } = e.target;
         setIsCheck([...isCheck, id]);
         if (!checked) setIsCheck(isCheck.filter((i) => i !== id));
@@ -41,16 +38,11 @@ export default function AdminPanel() {
             <ButtonGroup className="mx-auto mx-3 mt-3">
                 <Button
                     variant="light"
-                    onClick={async () => ChangeUsersStatus("block", isCheck)}
+                    onClick={async () => ChangeUsersStatus("status", isCheck)}
                 >
-                    Block
+                    Block / Unblock
                 </Button>
-                <Button
-                    variant="light"
-                    onClick={async () => ChangeUsersStatus("unblock", isCheck)}
-                >
-                    Unlock
-                </Button>
+
                 <Button
                     variant="light"
                     onClick={async () => ChangeUsersStatus("isadmin", isCheck)}
@@ -76,28 +68,12 @@ export default function AdminPanel() {
                 </thead>
                 <tbody>
                     {users.map((u) => (
-                        <tr key={users.indexOf(u)}>
-                            <td>
-                                <Form.Check.Input
-                                    type="checkbox"
-                                    id={u._id}
-                                    checked={isCheck.includes(u._id)}
-                                    onChange={handleCheck}
-                                />
-                            </td>
-                            <td
-                                className={
-                                    sessionStorage.getItem("user") ===
-                                    u.userName
-                                        ? "fw-bold"
-                                        : ""
-                                }
-                            >
-                                {u.userName}
-                            </td>
-                            <td>{u.isAdmin ? "True" : "False"}</td>
-                            <td>{u.status}</td>
-                        </tr>
+                        <UserInAdminPanel
+                            key={users.indexOf(u)}
+                            user={u}
+                            isCheck={isCheck}
+                            handleCheck={handleCheck}
+                        />
                     ))}
                 </tbody>
             </Table>

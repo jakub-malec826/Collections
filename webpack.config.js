@@ -3,11 +3,11 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const enviroment =
-    process.env.NODE_ENV === "production" ? "production" : "deployment";
+    process.env.NODE_ENV === "development" ? "development" : "production";
 
 const apiUrls = {
     production: "https://courseproject-back.herokuapp.com/",
-    deployment: "http://192.168.0.145:9090/",
+    development: "http://192.168.0.145:9090/",
 };
 
 module.exports = {

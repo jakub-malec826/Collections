@@ -6,7 +6,7 @@
     "scripts": {
         "build": "webpack",
         "deploy": "gh-pages -d build",
-        "publish": "npm run build && npm run deploy",
+        "publish": "NODE_ENV=production npm run build && npm run deploy",
         "start": "webpack serve",
         "test": "echo \"Error: no test specified\" && exit 1"
     },

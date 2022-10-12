@@ -2,9 +2,8 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-const enviroment = (process.env.NODE_ENV === "production"
-    ? "production"
-    : "deployment");
+const enviroment =
+    process.env.NODE_ENV === "production" ? "production" : "deployment";
 
 const apiUrls = {
     production: "https://courseproject-back.herokuapp.com/",
@@ -18,6 +17,7 @@ module.exports = {
         filename: "index.bundle.js",
         publicPath: process.env.PUBLIC_URL,
     },
+    devtool: enviroment === "production" ? false : "inline-source-map",
     mode: process.env.NODE_ENV || "development",
     resolve: {
         extensions: [".tsx", ".ts", ".js"],

@@ -1,10 +1,14 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
+
 import UserReducer from "./features/users/UsersSlice";
-import OneUserReducer from "./features/user/OneUserSlice";
+import OneUserReducer from "./features/user/ActualUserSlice";
+import FormsVisReducer from "./features/Forms/FormsVisSlice";
 
 const reducers = combineReducers({
     userReducer: UserReducer,
     oneUserReducer: OneUserReducer,
+    formsVisReducer: FormsVisReducer,
 });
 
 const store = configureStore({
@@ -13,4 +17,6 @@ const store = configureStore({
 
 export default store;
 
-export type UsersState = ReturnType<typeof store.getState>;
+export type StoreState = ReturnType<typeof store.getState>;
+
+export const useStoreDispatch = useDispatch<typeof store.dispatch>;

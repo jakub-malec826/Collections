@@ -1,5 +1,15 @@
 const path = require("path");
+const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+const enviroment = (process.env.NODE_ENV === "production"
+    ? "production"
+    : "deployment");
+
+const apiUrls = {
+    production: "https://courseproject-back.herokuapp.com/",
+    deployment: "http://192.168.0.145:9090/",
+};
 
 module.exports = {
     entry: path.join(__dirname, "src", "index.tsx"),
@@ -48,6 +58,9 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: path.join(__dirname, "src", "index.html"),
+        }),
+        new webpack.DefinePlugin({
+            API_URL: JSON.stringify(apiUrls[enviroment]),
         }),
     ],
 };

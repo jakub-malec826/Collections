@@ -1,3 +1,3 @@
-const serverUrl =
-    "http://localhost:9090/" || "https://courseproject-back.herokuapp.com/";
+declare var API_URL: string;
+const serverUrl = API_URL;
 export default serverUrl;

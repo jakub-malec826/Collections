@@ -1,5 +1,5 @@
 import serverUrl from "./serverUrl";
-import HashPassword from "../components/HashPassword";
+import HashPassword from "../functions/HashPassword";
 
 interface UserDataSendIF {
     email: string;

@@ -1,6 +1,6 @@
 import { useRoutes } from "react-router-dom";
 import HomePage from "./HomePage";
-import Forms from "./Forms";
+import Forms from "./SignForms";
 import UserPage from "./UserPage";
 import AdminPanel from "./AdminPanel";
 

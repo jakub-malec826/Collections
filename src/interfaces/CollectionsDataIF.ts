@@ -2,7 +2,7 @@ import ItemsDataIF from './ItemsDataIF';
 
 export default interface CollectionsDataIF {
     name: string;
-    descriptions: string;
+    description: string;
     topic: string;
     image: string;
     owner: string;

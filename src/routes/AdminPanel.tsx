@@ -1,8 +1,8 @@
 import { Button, ButtonGroup, Form, Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
-import { UsersState } from "../store/Store";
+import { StoreState, useStoreDispatch } from "../store/Store";
 
 import ChangeUsersStatus from "../connectWithServer/ChangeUsersStatus";
 
@@ -11,14 +11,14 @@ import UserInAdminPanel from "../components/UserInAdminPanel";
 import { AnyAction } from "redux";
 
 export default function AdminPanel() {
-    const users = useSelector((state: UsersState) => state.userReducer.users);
-    const dispatch = useDispatch();
+    const users = useSelector((state: StoreState) => state.userReducer.users);
+    const dispatch = useStoreDispatch();
 
     const [checkAll, setCheckAll] = useState<boolean>(false);
     const [isCheck, setIsCheck] = useState<string[]>(users.map((u) => u._id));
 
     useEffect(() => {
-        dispatch(GetAllDataUsers() as unknown as AnyAction);
+        dispatch(GetAllDataUsers());
     }, [users]);
 
     const handleSelectAll = () => {
@@ -51,7 +51,7 @@ export default function AdminPanel() {
                 </Button>
             </ButtonGroup>
 
-            <Table striped bordered responsive="sm">
+            <Table striped bordered responsive="lg">
                 <thead>
                     <tr>
                         <th>

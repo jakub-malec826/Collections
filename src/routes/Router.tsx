@@ -9,8 +9,8 @@ export default function Router() {
         { path: "/", element: <HomePage /> },
         { path: "/auth/signin", element: <Forms formType="signin" /> },
         { path: "/auth/signup", element: <Forms formType="signup" /> },
-        { path: "/:username", element: <UserPage /> },
-        { path: "/:username/admin", element: <AdminPanel /> },
+        { path: "/:userName", element: <UserPage /> },
+        { path: "/:userName/admin", element: <AdminPanel /> },
     ]);
     return router;
 }

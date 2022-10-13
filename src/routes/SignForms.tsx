@@ -17,7 +17,7 @@ import UserDataIF from "../interfaces/UserDataIF";
 import HandleChange from "../functions/HandleChange";
 import FormsVisSlice, {
     hideForms,
-} from "../store/features/Forms/FormsVisSlice";
+} from "../store/features/offcanvas/FormsVisSlice";
 import { StoreState } from "../store/Store";
 import { ButtonGroup } from "react-bootstrap";
 
@@ -57,6 +57,7 @@ export default function Forms({ formType }: FormsIF) {
                 state: { name: sessionStorage.getItem("user") },
             });
             dispatch(setUser(data.body));
+            dispatch(hideForms());
         }
     };
 
@@ -64,7 +65,6 @@ export default function Forms({ formType }: FormsIF) {
         e.preventDefault();
         await ValidateFormWithDb(state, formType, SetErrMessCallback);
         setState({ ...stateObj });
-        dispatch(hideForms());
     };
 
     return (
@@ -79,7 +79,7 @@ export default function Forms({ formType }: FormsIF) {
             <Form onSubmit={handleSubmit}>
                 {err !== "" && (
                     <Row className="mx-auto w-25 m-1 text-center">
-                        <Alert variant="danger">{err}</Alert>
+                        <Alert variant="danger" >{err}</Alert>
                     </Row>
                 )}
                 {formType === "signup" && (

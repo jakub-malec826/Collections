@@ -1,4 +1,5 @@
 export default interface ItemsDataIF {
+    _id: string;
     id: number;
     name: string;
     tag: string[];

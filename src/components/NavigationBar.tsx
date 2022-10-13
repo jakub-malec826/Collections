@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Navbar, Nav } from "react-bootstrap";
+import { Navbar, Nav, Modal, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -9,7 +9,7 @@ import {
     deleteUser,
     getUserData,
 } from "../store/features/user/ActualUserSlice";
-import { showForms } from "../store/features/Forms/FormsVisSlice";
+import { showForms } from "../store/features/offcanvas/FormsVisSlice";
 
 export default function NavigationBar() {
     const [isHidden, setIsHidden] = useState(true);
@@ -20,12 +20,16 @@ export default function NavigationBar() {
 
     const user = useSelector((state: StoreState) => state.oneUserReducer.user);
 
+    const sessUser = sessionStorage.getItem("user");
+
     useEffect(() => {
-        if (sessionStorage.getItem("user") === null) {
+        if (sessUser === null) {
             setIsHidden(true);
-        } else setIsHidden(false);
-        storeDispatch(getUserData());
-    }, [sessionStorage.getItem("user"), setIsHidden]);
+        } else {
+            setIsHidden(false);
+            storeDispatch(getUserData(sessUser));
+        }
+    }, [sessUser, setIsHidden, user]);
 
     return (
         <Navbar expand="sm" bg="light" variant="light">
@@ -36,25 +40,27 @@ export default function NavigationBar() {
                 onSelect={(selectedKey) =>
                     selectedKey &&
                     nav(selectedKey, {
-                        state: { name: sessionStorage.getItem("user") },
+                        state: { name: sessUser },
                     })
                 }
                 hidden={isHidden}
             >
-                <Nav.Link eventKey={`/${sessionStorage.getItem("user")}`}>
-                    Your Site
-                </Nav.Link>
+                <Nav.Link eventKey={`/${sessUser}`}>Your Site</Nav.Link>
                 <Nav.Link
-                    eventKey={`/${sessionStorage.getItem("user")}/admin`}
+                    eventKey={`/${sessUser}/admin`}
                     hidden={user ? !user.isAdmin : false}
                 >
                     Admin Panel
                 </Nav.Link>
             </Nav>
+
             <Nav
                 className="ms-auto me-3"
                 onSelect={(selectedKey) => selectedKey && nav(selectedKey)}
             >
+                <Navbar.Text>
+                    You are logged as <strong>{user.userName}</strong>
+                </Navbar.Text>
                 <Nav.Item>
                     <Nav.Link
                         eventKey="/auth/signin"

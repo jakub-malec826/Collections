@@ -5,7 +5,7 @@ import { useState } from "react";
 import CollectionsDataIF from "../interfaces/CollectionsDataIF";
 import HandleChange from "../functions/HandleChange";
 import MarkdownEditor from "@uiw/react-markdown-editor";
-import { hideForms } from "../store/features/Forms/FormsVisSlice";
+import { hideForms } from "../store/features/offcanvas/FormsVisSlice";
 import AddNewColl from "../connectWithServer/AddNewColl";
 
 const topicList = ["books", "cars", "whiskey", "animals"];
@@ -19,12 +19,14 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
         (state: StoreState) => state.formsVisReducer.formVis
     );
     const dispatch = useDispatch();
+
     const [coll, setColl] = useState<CollectionsDataIF>({
+        _id: "",
         name: "",
         description: `Hello *world*
-    
 
-    Type something and try`,
+
+            Type something and try`,
         topic: "",
         image: "",
         owner: "",
@@ -47,7 +49,7 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
                         id="desc"
                         value={coll.description}
                         onChange={(v) =>
-                            v &&  setColl({ ...coll, description: v })
+                            v && setColl({ ...coll, description: v })
                         }
                         toolbars={[
                             "codeBlock",

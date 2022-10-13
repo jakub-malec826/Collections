@@ -1,4 +1,5 @@
 import { Form } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import UserDataIF from "../interfaces/UserDataIF";
 
 interface UserInAdminPanelIF {
@@ -29,7 +30,7 @@ export default function UserInAdminPanel({
                         : ""
                 }
             >
-                {user.userName}
+                <Link to={`/${user.userName}`} className="text-decoration-none" style={{color: "black"}}>{user.userName}</Link>
             </td>
             <td>{user.isAdmin ? "True" : "False"}</td>
             <td>{user.status}</td>

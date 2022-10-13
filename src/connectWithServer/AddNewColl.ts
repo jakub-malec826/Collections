@@ -6,7 +6,7 @@ export default async function AddNewColl(
     collection: CollectionsDataIF
 ) {
     console.log(userName);
-    await fetch(`${serverUrl}user/newcoll/`, {
+    await fetch(`${serverUrl}users/${userName}/newcoll/`, {
         method: "post",
         mode: "cors",
         headers: {

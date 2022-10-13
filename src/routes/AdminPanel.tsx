@@ -8,14 +8,13 @@ import ChangeUsersStatus from "../connectWithServer/ChangeUsersStatus";
 
 import { GetAllDataUsers } from "../store/features/users/UsersSlice";
 import UserInAdminPanel from "../components/UserInAdminPanel";
-import { AnyAction } from "redux";
 
 export default function AdminPanel() {
     const users = useSelector((state: StoreState) => state.userReducer.users);
     const dispatch = useStoreDispatch();
 
     const [checkAll, setCheckAll] = useState<boolean>(false);
-    const [isCheck, setIsCheck] = useState<string[]>(users.map((u) => u._id));
+    const [isCheck, setIsCheck] = useState<string[]>([]);
 
     useEffect(() => {
         dispatch(GetAllDataUsers());

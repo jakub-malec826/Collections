@@ -7,7 +7,7 @@ const initialState = {
     users: <UserDataIF[]>[],
 };
 
-export const GetAllDataUsers = createAsyncThunk("users/all", async () => {
+export const GetAllDataUsers = createAsyncThunk("users/allusers", async () => {
     return await GetAllUsers();
 });
 

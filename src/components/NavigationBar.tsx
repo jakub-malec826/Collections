@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Navbar, Nav, Modal, Alert } from "react-bootstrap";
+import { Navbar, Nav } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -9,7 +9,7 @@ import {
     deleteUser,
     getUserData,
 } from "../store/features/user/ActualUserSlice";
-import { showForms } from "../store/features/offcanvas/FormsVisSlice";
+import { showSignForms } from "../store/features/Forms/FormsVisSlice";
 
 export default function NavigationBar() {
     const [isHidden, setIsHidden] = useState(true);
@@ -58,13 +58,15 @@ export default function NavigationBar() {
                 className="ms-auto me-3"
                 onSelect={(selectedKey) => selectedKey && nav(selectedKey)}
             >
-                <Navbar.Text>
-                    You are logged as <strong>{user.userName}</strong>
-                </Navbar.Text>
+                {sessUser && (
+                    <Navbar.Text>
+                        You are logged as <strong>{user.userName}</strong>
+                    </Navbar.Text>
+                )}
                 <Nav.Item>
                     <Nav.Link
                         eventKey="/auth/signin"
-                        onClick={() => dispatch(showForms())}
+                        onClick={() => dispatch(showSignForms())}
                         hidden={!isHidden}
                     >
                         Sign in
@@ -73,7 +75,7 @@ export default function NavigationBar() {
                 <Nav.Item>
                     <Nav.Link
                         eventKey="/auth/signup"
-                        onClick={() => dispatch(showForms())}
+                        onClick={() => dispatch(showSignForms())}
                         hidden={!isHidden}
                     >
                         Sign up

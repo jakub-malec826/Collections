@@ -1,15 +1,14 @@
-import { Button, Form, Table } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 
 import { useSelector, useDispatch } from "react-redux";
 import { StoreState, useStoreDispatch } from "../store/Store";
 
-import CollectionForm from "../components/CollectionForm";
-import { showForms } from "../store/features/offcanvas/FormsVisSlice";
-import { useEffect, useState } from "react";
+import CollectionForm from "../components/Forms/CollectionForm";
+import { showForms, emptyColl } from "../store/features/Forms/FormsVisSlice";
+import { useEffect } from "react";
 import { getUserOnViewData } from "../store/features/user/ActualUserSlice";
 import UserCollectionView from "../components/UserCollectionView";
 import { useParams } from "react-router-dom";
-import DeleteColl from "../connectWithServer/DeleteColl";
 
 export default function UserPage() {
     const userOnView = useSelector(
@@ -24,25 +23,12 @@ export default function UserPage() {
 
     useEffect(() => {
         storeDispatch(getUserOnViewData(userName ? userName : ""));
-    }, [userOnView]);
-
-    const [checkAll, setCheckAll] = useState<boolean>(false);
-    const [isEleCheck, setIsEleCheck] = useState<string[]>([]);
-
-    const handleSelectAll = () => {
-        setCheckAll(!checkAll);
-        setIsEleCheck(userOnView.collections.map((c) => c._id));
-        if (checkAll) setIsEleCheck([]);
-    };
-
-    const handleIsEleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { id, checked } = e.target;
-        setIsEleCheck([...isEleCheck, id]);
-        if (!checked) setIsEleCheck(isEleCheck.filter((i) => i !== id));
-    };
+    }, [userOnView.collections]);
 
     return (
         <div className="mx-auto w-75 text-center">
+            <CollectionForm userName={userOnView.userName} />
+
             <h4 className="m-3">Hey "{userName}"</h4>
 
             <div className="m-3 text-center">
@@ -53,48 +39,16 @@ export default function UserPage() {
                             : !actualUser.isAdmin
                     }
                     variant="success"
-                    onClick={() => dispatch(showForms())}
+                    onClick={() => dispatch(showForms([emptyColl, false]))}
                 >
                     Create new collection
                 </Button>
             </div>
-            <CollectionForm userName={userOnView.userName} />
 
             <Table striped responsive="lg" variant="light">
                 <thead>
                     <tr>
-                        <td
-                            colSpan={5}
-                            className="text-center"
-                            hidden={
-                                actualUser.userName === userOnView.userName
-                                    ? false
-                                    : !actualUser.isAdmin
-                            }
-                        >
-                            <Button variant="warning" size="sm" className="m-2">
-                                Edit
-                            </Button>
-                            <Button
-                                variant="danger"
-                                size="sm"
-                                className="m-2"
-                                onClick={() =>
-                                    DeleteColl(isEleCheck, userOnView.userName)
-                                }
-                            >
-                                Delete
-                            </Button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <Form.Check.Input
-                                type="checkbox"
-                                checked={checkAll}
-                                onChange={handleSelectAll}
-                            />
-                        </td>
+                        <td></td>
                         <td>Name</td>
                         <td>Description</td>
                         <td>Topic</td>
@@ -107,8 +61,7 @@ export default function UserPage() {
                             <UserCollectionView
                                 key={userOnView.collections.indexOf(c)}
                                 collection={c}
-                                isChecked={isEleCheck}
-                                handleIsEleCheck={handleIsEleCheck}
+                                userOnView={userOnView}
                             />
                         ))}
                 </tbody>

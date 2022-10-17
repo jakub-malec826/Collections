@@ -1,12 +1,12 @@
 import { Button, Form, Offcanvas, OffcanvasHeader, Row } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { StoreState } from "../store/Store";
-import { useState } from "react";
-import CollectionsDataIF from "../interfaces/CollectionsDataIF";
-import HandleChange from "../functions/HandleChange";
+import { StoreState } from "../../store/Store";
+import { useState, useEffect } from "react";
+import CollectionsDataIF from "../../interfaces/CollectionsDataIF";
+import HandleChange from "../../functions/HandleChange";
 import MarkdownEditor from "@uiw/react-markdown-editor";
-import { hideForms } from "../store/features/offcanvas/FormsVisSlice";
-import AddNewColl from "../connectWithServer/AddNewColl";
+import { hideForms } from "../../store/features/Forms/FormsVisSlice";
+import OperationsOnColl from "../../connectWithServer/OperationsOnColl";
 
 const topicList = ["books", "cars", "whiskey", "animals"];
 
@@ -15,33 +15,35 @@ interface CollectionFormIF {
 }
 
 export default function CollectionForm({ userName }: CollectionFormIF) {
-    const formVis = useSelector(
-        (state: StoreState) => state.formsVisReducer.formVis
-    );
+    const formState = useSelector((state: StoreState) => state.formsVisReducer);
     const dispatch = useDispatch();
 
-    const [coll, setColl] = useState<CollectionsDataIF>({
-        _id: "",
-        name: "",
-        description: `Hello *world*
+    const [coll, setColl] = useState<CollectionsDataIF>(formState.collection);
 
-
-            Type something and try`,
-        topic: "",
-        image: "",
-        owner: "",
-        items: [],
-    });
+    useEffect(() => {
+        setColl(formState.collection);
+    }, [formState.formVis]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        console.log(coll.owner);
         e.preventDefault();
-        await AddNewColl(coll.owner, coll);
+        formState.forEdit
+            ? await OperationsOnColl(coll.owner, coll, "editcoll", () =>
+                  console.log("edit")
+              )
+            : await OperationsOnColl(coll.owner, coll, "newcoll", () =>
+                  console.log("new")
+              );
+        dispatch(hideForms());
     };
 
     return (
-        <Offcanvas show={formVis} onHide={() => dispatch(hideForms())}>
-            <OffcanvasHeader closeButton>Add new collection</OffcanvasHeader>
+        <Offcanvas
+            show={formState.formVis}
+            onHide={() => dispatch(hideForms())}
+        >
+            <OffcanvasHeader closeButton>
+                {formState.forEdit ? "Edit collection" : "Add new collection"}
+            </OffcanvasHeader>
             <Form onSubmit={handleSubmit}>
                 <Row className="m-1" data-color-mode="light">
                     <Form.Label htmlFor="desc">Description</Form.Label>
@@ -79,23 +81,22 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
                     />
                 </Row>
                 <Row className="m-1">
-                    <>
-                        <Form.Select
-                            placeholder="Topic"
-                            name="topic"
-                            required
-                            onChange={(
-                                e: React.ChangeEvent<HTMLSelectElement>
-                            ) => HandleChange(e, setColl, coll)}
-                        >
-                            <option>Topic</option>
-                            {topicList.map((t) => (
-                                <option key={topicList.indexOf(t)} value={t}>
-                                    {t}
-                                </option>
-                            ))}
-                        </Form.Select>
-                    </>
+                    <Form.Select
+                        placeholder="Topic"
+                        name="topic"
+                        required
+                        value={coll.topic}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                            HandleChange(e, setColl, coll)
+                        }
+                    >
+                        <option>Topic</option>
+                        {topicList.map((t) => (
+                            <option key={topicList.indexOf(t)} value={t}>
+                                {t}
+                            </option>
+                        ))}
+                    </Form.Select>
                 </Row>
                 <Row className="m-1">
                     <Form.Control

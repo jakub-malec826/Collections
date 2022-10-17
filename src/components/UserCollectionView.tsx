@@ -1,28 +1,62 @@
 import CollectionsDataIF from "../interfaces/CollectionsDataIF";
 import MarkdownEditor from "@uiw/react-markdown-editor";
-import { Form } from "react-bootstrap";
+import { Button, ButtonGroup, Form } from "react-bootstrap";
+import UserDataIF from "../interfaces/UserDataIF";
+import OperationsOnColl from "../connectWithServer/OperationsOnColl";
+import { useDispatch, useSelector } from "react-redux";
+import { showForms } from "../store/features/Forms/FormsVisSlice";
+import CollectionForm from "./Forms/CollectionForm";
+import { StoreState } from "../store/Store";
 
 interface UserColViewIF {
     collection: CollectionsDataIF;
-    isChecked: string[];
-    handleIsEleCheck: React.ChangeEventHandler<HTMLInputElement>;
+    userOnView: UserDataIF;
 }
 
 export default function UserCollectionView({
     collection,
-    isChecked,
-    handleIsEleCheck,
+    userOnView,
 }: UserColViewIF) {
+    const actualUser = useSelector(
+        (state: StoreState) => state.oneUserReducer.user
+    );
+
+    const dispatch = useDispatch();
     return (
         <tr>
             <td>
-                <Form.Check.Input
-                    type="checkbox"
-                    id={collection._id}
-                    checked={isChecked.includes(collection._id)}
-                    onChange={handleIsEleCheck}
-                />
+                <ButtonGroup
+                    hidden={
+                        userOnView.userName === actualUser.userName
+                            ? false
+                            : !actualUser.isAdmin
+                    }
+                >
+                    <Button
+                        variant="warning"
+                        size="sm"
+                        onClick={() => {
+                            dispatch(showForms([collection, true]));
+                        }}
+                    >
+                        Edit
+                    </Button>
+                    <Button
+                        variant="danger"
+                        size="sm"
+                        onClick={async () =>
+                            await OperationsOnColl(
+                                userOnView.userName,
+                                collection,
+                                "delcoll"
+                            )
+                        }
+                    >
+                        Delete
+                    </Button>
+                </ButtonGroup>
             </td>
+
             <td>{collection.name}</td>
             <td data-color-mode="light">
                 <MarkdownEditor.Markdown source={collection.description} />

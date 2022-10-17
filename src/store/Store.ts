@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 
 import UserReducer from "./features/users/UsersSlice";
 import OneUserReducer from "./features/user/ActualUserSlice";
-import FormsVisReducer from "./features/offcanvas/FormsVisSlice";
+import FormsVisReducer from "./features/Forms/FormsVisSlice";
 
 const reducers = combineReducers({
     userReducer: UserReducer,

@@ -1,4 +1,4 @@
-import { valuesIF } from "../routes/SignForms";
+import { valuesIF } from "../components/Forms/SignForms";
 import CollectionsDataIF from "../interfaces/CollectionsDataIF";
 export default function HandleChange(
     e: React.ChangeEvent<

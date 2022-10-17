@@ -7,7 +7,7 @@ const enviroment =
 
 const apiUrls = {
     production: "https://courseproject-back.herokuapp.com/",
-    development: "http://192.168.67.15:9090/",
+    development: "http://192.168.0.145:9090/",
 };
 
 module.exports = {

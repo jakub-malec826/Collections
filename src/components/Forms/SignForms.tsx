@@ -10,15 +10,15 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import ValidateFormWithDb from "../connectWithServer/ValidateFormWithDb";
+import ValidateFormWithDb from "../../connectWithServer/ValidateFormWithDb";
 
-import { setUser } from "../store/features/user/ActualUserSlice";
-import UserDataIF from "../interfaces/UserDataIF";
-import HandleChange from "../functions/HandleChange";
+import { setUser } from "../../store/features/user/ActualUserSlice";
+import UserDataIF from "../../interfaces/UserDataIF";
+import HandleChange from "../../functions/HandleChange";
 import FormsVisSlice, {
     hideForms,
-} from "../store/features/offcanvas/FormsVisSlice";
-import { StoreState } from "../store/Store";
+} from "../../store/features/Forms/FormsVisSlice";
+import { StoreState } from "../../store/Store";
 import { ButtonGroup } from "react-bootstrap";
 
 interface FormsIF {
@@ -79,7 +79,7 @@ export default function Forms({ formType }: FormsIF) {
             <Form onSubmit={handleSubmit}>
                 {err !== "" && (
                     <Row className="mx-auto w-25 m-1 text-center">
-                        <Alert variant="danger" >{err}</Alert>
+                        <Alert variant="danger">{err}</Alert>
                     </Row>
                 )}
                 {formType === "signup" && (

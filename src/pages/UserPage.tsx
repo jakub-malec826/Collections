@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+
 import { Button, Table } from "react-bootstrap";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -5,10 +8,8 @@ import { StoreState, useStoreDispatch } from "../store/Store";
 
 import CollectionForm from "../components/Forms/CollectionForm";
 import { showForms, emptyColl } from "../store/features/Forms/FormsVisSlice";
-import { useEffect } from "react";
 import { getUserOnViewData } from "../store/features/user/ActualUserSlice";
 import UserCollectionView from "../components/UserCollectionView";
-import { useParams } from "react-router-dom";
 
 export default function UserPage() {
     const userOnView = useSelector(
@@ -31,8 +32,8 @@ export default function UserPage() {
 
             <h4 className="m-3">Hey "{userName}"</h4>
 
-            <div className="m-3 text-center">
                 <Button
+                    className="mb-3"
                     hidden={
                         userOnView.userName === actualUser.userName
                             ? false
@@ -43,7 +44,6 @@ export default function UserPage() {
                 >
                     Create new collection
                 </Button>
-            </div>
 
             <Table striped responsive="lg" variant="light">
                 <thead>

@@ -33,8 +33,8 @@ export default function AdminPanel() {
     };
 
     return (
-        <div className="mx-auto w-75">
-            <ButtonGroup className="mx-auto mx-3 mt-3">
+        <div className="mx-auto w-75 text-center">
+            <ButtonGroup className="mx-auto mx-3 m-3">
                 <Button
                     variant="light"
                     onClick={async () => ChangeUsersStatus("status", isCheck)}

@@ -1,11 +1,14 @@
-import CollectionsDataIF from "../interfaces/CollectionsDataIF";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
 import MarkdownEditor from "@uiw/react-markdown-editor";
-import { Button, ButtonGroup, Form } from "react-bootstrap";
+import { Button, ButtonGroup } from "react-bootstrap";
+
+import CollectionsDataIF from "../interfaces/CollectionsDataIF";
 import UserDataIF from "../interfaces/UserDataIF";
 import OperationsOnColl from "../connectWithServer/OperationsOnColl";
-import { useDispatch, useSelector } from "react-redux";
+
 import { showForms } from "../store/features/Forms/FormsVisSlice";
-import CollectionForm from "./Forms/CollectionForm";
 import { StoreState } from "../store/Store";
 
 interface UserColViewIF {
@@ -20,6 +23,8 @@ export default function UserCollectionView({
     const actualUser = useSelector(
         (state: StoreState) => state.oneUserReducer.user
     );
+
+    const nav = useNavigate();
 
     const dispatch = useDispatch();
     return (
@@ -52,12 +57,12 @@ export default function UserCollectionView({
                             )
                         }
                     >
-                        Delete
+                        X
                     </Button>
                 </ButtonGroup>
             </td>
 
-            <td>{collection.name}</td>
+            <td onClick={() => nav(`${collection.name}`)}>{collection.name}</td>
             <td data-color-mode="light">
                 <MarkdownEditor.Markdown source={collection.description} />
             </td>

@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import CollectionsDataIF from "../../interfaces/CollectionsDataIF";
 import HandleChange from "../../functions/HandleChange";
 import MarkdownEditor from "@uiw/react-markdown-editor";
-import { hideForms } from "../../store/features/Forms/FormsVisSlice";
+import { hideCollectionForm } from "../../store/features/Forms/CollectionFormSlice";
 import OperationsOnColl from "../../connectWithServer/OperationsOnColl";
 
 const topicList = ["books", "cars", "whiskey", "animals"];
@@ -15,14 +15,14 @@ interface CollectionFormIF {
 }
 
 export default function CollectionForm({ userName }: CollectionFormIF) {
-    const formState = useSelector((state: StoreState) => state.formsVisReducer);
+    const formState = useSelector((state: StoreState) => state.FormsVisReducer);
     const dispatch = useDispatch();
 
     const [coll, setColl] = useState<CollectionsDataIF>(formState.collection);
 
     useEffect(() => {
-        setColl(formState.collection);
-    }, [formState.formVis]);
+        setColl({ ...formState.collection, owner: userName });
+    }, [formState]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -33,13 +33,13 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
             : await OperationsOnColl(coll.owner, coll, "newcoll", () =>
                   console.log("new")
               );
-        dispatch(hideForms());
+        dispatch(hideCollectionForm());
     };
 
     return (
         <Offcanvas
             show={formState.formVis}
-            onHide={() => dispatch(hideForms())}
+            onHide={() => dispatch(hideCollectionForm())}
         >
             <OffcanvasHeader closeButton>
                 {formState.forEdit ? "Edit collection" : "Add new collection"}
@@ -74,7 +74,7 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
                         name="name"
                         value={coll.name}
                         placeholder="Name"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        onChange={(e) => {
                             HandleChange(e, setColl, coll);
                         }}
                         required
@@ -86,9 +86,7 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
                         name="topic"
                         required
                         value={coll.topic}
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                            HandleChange(e, setColl, coll)
-                        }
+                        onChange={(e) => HandleChange(e, setColl, coll)}
                     >
                         <option>Topic</option>
                         {topicList.map((t) => (
@@ -105,9 +103,7 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
                         id="sendImage"
                         value={coll.image}
                         accept="image/*"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            HandleChange(e, setColl, coll)
-                        }
+                        onChange={(e) => HandleChange(e, setColl, coll)}
                         hidden
                     />
                     <Button
@@ -120,11 +116,7 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
                     </Button>
                 </Row>
 
-                <Button
-                    variant="success"
-                    type="submit"
-                    onClick={() => setColl({ ...coll, owner: userName })}
-                >
+                <Button variant="success" type="submit">
                     Send
                 </Button>
             </Form>

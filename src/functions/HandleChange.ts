@@ -1,11 +1,9 @@
-import { valuesIF } from "../components/Forms/SignForms";
-import CollectionsDataIF from "../interfaces/CollectionsDataIF";
 export default function HandleChange(
     e: React.ChangeEvent<
         HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >,
     setState: Function,
-    state: CollectionsDataIF | valuesIF
+    state: any
 ) {
     setState({ ...state, [e.target.name]: e.target.value });
 }

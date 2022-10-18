@@ -8,74 +8,89 @@ import ChangeUsersStatus from "../connectWithServer/ChangeUsersStatus";
 
 import { GetAllDataUsers } from "../store/features/users/UsersSlice";
 import UserInAdminPanel from "../components/UserInAdminPanel";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminPanel() {
-    const users = useSelector((state: StoreState) => state.userReducer.users);
-    const dispatch = useStoreDispatch();
+  const users = useSelector((state: StoreState) => state.UserReducer.users);
+  const activeUser = useSelector(
+    (state: StoreState) => state.OneUserReducer.user
+  );
+  const sess = sessionStorage.getItem("user");
 
-    const [checkAll, setCheckAll] = useState<boolean>(false);
-    const [isCheck, setIsCheck] = useState<string[]>([]);
+  const dispatch = useStoreDispatch();
 
-    useEffect(() => {
-        dispatch(GetAllDataUsers());
-    }, [users]);
+  const nav = useNavigate();
 
-    const handleSelectAll = () => {
-        setCheckAll(!checkAll);
-        setIsCheck(users.map((u) => u._id));
-        if (checkAll) setIsCheck([]);
-    };
+  const [checkAll, setCheckAll] = useState<boolean>(false);
+  const [isCheck, setIsCheck] = useState<string[]>([]);
 
-    const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { id, checked } = e.target;
-        setIsCheck([...isCheck, id]);
-        if (!checked) setIsCheck(isCheck.filter((i) => i !== id));
-    };
+  useEffect(() => {
+    dispatch(GetAllDataUsers());
+  }, [users]);
+
+  useEffect(() => {
+    if (sess === null || !activeUser.isAdmin) {
+      alert("Nope");
+      nav("/");
+    }
+  }, [sess, activeUser]);
+
+  const handleSelectAll = () => {
+    setCheckAll(!checkAll);
+    setIsCheck(users.map((u) => u._id));
+    if (checkAll) setIsCheck([]);
+  };
+
+  const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, checked } = e.target;
+    setIsCheck([...isCheck, id]);
+    if (!checked) setIsCheck(isCheck.filter((i) => i !== id));
+  };
 
     return (
-        <div className="mx-auto w-75 text-center">
-            <ButtonGroup className="mx-auto mx-3 m-3">
-                <Button
-                    variant="light"
-                    onClick={async () => ChangeUsersStatus("status", isCheck)}
-                >
-                    Block / Unblock
-                </Button>
+    <div className="mx-auto text-center">
+      <ButtonGroup className="mx-auto mx-3 m-3">
+        <Button
+          variant="light"
+          onClick={async () => ChangeUsersStatus("status", isCheck)}
+        >
+          Block / Unblock
+        </Button>
 
-                <Button
-                    variant="light"
-                    onClick={async () => ChangeUsersStatus("isadmin", isCheck)}
-                >
-                    Change Admin Status
-                </Button>
-            </ButtonGroup>
+        <Button
+          variant="light"
+          onClick={async () => ChangeUsersStatus("isadmin", isCheck)}
+        >
+          Change Admin Status
+        </Button>
+      </ButtonGroup>
 
-            <Table striped bordered responsive="lg">
-                <thead>
-                    <tr>
-                        <th>
-                            <Form.Check.Input
-                                type="checkbox"
-                                checked={checkAll}
-                                onChange={handleSelectAll}
-                            />
-                        </th>
-                        <th>User Name</th>
-                        <th>Is Admin</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {users.map((u) => (
-                        <UserInAdminPanel
-                            key={users.indexOf(u)}
-                            user={u}
-                            isCheck={isCheck}
-                            handleCheck={handleCheck}
-                        />
-                    ))}
-                </tbody>
-            </Table>
-        </div>
-    );
+      <Table striped bordered responsive={false} className="w-75 mx-auto">
+        <thead>
+          <tr>
+            <th>
+              <Form.Check.Input
+                type="checkbox"
+                checked={checkAll}
+                onChange={handleSelectAll}
+              />
+            </th>
+            <th>User Name</th>
+            <th>Is Admin</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((u) => (
+            <UserInAdminPanel
+              key={users.indexOf(u)}
+              user={u}
+              isCheck={isCheck}
+              handleCheck={handleCheck}
+            />
+          ))}
+        </tbody>
+      </Table>
+    </div>
+  );
 }

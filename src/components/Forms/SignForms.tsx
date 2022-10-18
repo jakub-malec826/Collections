@@ -15,25 +15,20 @@ import ValidateFormWithDb from "../../connectWithServer/ValidateFormWithDb";
 import { setUser } from "../../store/features/user/ActualUserSlice";
 import UserDataIF from "../../interfaces/UserDataIF";
 import HandleChange from "../../functions/HandleChange";
-import FormsVisSlice, {
-    hideForms,
-} from "../../store/features/Forms/FormsVisSlice";
-import { StoreState } from "../../store/Store";
-import { ButtonGroup } from "react-bootstrap";
 
-interface FormsIF {
-    formType: string;
-}
+import { StoreState } from "../../store/Store";
+import { hideSignForm } from "../../store/features/Forms/SignFormsSlice";
+
 export interface valuesIF {
     email: string;
     userName: string;
     password: string;
 }
 
-export default function Forms({ formType }: FormsIF) {
+export default function Forms() {
     const dispatch = useDispatch();
-    const formsVis = useSelector(
-        (state: StoreState) => state.formsVisReducer.formVis
+    const SignForms = useSelector(
+        (state: StoreState) => state.SignFormsReducer
     );
 
     const [err, setErr] = useState("");
@@ -57,24 +52,26 @@ export default function Forms({ formType }: FormsIF) {
                 state: { name: sessionStorage.getItem("user") },
             });
             dispatch(setUser(data.body));
-            dispatch(hideForms());
+            dispatch(hideSignForm());
         }
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        await ValidateFormWithDb(state, formType, SetErrMessCallback);
+        await ValidateFormWithDb(state, SignForms.formType, SetErrMessCallback);
         setState({ ...stateObj });
     };
 
     return (
         <Offcanvas
-            show={formsVis}
-            onHide={() => dispatch(hideForms())}
+            show={SignForms.formVis}
+            onHide={() => dispatch(hideSignForm())}
             placement="end"
         >
             <OffcanvasHeader closeButton>
-                <h4>{formType === "signin" ? "Sign In" : "Sign Up"}</h4>
+                <h4>
+                    {SignForms.formType === "signin" ? "Sign In" : "Sign Up"}
+                </h4>
             </OffcanvasHeader>
             <Form onSubmit={handleSubmit}>
                 {err !== "" && (
@@ -82,15 +79,13 @@ export default function Forms({ formType }: FormsIF) {
                         <Alert variant="danger">{err}</Alert>
                     </Row>
                 )}
-                {formType === "signup" && (
+                {SignForms.formType === "signup" && (
                     <Form.Control
                         type="email"
                         name="email"
                         value={state.email}
                         placeholder="Email"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            HandleChange(e, setState, state)
-                        }
+                        onChange={(e) => HandleChange(e, setState, state)}
                         required
                     />
                 )}
@@ -99,9 +94,7 @@ export default function Forms({ formType }: FormsIF) {
                     name="userName"
                     value={state.userName}
                     placeholder="UserName"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        HandleChange(e, setState, state)
-                    }
+                    onChange={(e) => HandleChange(e, setState, state)}
                     required
                 />
                 <Form.Control
@@ -109,9 +102,7 @@ export default function Forms({ formType }: FormsIF) {
                     name="password"
                     value={state.password}
                     placeholder="Password"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        HandleChange(e, setState, state)
-                    }
+                    onChange={(e) => HandleChange(e, setState, state)}
                     required
                 />
                 <div className="text-center">
@@ -120,20 +111,9 @@ export default function Forms({ formType }: FormsIF) {
                         variant="primary"
                         className="m-1 d-inline"
                     >
-                        {formType === "signin" ? "Sign In" : "Sign up"}
-                    </Button>
-                    <Button
-                        variant="secondary"
-                        onClick={() =>
-                            nav(
-                                `/auth/${
-                                    formType === "signin" ? "signup" : "signin"
-                                }`
-                            )
-                        }
-                        className="m-1 d-inline"
-                    >
-                        {formType === "signin" ? "Sign Up" : "Sign In"}
+                        {SignForms.formType === "signin"
+                            ? "Sign In"
+                            : "Sign up"}
                     </Button>
                 </div>
             </Form>

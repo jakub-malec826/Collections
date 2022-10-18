@@ -3,12 +3,18 @@ import { useDispatch } from "react-redux";
 
 import UserReducer from "./features/users/UsersSlice";
 import OneUserReducer from "./features/user/ActualUserSlice";
-import FormsVisReducer from "./features/Forms/FormsVisSlice";
+import FormsVisReducer from "./features/Forms/CollectionFormSlice";
+import SignFormsReducer from "./features/Forms/SignFormsSlice";
+import ItemFormReducer from "./features/Forms/ItemFormSlice";
+import CollectionFieldsReducer from "./features/collectionFields/CollectionFieldsSlice";
 
 const reducers = combineReducers({
-    userReducer: UserReducer,
-    oneUserReducer: OneUserReducer,
-    formsVisReducer: FormsVisReducer,
+    UserReducer,
+    OneUserReducer,
+    FormsVisReducer,
+    SignFormsReducer,
+    ItemFormReducer,
+    CollectionFieldsReducer,
 });
 
 const store = configureStore({

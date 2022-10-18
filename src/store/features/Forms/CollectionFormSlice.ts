@@ -23,20 +23,18 @@ export const FormsVisSlice = createSlice({
     name: "formsVis",
     initialState,
     reducers: {
-        showForms: (state, action) => {
+        showCollectionForm: (state, action) => {
             state.formVis = true;
             state.collection = action.payload[0];
             state.forEdit = action.payload[1];
         },
-        hideForms: (state) => {
+        hideCollectionForm: (state) => {
             state.formVis = false;
-        },
-        showSignForms: (state) => {
-            state.formVis = true;
         },
     },
 });
 
-export const { showForms, hideForms, showSignForms } = FormsVisSlice.actions;
+export const { showCollectionForm, hideCollectionForm } =
+    FormsVisSlice.actions;
 
 export default FormsVisSlice.reducer;

@@ -7,16 +7,19 @@ import { useSelector, useDispatch } from "react-redux";
 import { StoreState, useStoreDispatch } from "../store/Store";
 
 import CollectionForm from "../components/Forms/CollectionForm";
-import { showForms, emptyColl } from "../store/features/Forms/FormsVisSlice";
+import {
+    showCollectionForm,
+    emptyColl,
+} from "../store/features/Forms/CollectionFormSlice";
 import { getUserOnViewData } from "../store/features/user/ActualUserSlice";
-import UserCollectionView from "../components/UserCollectionView";
+import TableView from "../components/TableView";
 
 export default function UserPage() {
     const userOnView = useSelector(
-        (state: StoreState) => state.oneUserReducer.userOnView
+        (state: StoreState) => state.OneUserReducer.userOnView
     );
     const actualUser = useSelector(
-        (state: StoreState) => state.oneUserReducer.user
+        (state: StoreState) => state.OneUserReducer.user
     );
     const dispatch = useDispatch();
     const storeDispatch = useStoreDispatch();
@@ -24,28 +27,33 @@ export default function UserPage() {
 
     useEffect(() => {
         storeDispatch(getUserOnViewData(userName ? userName : ""));
-    }, [userOnView.collections]);
+    }, [userOnView.userName, userOnView.collections]);
 
     return (
-        <div className="mx-auto w-75 text-center">
+        <div className="mx-auto text-center">
             <CollectionForm userName={userOnView.userName} />
 
             <h4 className="m-3">Hey "{userName}"</h4>
 
-                <Button
-                    className="mb-3"
-                    hidden={
-                        userOnView.userName === actualUser.userName
-                            ? false
-                            : !actualUser.isAdmin
-                    }
-                    variant="success"
-                    onClick={() => dispatch(showForms([emptyColl, false]))}
-                >
-                    Create new collection
-                </Button>
+            <Button
+                className="mb-3"
+                hidden={
+                    userOnView.userName === actualUser.userName
+                        ? false
+                        : !actualUser.isAdmin
+                }
+                variant="success"
+                onClick={() => dispatch(showCollectionForm([emptyColl, false]))}
+            >
+                Create new collection
+            </Button>
 
-            <Table striped responsive="lg" variant="light">
+            <Table
+                striped
+                responsive="sm"
+                variant="light"
+                className="mx-auto w-75"
+            >
                 <thead>
                     <tr>
                         <td></td>
@@ -58,10 +66,11 @@ export default function UserPage() {
                 <tbody>
                     {userOnView.collections &&
                         userOnView.collections.map((c) => (
-                            <UserCollectionView
+                            <TableView
                                 key={userOnView.collections.indexOf(c)}
-                                collection={c}
+                                collectionToShow={c}
                                 userOnView={userOnView}
+                                type="collection"
                             />
                         ))}
                 </tbody>

@@ -9,13 +9,14 @@ import Router from "./Router";
 import store from "./store/Store";
 import { Provider } from "react-redux";
 
-const root = ReactDOM.createRoot(
-    document.getElementById("root") as HTMLElement
-);
+const rootDiv = document.getElementById("root") as HTMLElement;
+
+const root = ReactDOM.createRoot(rootDiv);
 
 const baseName = "/";
 
 root.render(
+    
     <Provider store={store}>
         <HashRouter basename={baseName}>
             <NavigationBar />

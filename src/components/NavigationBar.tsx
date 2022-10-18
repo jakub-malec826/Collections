@@ -9,7 +9,8 @@ import {
     deleteUser,
     getUserData,
 } from "../store/features/user/ActualUserSlice";
-import { showSignForms } from "../store/features/Forms/FormsVisSlice";
+import Forms from "./Forms/SignForms";
+import { showSignForm } from "../store/features/Forms/SignFormsSlice";
 
 export default function NavigationBar() {
     const [isHidden, setIsHidden] = useState(true);
@@ -18,7 +19,7 @@ export default function NavigationBar() {
     const storeDispatch = useStoreDispatch();
     const dispatch = useDispatch();
 
-    const user = useSelector((state: StoreState) => state.oneUserReducer.user);
+    const user = useSelector((state: StoreState) => state.OneUserReducer.user);
 
     const sessUser = sessionStorage.getItem("user");
 
@@ -29,13 +30,10 @@ export default function NavigationBar() {
             setIsHidden(false);
             storeDispatch(getUserData(sessUser));
         }
-    }, [sessUser, setIsHidden, user]);
+    }, [sessUser, setIsHidden, user.userName]);
 
     return (
-        <Navbar expand="sm" bg="light" variant="light">
-            <Navbar.Brand className="ms-3" onClick={() => nav("/")}>
-                Collections
-            </Navbar.Brand>
+        <Navbar expand="sm" bg="light" variant="light" className="ms-1">
             <Nav
                 onSelect={(selectedKey) =>
                     selectedKey &&
@@ -43,9 +41,13 @@ export default function NavigationBar() {
                         state: { name: sessUser },
                     })
                 }
-                hidden={isHidden}
             >
-                <Nav.Link eventKey={`/${sessUser}`}>Your Site</Nav.Link>
+                <Nav.Link eventKey={`/`}>
+                    <Navbar.Brand>Collections</Navbar.Brand>
+                </Nav.Link>
+                <Nav.Link eventKey={`/${sessUser}`} hidden={isHidden}>
+                    Your Site
+                </Nav.Link>
                 <Nav.Link
                     eventKey={`/${sessUser}/admin`}
                     hidden={user ? !user.isAdmin : false}
@@ -55,18 +57,17 @@ export default function NavigationBar() {
             </Nav>
 
             <Nav
-                className="ms-auto me-3"
+                className="ms-auto me-1"
                 onSelect={(selectedKey) => selectedKey && nav(selectedKey)}
             >
                 {sessUser && (
                     <Navbar.Text>
-                        You are logged as <strong>{user.userName}</strong>
+                        Hi <strong>{user.userName}</strong>
                     </Navbar.Text>
                 )}
                 <Nav.Item>
                     <Nav.Link
-                        eventKey="/auth/signin"
-                        onClick={() => dispatch(showSignForms())}
+                        onClick={() => dispatch(showSignForm("signin"))}
                         hidden={!isHidden}
                     >
                         Sign in
@@ -74,8 +75,7 @@ export default function NavigationBar() {
                 </Nav.Item>
                 <Nav.Item>
                     <Nav.Link
-                        eventKey="/auth/signup"
-                        onClick={() => dispatch(showSignForms())}
+                        onClick={() => dispatch(showSignForm("signup"))}
                         hidden={!isHidden}
                     >
                         Sign up
@@ -94,6 +94,7 @@ export default function NavigationBar() {
                     </Nav.Link>
                 </Nav.Item>
             </Nav>
+            <Forms />
         </Navbar>
     );
 }

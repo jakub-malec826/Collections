@@ -1,13 +1,14 @@
 export default interface ItemsDataIF {
-    _id: string;
-    id: number;
+    _id?: string;
     name: string;
     tag: string[];
-    comments: [
+    comments?: [
         {
             user: string;
             comment: string;
         }
     ];
-    likes: number;
+    likes?: number;
+    additionalField?: { fieldName: string; fieldType: string }[];
+    [key: string]: any;
 }

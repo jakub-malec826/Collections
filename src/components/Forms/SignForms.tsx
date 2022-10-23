@@ -78,7 +78,7 @@ export default function Forms() {
 			onHide={() => dispatch(hideSignForm())}
 			placement="end"
 		>
-			<OffcanvasHeader className="border-bottom border-secondary mb-2">
+			<OffcanvasHeader className="border-bottom border-secondary m-3">
 				<h4 className="d-inline">
 					{SignForms.formType === "signin" ? "Sign In" : "Sign Up"}
 				</h4>
@@ -90,7 +90,7 @@ export default function Forms() {
 					ｘ
 				</Button>
 			</OffcanvasHeader>
-			<Form onSubmit={handleSubmit}>
+			<Form onSubmit={handleSubmit} className="text-center">
 				{err !== "" && (
 					<Alert
 						className="mx-auto w-50 m-1 text-center"
@@ -128,17 +128,9 @@ export default function Forms() {
 					onChange={(e) => HandleChange(e, setState, state)}
 					required
 				/>
-				<div className="text-center">
-					<Button
-						type="submit"
-						variant={theme}
-						className="m-1 d-inline"
-					>
-						{SignForms.formType === "signin"
-							? "Sign In"
-							: "Sign up"}
-					</Button>
-				</div>
+				<Button type="submit" variant={theme} className="m-1 d-inline">
+					{SignForms.formType === "signin" ? "Sign In" : "Sign up"}
+				</Button>
 			</Form>
 		</Offcanvas>
 	);

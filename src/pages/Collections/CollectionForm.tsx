@@ -87,7 +87,7 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
 			show={formState.formVis}
 			onHide={() => dispatch(hideCollectionForm())}
 		>
-			<OffcanvasHeader className="border-bottom border-secondary m-2">
+			<OffcanvasHeader className="border-bottom border-secondary m-3">
 				<h3 className="d-inline">
 					{formState.forEdit
 						? "Edit collection"
@@ -101,13 +101,14 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
 					ｘ
 				</Button>
 			</OffcanvasHeader>
-			<Form onSubmit={handleSubmit}>
+			<Form onSubmit={handleSubmit} className="text-center">
 				<Form.Group
-					className=" w-auto mx-auto m-1"
+					className=" w-auto mx-auto m-3"
 					data-color-mode={theme}
 				>
-					<Form.Label htmlFor="desc">Description</Form.Label>
+					<Form.Label className="mx-auto w-auto m-2" htmlFor="desc">Description</Form.Label>
 					<MarkdownEditor
+						className="m-3"
 						id="desc"
 						value={coll.description}
 						onChange={(v) =>
@@ -158,6 +159,7 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
 						))}
 					</Form.Select>
 				</Form.Group>
+				<Form.Group className="m-3">
 					<FileUploader
 						name="image"
 						label="Upload/drop image here"
@@ -167,6 +169,7 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
 							await sendImage(e);
 						}}
 					/>
+				</Form.Group>
 
 				<Button variant={theme} type="submit">
 					Send

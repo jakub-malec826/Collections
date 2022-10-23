@@ -86,7 +86,7 @@ export default function ItemForm({
 			show={ItemsForm.formVis}
 			onHide={() => dispatch(hideItemsForm())}
 		>
-			<OffcanvasHeader className="border-bottom border-secondary mb-2">
+			<OffcanvasHeader className="border-bottom border-secondary m-3">
 				<h3 className="d-inline">
 					{ItemsForm.forEdit ? "Edit Item" : "Add Item"}
 				</h3>

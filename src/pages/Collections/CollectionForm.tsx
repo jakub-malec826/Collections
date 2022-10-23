@@ -158,7 +158,6 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
 						))}
 					</Form.Select>
 				</Form.Group>
-				<Form.Group className="">
 					<FileUploader
 						name="image"
 						label="Upload/drop image here"
@@ -168,7 +167,6 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
 							await sendImage(e);
 						}}
 					/>
-				</Form.Group>
 
 				<Button variant={theme} type="submit">
 					Send

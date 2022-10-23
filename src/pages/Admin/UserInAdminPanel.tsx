@@ -1,6 +1,8 @@
 import { Form } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import UserDataIF from "../../interfaces/UserDataIF";
+import { StoreState } from "../../store/Store";
 
 interface UserInAdminPanelIF {
 	user: UserDataIF;
@@ -13,6 +15,8 @@ export default function UserInAdminPanel({
 	isCheck,
 	handleCheck,
 }: UserInAdminPanelIF) {
+	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
+
 	return (
 		<tr>
 			<td>
@@ -33,7 +37,11 @@ export default function UserInAdminPanel({
 				<Link
 					to={`/${user.userName}`}
 					className="text-decoration-none"
-					style={{ color: "black" }}
+					style={
+						theme === "dark"
+							? { color: "white" }
+							: { color: "black" }
+					}
 				>
 					{user.userName}
 				</Link>

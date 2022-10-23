@@ -29,6 +29,8 @@ export interface ItemStateIF extends ItemsDataIF {
 }
 
 export default function CollectionsPage() {
+	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
+
 	const userOnView = useSelector(
 		(state: StoreState) => state.UserOnViewReducer.userOnView
 	);
@@ -94,7 +96,7 @@ export default function CollectionsPage() {
 			</Button>
 
 			<Table
-				variant="light"
+				variant={theme}
 				hover
 				responsive="sm"
 				className="mx-auto w-auto rounded"
@@ -121,11 +123,24 @@ export default function CollectionsPage() {
 										}
 										overlay={
 											<Popover>
+												<Popover.Header
+													style={
+														theme === "dark"
+															? {
+																	backgroundColor:
+																		"rgb(32,35,38)",
+																	color: "rgb(240,240,240)",
+															  }
+															: {}
+													}
+												>
+													Add Field
+												</Popover.Header>
 												<CollectionFieldForm />
 											</Popover>
 										}
 									>
-										<Button variant="light">
+										<Button variant={theme}>
 											Add Field
 										</Button>
 									</OverlayTrigger>

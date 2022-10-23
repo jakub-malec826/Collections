@@ -15,6 +15,8 @@ import { getUserOnViewData } from "../../store/features/oneUser/UserOnViewSlice"
 import TableView from "../../components/TableView";
 
 export default function UserPage() {
+	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
+
 	const userOnView = useSelector(
 		(state: StoreState) => state.UserOnViewReducer.userOnView
 	);
@@ -66,7 +68,7 @@ export default function UserPage() {
 			<Table
 				hover
 				responsive="sm"
-				variant="light"
+				variant={theme}
 				className="mx-auto w-75 rounded"
 			>
 				<thead>

@@ -33,6 +33,8 @@ export default function TableView({
 	itemsToShow,
 	collectionName,
 }: UserColViewIF) {
+	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
+
 	const actualUser = useSelector(
 		(state: StoreState) => state.LoginUserReducer.loginUser
 	);
@@ -57,7 +59,7 @@ export default function TableView({
 				>
 					<Button
 						className="m-0"
-						variant="light"
+						variant={theme}
 						onClick={() => {
 							type === "collection" &&
 								dispatch(
@@ -71,7 +73,7 @@ export default function TableView({
 					</Button>
 					<Button
 						className="m-0"
-						variant="light"
+						variant={theme}
 						onClick={async () => {
 							type === "collection" &&
 								collectionToShow &&
@@ -101,7 +103,7 @@ export default function TableView({
 								{collectionToShow.name}
 							</strong>
 						</td>
-						<td data-color-mode="light">
+						<td data-color-mode={theme}>
 							<MarkdownEditor.Markdown
 								source={collectionToShow.description}
 							/>

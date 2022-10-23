@@ -26,6 +26,8 @@ export default function ItemForm({
 	setState,
 	actualCollection,
 }: propsIF) {
+	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
+
 	const ItemsForm = useSelector((state: StoreState) => state.ItemFormReducer);
 
 	const { collectionName, userName } = useParams();
@@ -73,16 +75,34 @@ export default function ItemForm({
 
 	return (
 		<Offcanvas
+			style={
+				theme === "dark"
+					? {
+							backgroundColor: "rgb(21,21,21)",
+							color: "rgb(240,240,240)",
+					  }
+					: {}
+			}
 			show={ItemsForm.formVis}
 			onHide={() => dispatch(hideItemsForm())}
 		>
-			<OffcanvasHeader closeButton>
-				{ItemsForm.forEdit ? "Edit Item" : "Add Item"}
+			<OffcanvasHeader className="border-bottom border-secondary mb-2">
+				<h3 className="d-inline">
+					{ItemsForm.forEdit ? "Edit Item" : "Add Item"}
+				</h3>
+				<Button
+					className="d-inline mb-2"
+					variant={theme}
+					onClick={() => dispatch(hideItemsForm())}
+				>
+					ｘ
+				</Button>
 			</OffcanvasHeader>
-			<Form onSubmit={handleSubmit}>
+			<Form onSubmit={handleSubmit} className="text-center">
 				<Form.Group className="m-1">
-					<Form.Label>Name</Form.Label>
+					<Form.Label className="w-auto mx-auto m-2">Name</Form.Label>
 					<Form.Control
+						className="w-auto mx-auto m-2"
 						type="text"
 						name="name"
 						value={state.name}
@@ -90,8 +110,9 @@ export default function ItemForm({
 					/>
 				</Form.Group>
 				<Form.Group className="m-1">
-					<Form.Label>Tags</Form.Label>
+					<Form.Label className="w-auto mx-auto m-2">Tags</Form.Label>
 					<Form.Control
+						className="w-auto mx-auto m-2"
 						type="text"
 						name="tag"
 						placeholder="tag1,tag2,..."
@@ -109,7 +130,7 @@ export default function ItemForm({
 						f.fieldType === "checkbox" ? (
 							<div key={fields.indexOf(f)}>
 								<Form.Check.Input
-									className="ms-1"
+									className="mx-auto m-2"
 									type="checkbox"
 									name={f.fieldName.toLowerCase()}
 									checked={state[f.fieldName.toLowerCase()]}
@@ -123,14 +144,17 @@ export default function ItemForm({
 										})
 									}
 								/>
-								<Form.Label className="ms-2">
+								<Form.Label className="w-auto mx-auto m-2 ms-2 d-inline">
 									{f.fieldName}
 								</Form.Label>
 							</div>
 						) : f.fieldType !== "textarea" ? (
 							<div key={fields.indexOf(f)}>
-								<Form.Label>{f.fieldName}</Form.Label>
+								<Form.Label className="w-auto mx-auto m-2">
+									{f.fieldName}
+								</Form.Label>
 								<Form.Control
+									className="w-auto mx-auto m-2"
 									type={f.fieldType}
 									name={f.fieldName.toLowerCase()}
 									value={state[f.fieldName.toLowerCase()]}
@@ -141,8 +165,11 @@ export default function ItemForm({
 							</div>
 						) : (
 							<div key={fields.indexOf(f)}>
-								<Form.Label>{f.fieldName}</Form.Label>
+								<Form.Label className="w-auto mx-auto m-2">
+									{f.fieldName}
+								</Form.Label>
 								<Form.Control
+									className="w-auto mx-auto m-2"
 									as={f.fieldType}
 									name={f.fieldName.toLowerCase()}
 									value={state[f.fieldName.toLowerCase()]}
@@ -156,7 +183,8 @@ export default function ItemForm({
 				</Form.Group>
 
 				<Button
-					variant="light"
+					variant={theme}
+					className="w-auto mx-auto m-2"
 					type="submit"
 					onClick={() =>
 						setState({ ...state, additionalField: fields })

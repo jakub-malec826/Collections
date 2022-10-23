@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Navbar, Nav } from "react-bootstrap";
+import { Navbar, Nav, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -11,8 +11,14 @@ import {
 	deleteloginUser,
 	getUserData,
 } from "../store/features/oneUser/LoginUserSlice";
+import { changeTheme } from "../store/features/theme/ThemeSlice";
 
 export default function NavigationBar() {
+	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
+
+	document.body.style.backgroundColor = theme === "dark" ? "black" : "white";
+	document.body.style.color = theme === "dark" ? "gray" : "black";
+
 	const [isHidden, setIsHidden] = useState(true);
 	const nav = useNavigate();
 
@@ -35,7 +41,7 @@ export default function NavigationBar() {
 	}, [user.userName]);
 
 	return (
-		<Navbar expand="sm" bg="light" variant="light" className="ms-1">
+		<Navbar expand="sm" bg={theme} variant={theme} className="ms-1">
 			<Nav
 				onSelect={(selectedKey) =>
 					selectedKey &&
@@ -62,6 +68,9 @@ export default function NavigationBar() {
 				className="ms-auto me-1"
 				onSelect={(selectedKey) => selectedKey && nav(selectedKey)}
 			>
+				<Button className="me-3" variant={theme} onClick={()=> dispatch(changeTheme(theme==="light"? "dark" : "light"))}>
+					{theme === "light" ? "🌕" : "🌑"}
+				</Button>
 				{sessUser && (
 					<Navbar.Text>
 						Hi <strong>{user.userName}</strong>

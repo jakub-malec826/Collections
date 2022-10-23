@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { Button, Form, Popover } from "react-bootstrap";
 import HandleChange from "../../functions/HandleChange";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
 	hideFieldsForm,
 	setFields,
 } from "../../store/features/collections/collectionFields/CollectionFieldsSlice";
+import { StoreState } from "../../store/Store";
 
 export default function CollectionFieldForm() {
+	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
+
 	const [state, setState] = useState({
 		fieldName: "",
 		fieldType: "",
@@ -18,7 +21,16 @@ export default function CollectionFieldForm() {
 	const types = ["text", "number", "textarea", "checkbox", "date"];
 	("use strict");
 	return (
-		<Popover.Body>
+		<Popover.Body
+			style={
+				theme === "dark"
+					? {
+							backgroundColor: "rgb(21,25,29)",
+							color: "rgb(245,245,245)",
+					  }
+					: {}
+			}
+		>
 			<Form
 				className="text-center"
 				onSubmit={(e) => {
@@ -28,6 +40,7 @@ export default function CollectionFieldForm() {
 				}}
 			>
 				<Form.Control
+					className="w-auto mx-auto m-2"
 					type="text"
 					name="fieldName"
 					placeholder="Field Name"
@@ -36,6 +49,7 @@ export default function CollectionFieldForm() {
 					onChange={(e) => HandleChange(e, setState, state)}
 				/>
 				<Form.Select
+					className="w-auto mx-auto m-2"
 					value={state.fieldType}
 					name="fieldType"
 					required
@@ -47,7 +61,7 @@ export default function CollectionFieldForm() {
 						</option>
 					))}
 				</Form.Select>
-				<Button variant="light" type="submit" className="ms-auto m-1">
+				<Button variant={theme} type="submit" className="m-1">
 					Add
 				</Button>
 			</Form>

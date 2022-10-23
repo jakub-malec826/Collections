@@ -26,6 +26,8 @@ export interface valuesIF {
 }
 
 export default function Forms() {
+	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
+
 	const dispatch = useDispatch();
 	const SignForms = useSelector(
 		(state: StoreState) => state.SignFormsReducer
@@ -64,23 +66,42 @@ export default function Forms() {
 
 	return (
 		<Offcanvas
+			style={
+				theme === "dark"
+					? {
+							backgroundColor: "rgb(21,21,21)",
+							color: "rgb(240,240,240)",
+					  }
+					: {}
+			}
 			show={SignForms.formVis}
 			onHide={() => dispatch(hideSignForm())}
 			placement="end"
 		>
-			<OffcanvasHeader closeButton>
-				<h4>
+			<OffcanvasHeader className="border-bottom border-secondary mb-2">
+				<h4 className="d-inline">
 					{SignForms.formType === "signin" ? "Sign In" : "Sign Up"}
 				</h4>
+				<Button
+					className="d-inline mb-2"
+					variant={theme}
+					onClick={() => dispatch(hideSignForm())}
+				>
+					ｘ
+				</Button>
 			</OffcanvasHeader>
 			<Form onSubmit={handleSubmit}>
 				{err !== "" && (
-					<Row className="mx-auto w-25 m-1 text-center">
-						<Alert variant="danger">{err}</Alert>
-					</Row>
+					<Alert
+						className="mx-auto w-50 m-1 text-center"
+						variant="danger"
+					>
+						{err}
+					</Alert>
 				)}
 				{SignForms.formType === "signup" && (
 					<Form.Control
+						className="w-auto mx-auto m-2"
 						type="email"
 						name="email"
 						value={state.email}
@@ -90,6 +111,7 @@ export default function Forms() {
 					/>
 				)}
 				<Form.Control
+					className="w-auto mx-auto m-2"
 					type="text"
 					name="userName"
 					value={state.userName}
@@ -98,6 +120,7 @@ export default function Forms() {
 					required
 				/>
 				<Form.Control
+					className="w-auto mx-auto m-2"
 					type="password"
 					name="password"
 					value={state.password}
@@ -108,7 +131,7 @@ export default function Forms() {
 				<div className="text-center">
 					<Button
 						type="submit"
-						variant="primary"
+						variant={theme}
 						className="m-1 d-inline"
 					>
 						{SignForms.formType === "signin"

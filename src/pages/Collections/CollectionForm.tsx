@@ -4,7 +4,7 @@ declare var REACT_APP_CLOUD_NAME: string;
 import { useState, useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
-import { StoreState } from "../../store/Store";
+import { StoreState, useStoreDispatch } from "../../store/Store";
 import { hideCollectionForm } from "../../store/features/collections/CollectionFormSlice";
 
 import { Button, Form, Offcanvas, OffcanvasHeader, Row } from "react-bootstrap";
@@ -14,18 +14,28 @@ import { FileUploader } from "react-drag-drop-files";
 import CollectionsDataIF from "../../interfaces/CollectionsDataIF";
 import HandleChange from "../../functions/HandleChange";
 import OperationsOnColl from "../../connectWithServer/OperationsOnColl";
-
-const topicList = ["books", "IT", "cars", "whiskey", "animals"];
+import { getTopicListFromDb } from "../../store/features/collections/CollectionsTopicSlice";
 
 interface CollectionFormIF {
 	userName: string;
 }
 
 export default function CollectionForm({ userName }: CollectionFormIF) {
+	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
+
+	const topicList = useSelector(
+		(state: StoreState) => state.CollectionsTopicReducer.topicsList
+	);
 	const formState = useSelector((state: StoreState) => state.FormsVisReducer);
+
 	const dispatch = useDispatch();
+	const storeDispatch = useStoreDispatch();
 
 	const [coll, setColl] = useState<CollectionsDataIF>(formState.collection);
+
+	useEffect(() => {
+		storeDispatch(getTopicListFromDb());
+	}, [topicList.length]);
 
 	useEffect(() => {
 		setColl({ ...formState.collection, owner: userName });
@@ -66,14 +76,36 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
 
 	return (
 		<Offcanvas
+			style={
+				theme === "dark"
+					? {
+							backgroundColor: "rgb(21,21,21)",
+							color: "rgb(240,240,240)",
+					  }
+					: {}
+			}
 			show={formState.formVis}
 			onHide={() => dispatch(hideCollectionForm())}
 		>
-			<OffcanvasHeader closeButton>
-				{formState.forEdit ? "Edit collection" : "Add new collection"}
+			<OffcanvasHeader className="border-bottom border-secondary m-2">
+				<h3 className="d-inline">
+					{formState.forEdit
+						? "Edit collection"
+						: "Add new collection"}
+				</h3>
+				<Button
+					className="d-inline mb-2"
+					variant={theme}
+					onClick={() => dispatch(hideCollectionForm())}
+				>
+					ｘ
+				</Button>
 			</OffcanvasHeader>
 			<Form onSubmit={handleSubmit}>
-				<Row className="m-1" data-color-mode="light">
+				<Form.Group
+					className=" w-auto mx-auto m-1"
+					data-color-mode={theme}
+				>
 					<Form.Label htmlFor="desc">Description</Form.Label>
 					<MarkdownEditor
 						id="desc"
@@ -95,9 +127,10 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
 						]}
 						toolbarsMode={["preview", "fullscreen"]}
 					/>
-				</Row>
-				<Row className="m-1">
+				</Form.Group>
+				<Form.Group className="m-1">
 					<Form.Control
+						className="mx-auto w-auto m-2"
 						type="text"
 						name="name"
 						value={coll.name}
@@ -107,9 +140,10 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
 						}}
 						required
 					/>
-				</Row>
-				<Row className="m-1">
+				</Form.Group>
+				<Form.Group className="m-1">
 					<Form.Select
+						className="mx-auto w-auto m-2"
 						placeholder="Topic"
 						name="topic"
 						required
@@ -118,13 +152,13 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
 					>
 						<option>Topic</option>
 						{topicList.map((t) => (
-							<option key={topicList.indexOf(t)} value={t}>
-								{t}
+							<option key={topicList.indexOf(t)} value={t.topic}>
+								{t.topic}
 							</option>
 						))}
 					</Form.Select>
-				</Row>
-				<Row className="m-1">
+				</Form.Group>
+				<Form.Group className="">
 					<FileUploader
 						name="image"
 						label="Upload/drop image here"
@@ -134,9 +168,9 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
 							await sendImage(e);
 						}}
 					/>
-				</Row>
+				</Form.Group>
 
-				<Button variant="light" type="submit">
+				<Button variant={theme} type="submit">
 					Send
 				</Button>
 			</Form>

@@ -1,23 +1,26 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+
+import GetTopicList from "../../../connectWithServer/topic/GetTopicList";
 
 const initialState = {
-	topicsList: ["books", "IT", "cars", "whiskey", "animals"],
+	topicsList: <{ _id?: string; topic: string }[]>[],
 };
+
+export const getTopicListFromDb = createAsyncThunk("topic/get", async () => {
+	return await GetTopicList();
+});
 
 const CollectionsTopicSlice = createSlice({
 	name: "collectionsTopic",
 	initialState,
 	reducers: {
-		addToTopicList: (state, action) => {
-			state.topicsList.push(action.payload);
-		},
-		deleteFromTopicList: (state, action) => {
-			state.topicsList.filter((t) => t !== action.payload);
-		},
+	},
+	extraReducers(builder) {
+		builder.addCase(getTopicListFromDb.fulfilled, (state, action) => {
+			state.topicsList = action.payload;
+		});
 	},
 });
 
-export const { addToTopicList, deleteFromTopicList } =
-	CollectionsTopicSlice.actions;
 
 export default CollectionsTopicSlice.reducer;

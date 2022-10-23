@@ -9,8 +9,10 @@ import SignFormsReducer from "./features/forms/SignFormsSlice";
 import ItemFormReducer from "./features/forms/ItemFormSlice";
 import CollectionFieldsReducer from "./features/collections/collectionFields/CollectionFieldsSlice";
 import CollectionsTopicReducer from "./features/collections/CollectionsTopicSlice";
+import ThemeReducer from "./features/theme/ThemeSlice";
 
 const reducers = combineReducers({
+	ThemeReducer,
 	UserReducer,
 	LoginUserReducer,
 	UserOnViewReducer,

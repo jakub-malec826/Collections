@@ -17,9 +17,7 @@ root.render(
 	<Provider store={store}>
 		<HashRouter basename={"/"}>
 			<NavigationBar />
-			<div>
-				<Router />
-			</div>
+			<Router />
 		</HashRouter>
 	</Provider>
 );

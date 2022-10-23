@@ -10,6 +10,8 @@ interface CommentsIF {
 }
 
 export default function CommentsForm({ actualItem }: CommentsIF) {
+	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
+
 	const fieldsLenght = useSelector(
 		(state: StoreState) => state.CollectionFieldsReducer.fields.length
 	);
@@ -65,7 +67,6 @@ export default function CommentsForm({ actualItem }: CommentsIF) {
 						overlay={
 							<Tooltip id="tooltip-id">
 								<ul
-
 									style={{
 										listStyle: "none",
 										marginLeft: "-2rem",
@@ -100,7 +101,7 @@ export default function CommentsForm({ actualItem }: CommentsIF) {
 					onChange={(e) => setComment(e.target.value)}
 				/>
 				<Button
-					variant="light"
+					variant={theme}
 					className="w-auto d-block me-auto"
 					onClick={() => {
 						OperationsOnComments(

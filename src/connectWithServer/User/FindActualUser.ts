@@ -1,5 +1,5 @@
-import serverUrl from "./serverUrl";
-import UserDataIF from "../interfaces/UserDataIF";
+import serverUrl from "../serverUrl";
+import UserDataIF from "../../interfaces/UserDataIF";
 
 export default async function FindActualUser(
 	userName: string

@@ -1,9 +1,11 @@
+declare var REACT_APP_UPLOAD_PRESET: string;
+declare var REACT_APP_CLOUD_NAME: string;
+
 import { useState, useEffect } from "react";
-import cloudinary from "cloudinary";
 
 import { useSelector, useDispatch } from "react-redux";
 import { StoreState } from "../../store/Store";
-import { hideCollectionForm } from "../../store/features/Forms/CollectionFormSlice";
+import { hideCollectionForm } from "../../store/features/collections/CollectionFormSlice";
 
 import { Button, Form, Offcanvas, OffcanvasHeader, Row } from "react-bootstrap";
 import MarkdownEditor from "@uiw/react-markdown-editor";
@@ -19,10 +21,6 @@ interface CollectionFormIF {
 	userName: string;
 }
 
-cloudinary.v2.config({
-	cloud_name: "de0g0quc5",
-});
-
 export default function CollectionForm({ userName }: CollectionFormIF) {
 	const formState = useSelector((state: StoreState) => state.FormsVisReducer);
 	const dispatch = useDispatch();
@@ -30,24 +28,29 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
 	const [coll, setColl] = useState<CollectionsDataIF>(formState.collection);
 
 	useEffect(() => {
-        setColl({ ...formState.collection, owner: userName });
-
+		setColl({ ...formState.collection, owner: userName });
 	}, [formState]);
 
 	const sendImage = async (image: File) => {
 		const imageData = new FormData();
 
 		imageData.append("file", image);
-		imageData.append("upload_preset", "projectCourse");
+		imageData.append("upload_preset", `${REACT_APP_UPLOAD_PRESET}`);
 
-		await fetch("https://api.cloudinary.com/v1_1/de0g0quc5/image/upload", {
-			method: "post",
-			body: imageData,
-		})
+		await fetch(
+			`https://api.cloudinary.com/v1_1/${REACT_APP_CLOUD_NAME}/image/upload/`,
+			{
+				method: "post",
+				body: imageData,
+			}
+		)
 			.then((res) => res.json())
 			.then((data) => {
 				console.log(data.url);
-				setColl({ ...coll, image: data.url });
+				setColl({
+					...coll,
+					image: { ...image, url: data.url, id: data.public_id },
+				});
 			})
 			.catch((err) => console.error(err));
 	};

@@ -10,13 +10,13 @@ import UserDataIF from "../interfaces/UserDataIF";
 
 import OperationsOnColl from "../connectWithServer/OperationsOnColl";
 
-import { showCollectionForm } from "../store/features/Forms/CollectionFormSlice";
+import { showCollectionForm } from "../store/features/collections/CollectionFormSlice";
 import { StoreState } from "../store/Store";
-import { showItemsForm } from "../store/features/Forms/ItemFormSlice";
+import { showItemsForm } from "../store/features/forms/ItemFormSlice";
 import OperationsOnItem from "../connectWithServer/OperationsOnItem";
-import CommentsView from "./CommentsView";
+import CommentsView from "./CommentsAndLikes/CommentsView";
 import { useState, useEffect } from "react";
-import CommentsForm from "./Forms/CommentsForm";
+import CommentsForm from "./CommentsAndLikes/CommentsForm";
 
 interface UserColViewIF {
 	userOnView: UserDataIF;

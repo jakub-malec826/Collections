@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import FindActualUser from "../../../connectWithServer/FindActualUser";
+import FindActualUser from "../../../connectWithServer/User/FindActualUser";
 import UserDataIF from "../../../interfaces/UserDataIF";
 import CollectionsDataIF from "../../../interfaces/CollectionsDataIF";
-import { emptyColl } from "../Forms/CollectionFormSlice";
+import { emptyColl } from "../collections/CollectionFormSlice";
 
 const tempUser: UserDataIF = {
 	_id: "",
@@ -26,7 +26,7 @@ export const getUserOnViewData = createAsyncThunk(
 	}
 );
 
-export const UserOnViewSLice = createSlice({
+const UserOnViewSLice = createSlice({
 	name: "user",
 	initialState,
 	reducers: {

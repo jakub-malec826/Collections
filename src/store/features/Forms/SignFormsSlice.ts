@@ -5,7 +5,7 @@ const initialState = {
     formType: "signin",
 };
 
-export const SignFormsSlice = createSlice({
+const SignFormsSlice = createSlice({
     name: "signformVis",
     initialState,
     reducers: {

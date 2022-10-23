@@ -16,10 +16,10 @@ const root = ReactDOM.createRoot(rootDiv);
 root.render(
 	<Provider store={store}>
 		<HashRouter basename={"/"}>
-            <NavigationBar />
-            <div>
-			<Router />
-            </div>
+			<NavigationBar />
+			<div>
+				<Router />
+			</div>
 		</HashRouter>
 	</Provider>
 );

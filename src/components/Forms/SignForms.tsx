@@ -10,14 +10,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import ValidateFormWithDb from "../../connectWithServer/ValidateFormWithDb";
+import ValidateFormWithDb from "../../connectWithServer/User/ValidateFormWithDb";
 
 import UserDataIF from "../../interfaces/UserDataIF";
 import HandleChange from "../../functions/HandleChange";
 
 import { StoreState } from "../../store/Store";
-import { hideSignForm } from "../../store/features/Forms/SignFormsSlice";
-import { setLoginUser } from "../../store/features/user/LoginUserSlice";
+import { hideSignForm } from "../../store/features/forms/SignFormsSlice";
+import { setLoginUser } from "../../store/features/oneUser/LoginUserSlice";
 
 export interface valuesIF {
 	email: string;

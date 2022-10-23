@@ -11,7 +11,7 @@ const initialState = {
     forEdit: false,
 };
 
-export const ItemFormSlice = createSlice({
+const ItemFormSlice = createSlice({
     name: "items",
     initialState,
     reducers: {

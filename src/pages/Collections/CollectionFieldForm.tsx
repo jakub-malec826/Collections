@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import {
 	hideFieldsForm,
 	setFields,
-} from "../../store/features/collectionFields/CollectionFieldsSlice";
+} from "../../store/features/collections/collectionFields/CollectionFieldsSlice";
 
 export default function CollectionFieldForm() {
 	const [state, setState] = useState({

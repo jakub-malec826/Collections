@@ -2,12 +2,12 @@ import { Button, ButtonGroup, Form, Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-import { StoreState, useStoreDispatch } from "../store/Store";
+import { StoreState, useStoreDispatch } from "../../store/Store";
 
-import ChangeUsersStatus from "../connectWithServer/ChangeUsersStatus";
+import ChangeUsersStatus from "../../connectWithServer/User/ChangeUsersStatus";
 
-import { GetAllDataUsers } from "../store/features/users/UsersSlice";
-import UserInAdminPanel from "../components/UserInAdminPanel";
+import { GetAllDataUsers } from "../../store/features/users/UsersSlice";
+import UserInAdminPanel from "./UserInAdminPanel";
 import { useNavigate } from "react-router-dom";
 
 export default function AdminPanel() {
@@ -33,7 +33,7 @@ export default function AdminPanel() {
 			alert("Nope");
 			nav("/");
 		}
-	}, [sess, activeUser]);
+	}, [activeUser]);
 
 	const handleSelectAll = () => {
 		setCheckAll(!checkAll);

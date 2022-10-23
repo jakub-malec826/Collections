@@ -5,7 +5,7 @@ const initialState = {
     showForm: false,
 };
 
-export const CollectionFieldSlice = createSlice({
+const CollectionFieldSlice = createSlice({
     name: "field",
     initialState,
     reducers: {

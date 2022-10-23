@@ -6,11 +6,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { StoreState, useStoreDispatch } from "../store/Store";
 
 import Forms from "./Forms/SignForms";
-import { showSignForm } from "../store/features/Forms/SignFormsSlice";
+import { showSignForm } from "../store/features/forms/SignFormsSlice";
 import {
 	deleteloginUser,
 	getUserData,
-} from "../store/features/user/LoginUserSlice";
+} from "../store/features/oneUser/LoginUserSlice";
 
 export default function NavigationBar() {
 	const [isHidden, setIsHidden] = useState(true);

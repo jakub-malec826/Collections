@@ -4,15 +4,15 @@ import { useParams } from "react-router-dom";
 import { Button, Form, Table } from "react-bootstrap";
 
 import { useSelector, useDispatch } from "react-redux";
-import { StoreState, useStoreDispatch } from "../store/Store";
+import { StoreState, useStoreDispatch } from "../../store/Store";
 
-import CollectionForm from "../components/Forms/CollectionForm";
+import CollectionForm from "../Collections/CollectionForm";
 import {
 	showCollectionForm,
 	emptyColl,
-} from "../store/features/Forms/CollectionFormSlice";
-import { getUserOnViewData } from "../store/features/user/UserOnViewSlice";
-import TableView from "../components/TableView";
+} from "../../store/features/collections/CollectionFormSlice";
+import { getUserOnViewData } from "../../store/features/oneUser/UserOnViewSlice";
+import TableView from "../../components/TableView";
 
 export default function UserPage() {
 	const userOnView = useSelector(

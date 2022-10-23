@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import FindActualUser from "../../../connectWithServer/FindActualUser";
+import FindActualUser from "../../../connectWithServer/User/FindActualUser";
 import UserDataIF from "../../../interfaces/UserDataIF";
 
 const tempUser: UserDataIF = {
@@ -23,7 +23,7 @@ export const getUserData = createAsyncThunk(
 	}
 );
 
-export const LoginUserSlice = createSlice({
+const LoginUserSlice = createSlice({
 	name: "user",
 	initialState,
 	reducers: {

@@ -1,4 +1,4 @@
-import ItemsDataIF from "../interfaces/ItemsDataIF";
+import ItemsDataIF from "../../interfaces/ItemsDataIF";
 
 interface CommentsViewIF {
 	actualItem: { user: string; comment: string };

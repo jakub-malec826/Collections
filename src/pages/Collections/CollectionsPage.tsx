@@ -2,27 +2,27 @@ import { Button, OverlayTrigger, Popover, Table, Badge } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
-import { StoreState, useStoreDispatch } from "../store/Store";
+import { StoreState, useStoreDispatch } from "../../store/Store";
 import {
 	showItemsForm,
 	emptyItem,
-} from "../store/features/Forms/ItemFormSlice";
+} from "../../store/features/forms/ItemFormSlice";
 
-import TableView from "../components/TableView";
-import ItemForm from "../components/Forms/ItemForm";
-import CollectionFieldForm from "../components/Forms/CollectionFieldForm";
+import TableView from "../../components/TableView";
+import ItemForm from "../../components/Forms/ItemForm";
+import CollectionFieldForm from "./CollectionFieldForm";
 import { useState, useEffect } from "react";
-import ItemsDataIF from "../interfaces/ItemsDataIF";
+import ItemsDataIF from "../../interfaces/ItemsDataIF";
 import {
 	deleteFields,
 	showFieldsForm,
 	startValue,
-} from "../store/features/collectionFields/CollectionFieldsSlice";
+} from "../../store/features/collections/collectionFields/CollectionFieldsSlice";
 import {
 	getUserOnViewData,
 	setCollectionOnView,
-} from "../store/features/user/UserOnViewSlice";
-import { emptyColl } from "../store/features/Forms/CollectionFormSlice";
+} from "../../store/features/oneUser/UserOnViewSlice";
+import { emptyColl } from "../../store/features/collections/CollectionFormSlice";
 
 export interface ItemStateIF extends ItemsDataIF {
 	[key: string]: any;
@@ -83,7 +83,7 @@ export default function CollectionsPage() {
 			/>
 
 			<h4 className="m-3">Collection: {collectionName}</h4>
-            <Button
+			<Button
 				className="mb-3"
 				variant="primary"
 				onClick={() => {

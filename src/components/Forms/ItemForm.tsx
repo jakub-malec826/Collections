@@ -5,12 +5,12 @@ import { StoreState } from "../../store/Store";
 import {
 	hideItemsForm,
 	emptyItem,
-} from "../../store/features/Forms/ItemFormSlice";
+} from "../../store/features/forms/ItemFormSlice";
 import HandleChange from "../../functions/HandleChange";
-import { ItemStateIF } from "../../pages/CollectionsPage";
+import { ItemStateIF } from "../../pages/Collections/CollectionsPage";
 import React from "react";
 import { useParams } from "react-router-dom";
-import { deleteFields } from "../../store/features/collectionFields/CollectionFieldsSlice";
+import { deleteFields } from "../../store/features/collections/collectionFields/CollectionFieldsSlice";
 import { useEffect } from "react";
 import OperationsOnItem from "../../connectWithServer/OperationsOnItem";
 import CollectionsDataIF from "../../interfaces/CollectionsDataIF";

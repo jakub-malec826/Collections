@@ -19,7 +19,7 @@ const initialState = {
 	forEdit: false,
 };
 
-export const FormsVisSlice = createSlice({
+const FormsVisSlice = createSlice({
 	name: "formsVis",
 	initialState,
 	reducers: {

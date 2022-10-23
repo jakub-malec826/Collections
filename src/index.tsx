@@ -13,14 +13,13 @@ const rootDiv = document.getElementById("root") as HTMLElement;
 
 const root = ReactDOM.createRoot(rootDiv);
 
-const baseName = "/";
-
 root.render(
-    
-    <Provider store={store}>
-        <HashRouter basename={baseName}>
+	<Provider store={store}>
+		<HashRouter basename={"/"}>
             <NavigationBar />
-            <Router />
-        </HashRouter>
-    </Provider>
+            <div>
+			<Router />
+            </div>
+		</HashRouter>
+	</Provider>
 );

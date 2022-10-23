@@ -14,6 +14,9 @@ import { showCollectionForm } from "../store/features/Forms/CollectionFormSlice"
 import { StoreState } from "../store/Store";
 import { showItemsForm } from "../store/features/Forms/ItemFormSlice";
 import OperationsOnItem from "../connectWithServer/OperationsOnItem";
+import CommentsView from "./CommentsView";
+import { useState, useEffect } from "react";
+import CommentsForm from "./Forms/CommentsForm";
 
 interface UserColViewIF {
 	userOnView: UserDataIF;
@@ -31,19 +34,21 @@ export default function TableView({
 	collectionName,
 }: UserColViewIF) {
 	const actualUser = useSelector(
-		(state: StoreState) => state.OneUserReducer.user
+		(state: StoreState) => state.LoginUserReducer.loginUser
 	);
 	const fields = useSelector(
 		(state: StoreState) => state.CollectionFieldsReducer.fields
 	);
 
+	const [showComments, setShowComments] = useState(true);
+
 	const nav = useNavigate();
 
 	const dispatch = useDispatch();
 	return (
-		<tr>
-			<td>
-				<div
+		<>
+			<tr>
+				<td
 					hidden={
 						userOnView.userName === actualUser.userName
 							? false
@@ -51,6 +56,7 @@ export default function TableView({
 					}
 				>
 					<Button
+						className="m-0"
 						variant="light"
 						onClick={() => {
 							type === "collection" &&
@@ -64,6 +70,7 @@ export default function TableView({
 						✍🏼
 					</Button>
 					<Button
+						className="m-0"
 						variant="light"
 						onClick={async () => {
 							type === "collection" &&
@@ -85,56 +92,79 @@ export default function TableView({
 					>
 						❌
 					</Button>
-				</div>
-			</td>
+				</td>
 
-			{type === "collection" && collectionToShow && (
-				<>
-					<td onClick={() => nav(`${collectionToShow.name}`)}>
-						{collectionToShow.name}
-					</td>
-					<td data-color-mode="light">
-						<MarkdownEditor.Markdown
-							source={collectionToShow.description}
-						/>
-					</td>
-					<td>{collectionToShow.topic}</td>
-					<td>
-						{collectionToShow.image
-							? collectionToShow.image
-							: "No image uploaded"}
-					</td>
-				</>
-			)}
-
-			{type === "items" && itemsToShow && (
-				<>
-					<td>{itemsToShow._id}</td>
-					<td>{itemsToShow.name}</td>
-					<td>
-						{itemsToShow.tag.map(
-							(t) =>
-								t +
-								(itemsToShow.tag.indexOf(t) <
-								itemsToShow.tag.length - 1
-									? ", "
-									: "")
-						)}
-					</td>
-					{fields.map((f) => (
-						<td key={fields.indexOf(f)}>
-							{typeof itemsToShow[f.fieldName.toLowerCase()] !==
-							"boolean"
-								? itemsToShow[f.fieldName.toLowerCase()]
-								: itemsToShow[f.fieldName.toLowerCase()] ===
-								  true
-								? "✅"
-								: "❌"}
+				{type === "collection" && collectionToShow && (
+					<>
+						<td onClick={() => nav(`${collectionToShow.name}`)}>
+							<strong className="text-primary">
+								{collectionToShow.name}
+							</strong>
 						</td>
-					))}
-					<td></td>
-				</>
-			)}
-		</tr>
+						<td data-color-mode="light">
+							<MarkdownEditor.Markdown
+								source={collectionToShow.description}
+							/>
+						</td>
+						<td>{collectionToShow.topic}</td>
+						<td>
+							<img
+								src={collectionToShow.image.url}
+								alt="No image uploaded"
+								width={150}
+							/>
+						</td>
+					</>
+				)}
+
+				{type === "items" && itemsToShow && (
+					<>
+						<td onClick={() => setShowComments((show) => !show)}>
+							<strong className="text-primary">
+								{itemsToShow._id?.slice(-6)}
+							</strong>
+						</td>
+						<td>{itemsToShow.name}</td>
+						<td>
+							{itemsToShow.tag.map(
+								(t) =>
+									t +
+									(itemsToShow.tag.indexOf(t) <
+									itemsToShow.tag.length - 1
+										? ", "
+										: "")
+							)}
+						</td>
+						{fields.map((f) => (
+							<td key={fields.indexOf(f)}>
+								{typeof itemsToShow[
+									f.fieldName.toLowerCase()
+								] !== "boolean"
+									? itemsToShow[f.fieldName.toLowerCase()]
+									: itemsToShow[f.fieldName.toLowerCase()] ===
+									  true
+									? "✅"
+									: "❌"}
+							</td>
+						))}
+					</>
+				)}
+			</tr>
+			<tr hidden={showComments}>
+				<CommentsForm
+					actualItem={
+						itemsToShow ? itemsToShow : { tag: [], name: "" }
+					}
+				/>
+			</tr>
+			{itemsToShow?.comments?.map((com) => (
+				<CommentsView
+					key={itemsToShow.comments?.indexOf(com)}
+					showComments={showComments}
+					fieldsLength={fields.length}
+					actualItem={com}
+				/>
+			))}
+		</>
 	);
 }

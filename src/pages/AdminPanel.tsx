@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 export default function AdminPanel() {
 	const users = useSelector((state: StoreState) => state.UserReducer.users);
 	const activeUser = useSelector(
-		(state: StoreState) => state.OneUserReducer.user
+		(state: StoreState) => state.LoginUserReducer.loginUser
 	);
 	const sess = sessionStorage.getItem("user");
 
@@ -26,7 +26,7 @@ export default function AdminPanel() {
 
 	useEffect(() => {
 		dispatch(GetAllDataUsers());
-	}, [users]);
+	}, [users, dispatch]);
 
 	useEffect(() => {
 		if (sess === null || !activeUser.isAdmin) {
@@ -65,7 +65,7 @@ export default function AdminPanel() {
 				</Button>
 			</ButtonGroup>
 
-			<Table striped bordered responsive={false} className="w-75 mx-auto">
+			<Table hover bordered responsive className="mx-auto w-auto">
 				<thead>
 					<tr>
 						<th>

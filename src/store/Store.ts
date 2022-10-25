@@ -3,24 +3,20 @@ import { useDispatch } from "react-redux";
 
 import UserReducer from "./features/users/UsersSlice";
 import LoginUserReducer from "./features/oneUser/LoginUserSlice";
-import UserOnViewReducer from "./features/oneUser/UserOnViewSlice";
-import FormsVisReducer from "./features/collections/CollectionFormSlice";
-import SignFormsReducer from "./features/forms/SignFormsSlice";
-import ItemFormReducer from "./features/forms/ItemFormSlice";
-import CollectionFieldsReducer from "./features/collections/collectionFields/CollectionFieldsSlice";
-import CollectionsTopicReducer from "./features/collections/CollectionsTopicSlice";
+import CollectionFieldsReducer from "./features/collectionFields/CollectionFieldsSlice";
+import CollectionsTopicReducer from "./features/topic/CollectionsTopicSlice";
 import ThemeReducer from "./features/theme/ThemeSlice";
+import CollectionsReducer from "./features/collections/CollectionsSlice";
+import ItemsReducer from "./features/items/ItemsSlice";
 
 const reducers = combineReducers({
 	ThemeReducer,
+	CollectionsTopicReducer,
 	UserReducer,
 	LoginUserReducer,
-	UserOnViewReducer,
-	FormsVisReducer,
-	SignFormsReducer,
-	ItemFormReducer,
+	CollectionsReducer,
 	CollectionFieldsReducer,
-	CollectionsTopicReducer,
+	ItemsReducer,
 });
 
 const store = configureStore({

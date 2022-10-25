@@ -3,8 +3,8 @@ import { HashRouter } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.css";
 
-import NavigationBar from "./components/NavigationBar";
-import Router from "./Router";
+import NavigationBar from "./app/components/NavigationBar";
+import Router from "./app/Router";
 
 import store from "./store/Store";
 import { Provider } from "react-redux";

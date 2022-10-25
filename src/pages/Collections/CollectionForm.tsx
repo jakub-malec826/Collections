@@ -3,43 +3,60 @@ declare var REACT_APP_CLOUD_NAME: string;
 
 import { useState, useEffect } from "react";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { StoreState, useStoreDispatch } from "../../store/Store";
-import { hideCollectionForm } from "../../store/features/collections/CollectionFormSlice";
+import { getTopicListFromDb } from "../../store/features/topic/CollectionsTopicSlice";
+import {
+	EditCollection,
+	AddCollectionData,
+} from "../../store/features/collections/CollectionsSlice";
 
-import { Button, Form, Offcanvas, OffcanvasHeader, Row } from "react-bootstrap";
+import { useParams } from "react-router-dom";
+
+import { Button, Form, Offcanvas, OffcanvasHeader } from "react-bootstrap";
 import MarkdownEditor from "@uiw/react-markdown-editor";
 import { FileUploader } from "react-drag-drop-files";
 
-import CollectionsDataIF from "../../interfaces/CollectionsDataIF";
+import CollectionSchemaIF from "../../interfaces/CollectionSchemaIF";
 import HandleChange from "../../functions/HandleChange";
-import OperationsOnColl from "../../connectWithServer/OperationsOnColl";
-import { getTopicListFromDb } from "../../store/features/collections/CollectionsTopicSlice";
 
 interface CollectionFormIF {
-	userName: string;
+	collectionFormState: {
+		collection: CollectionSchemaIF;
+		forEdit: boolean;
+		show: boolean;
+	};
+	setCollectionsFormState: Function;
 }
 
-export default function CollectionForm({ userName }: CollectionFormIF) {
+export default function CollectionForm({
+	collectionFormState,
+	setCollectionsFormState,
+}: CollectionFormIF) {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
 
 	const topicList = useSelector(
 		(state: StoreState) => state.CollectionsTopicReducer.topicsList
 	);
-	const formState = useSelector((state: StoreState) => state.FormsVisReducer);
 
-	const dispatch = useDispatch();
-	const storeDispatch = useStoreDispatch();
+	const { userName } = useParams();
 
-	const [coll, setColl] = useState<CollectionsDataIF>(formState.collection);
+	const dispatch = useStoreDispatch();
 
-	useEffect(() => {
-		storeDispatch(getTopicListFromDb());
-	}, [topicList.length]);
+	const [coll, setColl] = useState<CollectionSchemaIF>({
+		...collectionFormState.collection,
+	});
 
 	useEffect(() => {
-		setColl({ ...formState.collection, owner: userName });
-	}, [formState]);
+		dispatch(getTopicListFromDb());
+	}, [dispatch]);
+
+	useEffect(() => {
+		setColl({
+			...collectionFormState.collection,
+			owner: userName ? userName : "",
+		});
+	}, [collectionFormState, setColl]);
 
 	const sendImage = async (image: File) => {
 		const imageData = new FormData();
@@ -68,10 +85,11 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		formState.forEdit
-			? await OperationsOnColl(coll.owner, coll, "editcoll")
-			: await OperationsOnColl(coll.owner, coll, "newcoll");
-		dispatch(hideCollectionForm());
+		collectionFormState.forEdit
+			? dispatch(EditCollection(coll))
+			: dispatch(AddCollectionData(coll));
+
+		setCollectionsFormState({ ...collectionFormState, show: false });
 	};
 
 	return (
@@ -84,19 +102,26 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
 					  }
 					: {}
 			}
-			show={formState.formVis}
-			onHide={() => dispatch(hideCollectionForm())}
+			show={collectionFormState.show}
+			onHide={() =>
+				setCollectionsFormState({ ...collectionFormState, show: false })
+			}
 		>
 			<OffcanvasHeader className="border-bottom border-secondary m-3">
 				<h3 className="d-inline">
-					{formState.forEdit
+					{collectionFormState.forEdit
 						? "Edit collection"
 						: "Add new collection"}
 				</h3>
 				<Button
 					className="d-inline mb-2"
 					variant={theme}
-					onClick={() => dispatch(hideCollectionForm())}
+					onClick={() =>
+						setCollectionsFormState({
+							...collectionFormState,
+							show: false,
+						})
+					}
 				>
 					ｘ
 				</Button>
@@ -106,7 +131,9 @@ export default function CollectionForm({ userName }: CollectionFormIF) {
 					className=" w-auto mx-auto m-3"
 					data-color-mode={theme}
 				>
-					<Form.Label className="mx-auto w-auto m-2" htmlFor="desc">Description</Form.Label>
+					<Form.Label className="mx-auto w-auto m-2" htmlFor="desc">
+						Description
+					</Form.Label>
 					<MarkdownEditor
 						className="m-3"
 						id="desc"

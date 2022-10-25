@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import FindActualUser from "../../../connectWithServer/User/FindActualUser";
+
 import UserDataIF from "../../../interfaces/UserDataIF";
+import serverUrl from "../../serverUrl";
 
 const tempUser: UserDataIF = {
 	_id: "",
@@ -18,8 +19,18 @@ const initialState = {
 
 export const getUserData = createAsyncThunk(
 	"user/equaluser",
-	async (params: string) => {
-		return await FindActualUser(params);
+	async (userName: string) => {
+		return await fetch(`${serverUrl}users/${userName}`, {
+			method: "post",
+			mode: "cors",
+			headers: {
+				"Content-type": "application/json",
+			},
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				return data;
+			});
 	}
 );
 

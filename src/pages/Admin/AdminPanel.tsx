@@ -7,8 +7,8 @@ import { useNavigate } from "react-router-dom";
 
 import { Button } from "react-bootstrap";
 
-import UserManagement from "./UserManagement";
-import CollectionsTopicManagement from "./CollectionsTopicManagement";
+import UserManagement from "./UserManagement/UserManagement";
+import CollectionsTopicManagement from "./TopicManagement/CollectionsTopicManagement";
 
 export default function AdminPanel() {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
@@ -21,12 +21,12 @@ export default function AdminPanel() {
 
 	const [showItem, setShowItem] = useState(false);
 
-	useEffect(() => {
-		if (sess === null || !activeUser.isAdmin) {
-			alert("Nope");
-			nav("/");
-		}
-	}, [activeUser]);
+	// useEffect(() => {
+	// 	if (sess === null || !activeUser.isAdmin) {
+	// 		alert("Nope");
+	// 		nav("/");
+	// 	}
+	// }, [activeUser]);
 
 	return (
 		<div className="mx-auto text-center">

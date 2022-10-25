@@ -68,7 +68,7 @@ export default function CollectionItemsPage() {
 	useEffect(() => {
 		items &&
 			items.length !== 0 &&
-			items[items.length - 1]?.additionalField?.map((f, i, arr) => {
+			items[0]?.additionalField?.map((f, i, arr) => {
 				fields.length !== arr.length && dispatch(setFields(f));
 			});
 	}, [dispatch, items]);
@@ -112,35 +112,36 @@ export default function CollectionItemsPage() {
 							fields.map((f) => (
 								<th key={fields.indexOf(f)}>{f.fieldName}</th>
 							))}
-
-						<th>
-							<OverlayTrigger
-								trigger="click"
-								placement="bottom"
-								show={showFields}
-								onToggle={() => dispatch(showFieldsForm())}
-								overlay={
-									<Popover>
-										<Popover.Header
-											style={
-												theme === "dark"
-													? {
-															backgroundColor:
-																"rgb(32,35,38)",
-															color: "rgb(240,240,240)",
-													  }
-													: {}
-											}
-										>
-											Add Field
-										</Popover.Header>
-										<LikesAdnCollectionFieldForm />
-									</Popover>
-								}
-							>
-								<Button variant={theme}>Add Field</Button>
-							</OverlayTrigger>
-						</th>
+						{items.length === 0 && (
+							<th>
+								<OverlayTrigger
+									trigger="click"
+									placement="bottom"
+									show={showFields}
+									onToggle={() => dispatch(showFieldsForm())}
+									overlay={
+										<Popover>
+											<Popover.Header
+												style={
+													theme === "dark"
+														? {
+																backgroundColor:
+																	"rgb(32,35,38)",
+																color: "rgb(240,240,240)",
+														  }
+														: {}
+												}
+											>
+												Add Field
+											</Popover.Header>
+											<LikesAdnCollectionFieldForm />
+										</Popover>
+									}
+								>
+									<Button variant={theme}>Add Field</Button>
+								</OverlayTrigger>
+							</th>
+						)}
 					</tr>
 				</thead>
 				<tbody>

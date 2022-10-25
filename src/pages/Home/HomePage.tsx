@@ -47,6 +47,23 @@ export default function HomePage() {
 			</div>
 			<div>
 				<h4>Top 5 biggest collections</h4>
+				<Table
+					variant={theme}
+					responsive="sm"
+					striped
+					className="w-75 mx-auto m-3"
+				>
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Owner</th>
+							<th>Description</th>
+							<th>Topic</th>
+							<th>Image</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</Table>
 			</div>
 			<div>tag cloud</div>
 		</div>

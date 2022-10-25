@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
-import { StoreState, useStoreDispatch } from "../../store/Store";
-import { DeleteCollectionFromDb } from "../../store/features/collections/CollectionsSlice";
+import { StoreState } from "../../store/Store";
+
 
 import { useNavigate } from "react-router-dom";
 
@@ -8,7 +8,6 @@ import MarkdownEditor from "@uiw/react-markdown-editor";
 
 import CollectionSchemaIF from "../../interfaces/CollectionSchemaIF";
 import ButtonsInTableView from "../../app/components/ButtonsInTableView";
-import { useState } from "react";
 
 interface UserColViewIF {
 	collectionElement: CollectionSchemaIF;

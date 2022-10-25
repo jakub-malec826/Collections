@@ -2,8 +2,6 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-require("dotenv").config();
-
 const enviroment =
 	process.env.NODE_ENV === "development" ? "development" : "production";
 
@@ -63,12 +61,6 @@ module.exports = {
 		}),
 		new webpack.DefinePlugin({
 			API_URL: JSON.stringify(apiUrls[enviroment]),
-			REACT_APP_CLOUD_NAME: JSON.stringify(
-				process.env.REACT_APP_CLOUD_NAME
-			),
-			REACT_APP_UPLOAD_PRESET: JSON.stringify(
-				process.env.REACT_APP_UPLOAD_PRESET
-			),
 		}),
 	],
 };

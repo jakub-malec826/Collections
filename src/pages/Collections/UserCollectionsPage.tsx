@@ -52,7 +52,7 @@ export default function UserCollectionsPage() {
 
 	useEffect(() => {
 		dispatch(GetCollectionData(userName ? userName : ""));
-	}, [dispatch]);
+	}, [dispatch, userName]);
 
 	return (
 		<div className="mx-auto text-center">

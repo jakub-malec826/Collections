@@ -1,6 +1,9 @@
 import { useSelector } from "react-redux";
 import { StoreState, useStoreDispatch } from "../../store/Store";
-import { DeleteCollectionFromDb } from "../../store/features/collections/CollectionsSlice";
+import {
+	DeleteCollectionFromDb,
+	DeleteItemFromCollection,
+} from "../../store/features/collections/CollectionsSlice";
 
 import { useParams } from "react-router-dom";
 
@@ -82,6 +85,16 @@ export default function ButtonsInTableView({
 								itemElement._id ? itemElement._id : ""
 							)
 						);
+					itemElement &&
+						dispatch(
+							DeleteItemFromCollection({
+								collectionId: itemElement?.owner
+									? itemElement.owner
+									: "",
+								itemId: itemElement?._id ? itemElement._id : "",
+							})
+						);
+
 					callback && callback(false);
 				}}
 			>

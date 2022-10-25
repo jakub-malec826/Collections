@@ -9,11 +9,14 @@ import { Button, Form, Offcanvas, OffcanvasHeader } from "react-bootstrap";
 import HandleChange from "../../functions/HandleChange";
 
 import { ItemStateIF } from "./CollectionItemsPage";
+import { AddItemToCollection } from "../../store/features/collections/CollectionsSlice";
 import {
 	emptyItem,
 	EditItemInDb,
 	AddItemToDb,
 } from "../../store/features/items/ItemsSlice";
+
+import objectID from "bson-objectid";
 
 interface propsIF {
 	owner: string;
@@ -41,7 +44,7 @@ export default function ItemForm({
 	const [item, setItem] = useState<ItemStateIF>(emptyItem);
 
 	useEffect(() => {
-		const tempItems: any = {};
+		const tempItems: any = { ...itemFormState.item };
 		fields.map(
 			(f) =>
 				(tempItems[f.fieldName.toLowerCase()] =
@@ -49,15 +52,12 @@ export default function ItemForm({
 		);
 		itemFormState.forEdit
 			? setItem({
-					...item,
 					...tempItems,
-					...itemFormState.item,
 					owner,
-					author: loginUser,
 			  })
 			: setItem({
-					...itemFormState.item,
 					...tempItems,
+					_id: objectID(),
 					owner,
 					author: loginUser,
 					date: new Date().toLocaleString(),
@@ -67,9 +67,17 @@ export default function ItemForm({
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		itemFormState.forEdit
-			? dispatch(EditItemInDb(item))
-			: dispatch(AddItemToDb(item));
+		if (itemFormState.forEdit) {
+			dispatch(EditItemInDb(item));
+		} else {
+			dispatch(AddItemToDb(item));
+			dispatch(
+				AddItemToCollection({
+					collectionId: owner,
+					itemId: item._id ? item._id : "",
+				})
+			);
+		}
 
 		setItem(emptyItem);
 		dispatch(deleteFields());

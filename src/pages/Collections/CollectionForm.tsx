@@ -1,6 +1,3 @@
-declare var REACT_APP_UPLOAD_PRESET: string;
-declare var REACT_APP_CLOUD_NAME: string;
-
 import { useState, useEffect } from "react";
 
 import { useSelector } from "react-redux";
@@ -19,6 +16,7 @@ import { FileUploader } from "react-drag-drop-files";
 
 import CollectionSchemaIF from "../../interfaces/CollectionSchemaIF";
 import HandleChange from "../../functions/HandleChange";
+import { sendImageToCloud } from "../../functions/SendImageToCloud";
 
 interface CollectionFormIF {
 	collectionFormState: {
@@ -46,6 +44,7 @@ export default function CollectionForm({
 	const [coll, setColl] = useState<CollectionSchemaIF>({
 		...collectionFormState.collection,
 	});
+	const [image, setImage] = useState<File>();
 
 	useEffect(() => {
 		dispatch(getTopicListFromDb());
@@ -58,36 +57,22 @@ export default function CollectionForm({
 		});
 	}, [collectionFormState, setColl]);
 
-	const sendImage = async (image: File) => {
-		const imageData = new FormData();
-
-		imageData.append("file", image);
-		imageData.append("upload_preset", `${REACT_APP_UPLOAD_PRESET}`);
-
-		await fetch(
-			`https://api.cloudinary.com/v1_1/${REACT_APP_CLOUD_NAME}/image/upload/`,
-			{
-				method: "post",
-				body: imageData,
-			}
-		)
-			.then((res) => res.json())
-			.then((data) => {
-				console.log(data.url);
-				setColl({
-					...coll,
-					image: { ...image, url: data.url, id: data.public_id },
-				});
-			})
-			.catch((err) => console.error(err));
-	};
-
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		collectionFormState.forEdit
-			? dispatch(EditCollection(coll))
-			: dispatch(AddCollectionData(coll));
+		if (image) {
+			const collWithImage = await sendImageToCloud(image, coll);
+
+			if (collWithImage !== undefined) {
+				collectionFormState.forEdit
+					? dispatch(EditCollection(collWithImage))
+					: dispatch(AddCollectionData(collWithImage));
+			}
+		} else {
+			collectionFormState.forEdit
+				? dispatch(EditCollection(coll))
+				: dispatch(AddCollectionData(coll));
+		}
 
 		setCollectionsFormState({ ...collectionFormState, show: false });
 	};
@@ -149,8 +134,8 @@ export default function CollectionForm({
 							"italic",
 							"underline",
 							"todo",
-							"olist",
 							"ulist",
+							"olist",
 							"quote",
 						]}
 						toolbarsMode={["preview", "fullscreen"]}
@@ -192,8 +177,8 @@ export default function CollectionForm({
 						label="Upload/drop image here"
 						hoverTitle="Drop here"
 						types={["JPG", "JPEG", "PNG", "GIF", "HEIF"]}
-						handleChange={async (e: File) => {
-							await sendImage(e);
+						handleChange={(e: File) => {
+							setImage(e);
 						}}
 					/>
 				</Form.Group>

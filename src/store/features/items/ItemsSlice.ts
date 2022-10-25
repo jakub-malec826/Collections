@@ -20,8 +20,8 @@ const initialState = {
 
 export const GetItemsFromDb = createAsyncThunk(
 	"items/get",
-	async (collectionName: string) => {
-		return await fetch(`${serverUrl}items/getall/${collectionName}`)
+	async (collectionId: string) => {
+		return await fetch(`${serverUrl}items/getall/${collectionId}`)
 			.then((res) => res.json())
 			.then((data: ItemSchemaIF[]) => {
 				return data;

@@ -14,12 +14,24 @@ export const emptyColl = {
 
 const initialState = {
 	collections: <CollectionSchemaIF[]>[],
+	biggestCollections: <CollectionSchemaIF[]>[],
 };
 
 export const GetCollectionData = createAsyncThunk(
 	"collecion/get",
 	async (userId: string) => {
 		return await fetch(`${serverUrl}collections/getall/${userId}`)
+			.then((res) => res.json())
+			.then((data: CollectionSchemaIF[]) => {
+				return data;
+			});
+	}
+);
+
+export const GetBiggestCollectionsData = createAsyncThunk(
+	"collection/biggest",
+	async () => {
+		return await fetch(`${serverUrl}collections/getbiggest`)
 			.then((res) => res.json())
 			.then((data: CollectionSchemaIF[]) => {
 				return data;
@@ -67,6 +79,48 @@ export const EditCollection = createAsyncThunk(
 	}
 );
 
+export const AddItemToCollection = createAsyncThunk(
+	"collection/additem",
+	async (params: { collectionId: string; itemId: string }) => {
+		const { collectionId, itemId } = params;
+		return await fetch(
+			`${serverUrl}collections/additemtocollection/${collectionId}/${itemId}`,
+			{
+				method: "put",
+				mode: "cors",
+				headers: {
+					"Content-type": "application/json",
+				},
+			}
+		)
+			.then((res) => res.json())
+			.then((data: CollectionSchemaIF) => {
+				return { data, itemId };
+			});
+	}
+);
+export const DeleteItemFromCollection = createAsyncThunk(
+	"collection/deleteitem",
+	async (params: { collectionId: string; itemId: string }) => {
+		const { collectionId, itemId } = params;
+
+		return await fetch(
+			`${serverUrl}collections/deleteitemfromcollection/${collectionId}/${itemId}`,
+			{
+				method: "put",
+				mode: "cors",
+				headers: {
+					"Content-type": "application/json",
+				},
+			}
+		)
+			.then((res) => res.json())
+			.then((data: CollectionSchemaIF) => {
+				return { data, itemId };
+			});
+	}
+);
+
 export const DeleteCollectionFromDb = createAsyncThunk(
 	"collection/delete",
 	async (collectionId: string) => {
@@ -79,7 +133,7 @@ export const DeleteCollectionFromDb = createAsyncThunk(
 					"Content-type": "application/json",
 				},
 			}
-		);
+		).catch((err) => console.log(err));
 		return collectionId;
 	}
 );
@@ -93,6 +147,10 @@ const CollectionsSlice = createSlice({
 			.addCase(GetCollectionData.fulfilled, (state, action) => {
 				state.collections = action.payload;
 			})
+			.addCase(GetBiggestCollectionsData.fulfilled, (state, action) => {
+				state.biggestCollections = action.payload;
+			})
+
 			.addCase(AddCollectionData.fulfilled, (state, action) => {
 				state.collections.push(action.payload);
 			})
@@ -107,6 +165,22 @@ const CollectionsSlice = createSlice({
 						action.payload
 					);
 				}
+			})
+			.addCase(AddItemToCollection.fulfilled, (state, action) => {
+				let activeCollection = state.collections.find(
+					(coll) => coll._id === action.payload.data._id
+				);
+				if (activeCollection)
+					activeCollection.items.push(action.payload.itemId);
+			})
+			.addCase(DeleteItemFromCollection.fulfilled, (state, action) => {
+				let activeCollection = state.collections.find(
+					(coll) => coll._id === action.payload.data._id
+				);
+				if (activeCollection)
+					activeCollection.items = activeCollection.items.filter(
+						(cI) => cI !== action.payload.itemId
+					);
 			})
 			.addCase(DeleteCollectionFromDb.fulfilled, (state, action) => {
 				state.collections = state.collections.filter(

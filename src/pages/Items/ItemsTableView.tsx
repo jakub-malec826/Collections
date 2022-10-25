@@ -41,7 +41,6 @@ export default function ItemsTableView({
 		setShowCommentForm(
 			loginUser === undefined || loginUser === "" ? true : false
 		);
-		console.log(showCommentForm, loginUser);
 	}, [loginUser, dispatch]);
 
 	return (
@@ -87,7 +86,6 @@ export default function ItemsTableView({
 									: "❌"}
 							</td>
 						))}
-						<td></td>
 					</>
 				)}
 			</tr>

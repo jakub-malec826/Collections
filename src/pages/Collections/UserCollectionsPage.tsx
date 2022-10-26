@@ -2,17 +2,20 @@ import { useEffect, useState } from "react";
 
 import { useSelector } from "react-redux";
 import { StoreState, useStoreDispatch } from "../../store/Store";
-import { emptyColl, GetCollectionData } from "../../store/features/collections/CollectionsSlice";
+import {
+	deleteCollections,
+	emptyColl,
+	GetCollectionData,
+} from "../../store/features/collections/CollectionsSlice";
 
 import { useParams } from "react-router-dom";
 
-import { Button, Form, Table } from "react-bootstrap";
+import { Button, Form, Table, Container } from "react-bootstrap";
 
 import CollectionForm from "./CollectionForm";
 import CollectionTableView from "./CollectionTableView";
 
 import CollectionSchemaIF from "../../interfaces/CollectionSchemaIF";
-
 
 export default function UserCollectionsPage() {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
@@ -48,11 +51,18 @@ export default function UserCollectionsPage() {
 
 	const dispatch = useStoreDispatch();
 
+	const [filterText, setFilterText] = useState("");
+
 	const { userName } = useParams();
 
 	useEffect(() => {
-		dispatch(GetCollectionData(userName ? userName : ""));
-	}, [dispatch, userName]);
+		dispatch(
+			GetCollectionData({ userId: userName ? userName : "", filterText })
+		);
+		return () => {
+			dispatch(deleteCollections());
+		};
+	}, [dispatch, userName, filterText]);
 
 	return (
 		<div className="mx-auto text-center">
@@ -62,27 +72,37 @@ export default function UserCollectionsPage() {
 			/>
 
 			<h4 className="m-3">Hey "{userName}"</h4>
-
-			<Button
-				className="mb-3"
-				hidden={
-					userName === actualUser.userName
-						? false
-						: !actualUser.isAdmin
-				}
-				variant="primary"
-				onClick={() =>
-					setCollectionFormState({
-						show: true,
-						forEdit: false,
-						collection: emptyColl,
-					})
-				}
-			>
-				Create new collection
-			</Button>
-
+			<Container className="mb-3">
+				<Button
+					size="sm"
+					className="d-inline w-auto mx-1"
+					hidden={
+						userName === actualUser.userName
+							? false
+							: !actualUser.isAdmin
+					}
+					variant="primary"
+					onClick={() =>
+						setCollectionFormState({
+							show: true,
+							forEdit: false,
+							collection: emptyColl,
+						})
+					}
+				>
+					Create new collection
+				</Button>
+				<Form.Control
+					size="sm"
+					className="w-auto mx-1 d-inline"
+					type="text"
+					placeholder="Filter collections..."
+					value={filterText}
+					onChange={(e) => setFilterText(e.target.value)}
+				/>
+			</Container>
 			<Table
+				size="sm"
 				hover
 				responsive="sm"
 				variant={theme}
@@ -91,9 +111,9 @@ export default function UserCollectionsPage() {
 				<thead>
 					<tr>
 						<th>
-							<p className="d-inline">Sort by: </p>
 							<Form.Select
-								className="d-inline w-auto"
+								size="sm"
+								className="w-auto"
 								value={sortMethod}
 								onChange={(e) => setSortMethod(e.target.value)}
 							>

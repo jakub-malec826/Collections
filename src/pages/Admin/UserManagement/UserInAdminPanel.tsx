@@ -8,10 +8,10 @@ import { Form } from "react-bootstrap";
 
 import { Link } from "react-router-dom";
 
-import UserDataIF from "../../../interfaces/UserDataIF";
+import UserSchemaIF from "../../../interfaces/UserSchemaIF";
 
 interface UserInAdminPanelIF {
-	user: UserDataIF;
+	user: UserSchemaIF;
 	isCheck: string[];
 	handleCheck: React.ChangeEventHandler<HTMLInputElement>;
 }

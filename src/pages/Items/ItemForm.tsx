@@ -102,6 +102,7 @@ export default function ItemForm({
 					{itemFormState.forEdit ? "Edit Item" : "Add Item"}
 				</h3>
 				<Button
+					size="sm"
 					className="d-inline mb-2"
 					variant={theme}
 					onClick={() =>
@@ -119,6 +120,7 @@ export default function ItemForm({
 				<Form.Group className="m-1">
 					<Form.Label className="w-auto mx-auto m-2">Name</Form.Label>
 					<Form.Control
+						size="sm"
 						className="w-auto mx-auto m-2"
 						type="text"
 						name="name"
@@ -129,6 +131,7 @@ export default function ItemForm({
 				<Form.Group className="m-1">
 					<Form.Label className="w-auto mx-auto m-2">Tags</Form.Label>
 					<Form.Control
+						size="sm"
 						className="w-auto mx-auto m-2"
 						type="text"
 						name="tag"
@@ -171,6 +174,7 @@ export default function ItemForm({
 									{f.fieldName}
 								</Form.Label>
 								<Form.Control
+									size="sm"
 									className="w-auto mx-auto m-2"
 									type={f.fieldType}
 									name={f.fieldName.toLowerCase()}
@@ -186,6 +190,7 @@ export default function ItemForm({
 									{f.fieldName}
 								</Form.Label>
 								<Form.Control
+									size="sm"
 									className="w-auto mx-auto m-2"
 									as={f.fieldType}
 									name={f.fieldName.toLowerCase()}
@@ -200,6 +205,7 @@ export default function ItemForm({
 				</Form.Group>
 
 				<Button
+					size="sm"
 					variant={theme}
 					className="w-auto mx-auto m-2"
 					type="submit"

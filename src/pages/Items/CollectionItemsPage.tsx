@@ -10,12 +10,19 @@ import {
 
 import { useParams } from "react-router-dom";
 
-import { Button, OverlayTrigger, Popover, Table } from "react-bootstrap";
+import {
+	Button,
+	OverlayTrigger,
+	Popover,
+	Table,
+	Container,
+	Form,
+} from "react-bootstrap";
 
 import ItemForm from "./ItemForm";
 import LikesAdnCollectionFieldForm from "./CollectionFieldForm";
 
-import ItemSchemaIF from "../../interfaces/ItemDataIF";
+import ItemSchemaIF from "../../interfaces/ItemSchemaIF";
 import {
 	deleteItems,
 	emptyItem,
@@ -53,17 +60,31 @@ export default function CollectionItemsPage() {
 
 	const { collectionName } = useParams();
 
+	const [filterText, setFilterText] = useState("");
+	const [sortMethod, setSortMethod] = useState("name");
+
+	const sortedItems = [...items].sort((a, b) => {
+		if (sortMethod !== "tag")
+			return a[sortMethod.toLowerCase()] < b[sortMethod.toLowerCase()]
+				? -1
+				: 1;
+		else return a.tag[0].toLowerCase() < b.tag[0].toLowerCase() ? -1 : 1;
+	});
+
 	const dispatch = useStoreDispatch();
 
-	const callback = useCallback(() => {
-		dispatch(deleteFields());
-		dispatch(deleteItems());
-	}, [dispatch]);
-
 	useEffect(() => {
-		dispatch(GetItemsFromDb(collectionName ? collectionName : ""));
-		return callback();
-	}, [dispatch, callback]);
+		dispatch(
+			GetItemsFromDb({
+				collectionName: collectionName ? collectionName : "",
+				filterText,
+			})
+		);
+		return () => {
+			dispatch(deleteFields());
+			dispatch(deleteItems());
+		};
+	}, [dispatch, collectionName, filterText]);
 
 	useEffect(() => {
 		items &&
@@ -82,29 +103,64 @@ export default function CollectionItemsPage() {
 			/>
 
 			<h4 className="m-3">Collection: {collectionName}</h4>
-			<Button
-				className="mb-3"
-				variant="primary"
-				onClick={() => {
-					setItemFormState({
-						show: true,
-						forEdit: false,
-						item: emptyItem,
-					});
-				}}
-			>
-				Add new Item
-			</Button>
+			<Container className="mb-3">
+				<Button
+					size="sm"
+					className="mx-1 d-inline w-auto"
+					variant="primary"
+					onClick={() => {
+						setItemFormState({
+							show: true,
+							forEdit: false,
+							item: emptyItem,
+						});
+					}}
+				>
+					Add new Item
+				</Button>
+				<Form.Control
+					size="sm"
+					className="w-auto d-inline"
+					type="text"
+					placeholder="Filter items..."
+					name="filteringItems"
+					value={filterText}
+					onChange={(e) => setFilterText(e.target.value)}
+				/>
+			</Container>
 
 			<Table
+				size="sm"
 				variant={theme}
 				hover
-				responsive="sm"
 				className="mx-auto w-auto rounded"
+				style={{ minWidth: "320px", tableLayout: "fixed" }}
 			>
 				<thead>
 					<tr>
-						<th>#</th>
+						<th>
+							<Form.Select
+								size="sm"
+								className="w-auto"
+								value={sortMethod}
+								onChange={(e) => setSortMethod(e.target.value)}
+							>
+								<option value="id">id</option>
+								<option value="name">name</option>
+								<option value="tag">tags</option>
+								{fields.map((cf) => {
+									if (cf.fieldType !== "checkbox")
+										return (
+											<option
+												value={cf.fieldName}
+												key={fields.indexOf(cf)}
+											>
+												{cf.fieldName}
+											</option>
+										);
+								})}
+							</Form.Select>
+						</th>
 						<th>id</th>
 						<th>name</th>
 						<th>tags</th>
@@ -121,34 +177,24 @@ export default function CollectionItemsPage() {
 									onToggle={() => dispatch(showFieldsForm())}
 									overlay={
 										<Popover>
-											<Popover.Header
-												style={
-													theme === "dark"
-														? {
-																backgroundColor:
-																	"rgb(32,35,38)",
-																color: "rgb(240,240,240)",
-														  }
-														: {}
-												}
-											>
-												Add Field
-											</Popover.Header>
 											<LikesAdnCollectionFieldForm />
 										</Popover>
 									}
 								>
-									<Button variant={theme}>Add Field</Button>
+									<Button size="sm" variant={theme}>
+										Add Field
+									</Button>
 								</OverlayTrigger>
 							</th>
 						)}
 					</tr>
 				</thead>
 				<tbody>
-					{items.length !== 0 ? (
-						items.map((i) => (
+					{sortedItems.length !== 0 ? (
+						sortedItems.map((i) => (
 							<ItemsTableView
-								key={items.indexOf(i)}
+								hideComments={true}
+								key={sortedItems.indexOf(i)}
 								itemElement={i}
 								setItemFormState={setItemFormState}
 							/>

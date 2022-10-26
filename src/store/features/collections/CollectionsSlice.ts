@@ -19,8 +19,13 @@ const initialState = {
 
 export const GetCollectionData = createAsyncThunk(
 	"collecion/get",
-	async (userId: string) => {
-		return await fetch(`${serverUrl}collections/getall/${userId}`)
+	async (props: { userId: string; filterText: string }) => {
+		const { userId, filterText } = props;
+		return await fetch(
+			`${serverUrl}collections/getall/${userId}${
+				filterText !== "" ? "/" + filterText : ""
+			}`
+		)
 			.then((res) => res.json())
 			.then((data: CollectionSchemaIF[]) => {
 				return data;
@@ -52,7 +57,6 @@ export const AddCollectionData = createAsyncThunk(
 		})
 			.then((res) => res.json())
 			.then((data: CollectionSchemaIF) => {
-				console.log(data);
 				return data;
 			});
 	}
@@ -141,7 +145,11 @@ export const DeleteCollectionFromDb = createAsyncThunk(
 const CollectionsSlice = createSlice({
 	name: "collections",
 	initialState,
-	reducers: {},
+	reducers: {
+		deleteCollections: (state) => {
+			state.collections = [];
+		},
+	},
 	extraReducers(builder) {
 		builder
 			.addCase(GetCollectionData.fulfilled, (state, action) => {
@@ -189,5 +197,7 @@ const CollectionsSlice = createSlice({
 			});
 	},
 });
+
+export const { deleteCollections } = CollectionsSlice.actions;
 
 export default CollectionsSlice.reducer;

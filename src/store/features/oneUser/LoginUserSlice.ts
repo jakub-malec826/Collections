@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import UserDataIF from "../../../interfaces/UserDataIF";
+import UserSchemaIF from "../../../interfaces/UserSchemaIF";
 import serverUrl from "../../serverUrl";
 
-const tempUser: UserDataIF = {
+const tempUser: UserSchemaIF = {
 	_id: "",
 	userName: "",
 	password: "",
@@ -14,7 +14,7 @@ const tempUser: UserDataIF = {
 };
 
 const initialState = {
-	loginUser: <UserDataIF>{},
+	loginUser: <UserSchemaIF>{},
 };
 
 export const getUserData = createAsyncThunk(

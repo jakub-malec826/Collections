@@ -1,9 +1,23 @@
+import { useEffect } from "react";
+
 import { useSelector } from "react-redux";
 import { StoreState, useStoreDispatch } from "../../store/Store";
-import { useEffect } from "react";
 import { GetLastItems } from "../../store/features/items/ItemsSlice";
+import { GetBiggestCollectionsData } from "../../store/features/collections/CollectionsSlice";
+
 import { Table } from "react-bootstrap";
+import { TagCloud } from "react-tagcloud";
+
 import LastItemsView from "./LastItemsView";
+
+import BiggestCollectionsView from "./BiggestCollectionsView";
+import { GetTagsList } from "../../store/features/tags/TagsSlice";
+import { useNavigate } from "react-router-dom";
+
+interface tag {
+	value: string;
+	count: number;
+}
 
 export default function HomePage() {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
@@ -11,10 +25,22 @@ export default function HomePage() {
 		(state: StoreState) => state.ItemsReducer.lastItems
 	);
 
+	const tagList = useSelector(
+		(state: StoreState) => state.TagsReducer.tagsList
+	);
+
+	const biggestCollections = useSelector(
+		(state: StoreState) => state.CollectionsReducer.biggestCollections
+	);
+
+	const nav = useNavigate();
+
 	const dispatch = useStoreDispatch();
 
 	useEffect(() => {
 		dispatch(GetLastItems());
+		dispatch(GetBiggestCollectionsData());
+		dispatch(GetTagsList());
 	}, [dispatch]);
 
 	return (
@@ -62,10 +88,30 @@ export default function HomePage() {
 							<th>Image</th>
 						</tr>
 					</thead>
-					<tbody></tbody>
+					<tbody>
+						{biggestCollections.length !== 0 &&
+							biggestCollections.map((bC) => (
+								<BiggestCollectionsView
+									key={biggestCollections.indexOf(bC)}
+									collectionElement={bC}
+								/>
+							))}
+					</tbody>
 				</Table>
 			</div>
-			<div>tag cloud</div>
+			<div className="w-50 mx-auto">
+				<TagCloud
+					tags={tagList}
+					maxSize={40}
+					minSize={31}
+					colorOptions={{
+						luminosity: "dark",
+						hue: "blue",
+						format: "rgb",
+					}}
+					onClick={(tag: tag) => nav(`/items/${tag.value}`)}
+				/>
+			</div>
 		</div>
 	);
 }

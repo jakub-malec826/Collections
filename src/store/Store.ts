@@ -8,6 +8,8 @@ import CollectionsTopicReducer from "./features/topic/CollectionsTopicSlice";
 import ThemeReducer from "./features/theme/ThemeSlice";
 import CollectionsReducer from "./features/collections/CollectionsSlice";
 import ItemsReducer from "./features/items/ItemsSlice";
+import TagsReducer from "./features/tags/TagsSlice";
+import SearchBarReducer from "./features/searching/SearchBarSlice";
 
 const reducers = combineReducers({
 	ThemeReducer,
@@ -17,6 +19,8 @@ const reducers = combineReducers({
 	CollectionsReducer,
 	CollectionFieldsReducer,
 	ItemsReducer,
+	TagsReducer,
+	SearchBarReducer,
 });
 
 const store = configureStore({

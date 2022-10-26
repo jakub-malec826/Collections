@@ -1,6 +1,6 @@
 import CollectionSchemaIF from "./CollectionSchemaIF";
 
-export default interface UserDataIF {
+export default interface UserSchemaIF {
 	_id: string;
 	userName: string;
 	password: string;

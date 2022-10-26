@@ -50,7 +50,9 @@ const CollectionsTopicSlice = createSlice({
 	extraReducers(builder) {
 		builder
 			.addCase(getTopicListFromDb.fulfilled, (state, action) => {
-				state.topicsList = action.payload;
+				state.topicsList = action.payload.sort((a, b) =>
+					a.topic.toLowerCase() < b.topic.toLowerCase() ? -1 : 1
+				);
 			})
 			.addCase(AddTopicToDb.fulfilled, (state, action) => {
 				state.topicsList.push(action.payload);

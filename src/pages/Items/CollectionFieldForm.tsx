@@ -7,7 +7,7 @@ import {
 	setFields,
 } from "../../store/features/collectionFields/CollectionFieldsSlice";
 
-import { Button, Form, Popover } from "react-bootstrap";
+import { Button, Form, Popover, Container } from "react-bootstrap";
 
 import HandleChange from "../../functions/HandleChange";
 
@@ -28,12 +28,14 @@ export default function CollectionFieldForm() {
 			style={
 				theme === "dark"
 					? {
-							backgroundColor: "rgb(21,25,29)",
+							backgroundColor: "rgb(25,29,35)",
 							color: "rgb(245,245,245)",
+							borderRadius: "0.39rem",
 					  }
 					: {}
 			}
 		>
+			<h4 className="mb-3">Add field</h4>
 			<Form
 				className="text-center"
 				onSubmit={(e) => {
@@ -43,15 +45,18 @@ export default function CollectionFieldForm() {
 				}}
 			>
 				<Form.Control
+					size="sm"
 					className="w-auto mx-auto m-2"
 					type="text"
 					name="fieldName"
 					placeholder="Field Name"
+					style={{ textTransform: "lowercase" }}
 					required
 					value={state.fieldName}
 					onChange={(e) => HandleChange(e, setState, state)}
 				/>
 				<Form.Select
+					size="sm"
 					className="w-auto mx-auto m-2"
 					value={state.fieldType}
 					name="fieldType"
@@ -64,7 +69,7 @@ export default function CollectionFieldForm() {
 						</option>
 					))}
 				</Form.Select>
-				<Button variant={theme} type="submit" className="m-1">
+				<Button size="sm" variant={theme} type="submit" className="m-1">
 					Add
 				</Button>
 			</Form>

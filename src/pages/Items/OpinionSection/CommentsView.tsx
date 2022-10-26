@@ -9,6 +9,7 @@ export default function CommentsView({
 }: CommentsViewIF) {
 	return (
 		<>
+		
 			<td>{actualComment.user}</td>
 			<td colSpan={fieldsLength + 4}>{actualComment.comment}</td>
 		</>

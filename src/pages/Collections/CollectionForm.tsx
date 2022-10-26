@@ -99,6 +99,7 @@ export default function CollectionForm({
 						: "Add new collection"}
 				</h3>
 				<Button
+					size="sm"
 					className="d-inline mb-2"
 					variant={theme}
 					onClick={() =>
@@ -143,6 +144,7 @@ export default function CollectionForm({
 				</Form.Group>
 				<Form.Group className="m-1">
 					<Form.Control
+						size="sm"
 						className="mx-auto w-auto m-2"
 						type="text"
 						name="name"
@@ -156,6 +158,7 @@ export default function CollectionForm({
 				</Form.Group>
 				<Form.Group className="m-1">
 					<Form.Select
+						size="sm"
 						className="mx-auto w-auto m-2"
 						placeholder="Topic"
 						name="topic"
@@ -163,7 +166,6 @@ export default function CollectionForm({
 						value={coll.topic}
 						onChange={(e) => HandleChange(e, setColl, coll)}
 					>
-						<option>Topic</option>
 						{topicList.map((t) => (
 							<option key={topicList.indexOf(t)} value={t.topic}>
 								{t.topic}
@@ -183,7 +185,7 @@ export default function CollectionForm({
 					/>
 				</Form.Group>
 
-				<Button variant={theme} type="submit">
+				<Button size="sm" variant={theme} type="submit">
 					Send
 				</Button>
 			</Form>

@@ -7,9 +7,9 @@ import {
 
 import { useParams } from "react-router-dom";
 
-import { Button } from "react-bootstrap";
+import { Button, ButtonGroup } from "react-bootstrap";
 import CollectionSchemaIF from "../../interfaces/CollectionSchemaIF";
-import ItemSchemaIF from "../../interfaces/ItemDataIF";
+import ItemSchemaIF from "../../interfaces/ItemSchemaIF";
 import { DeleteItemFromDb } from "../../store/features/items/ItemsSlice";
 
 interface propsIF {
@@ -42,64 +42,70 @@ export default function ButtonsInTableView({
 
 	return (
 		<td>
-			<Button
-				hidden={hidden}
-				className="m-0"
-				variant={theme}
-				onClick={() => {
-					tableType === "collection" &&
-						setFormState({
-							show: true,
-							forEdit: true,
-							collection: collectionElement,
-						});
-					tableType === "item" &&
-						setFormState({
-							show: true,
-							forEdit: true,
-							item: itemElement,
-						});
-					callback && callback(false);
-				}}
-			>
-				✍🏼
-			</Button>
-			<Button
-				hidden={hidden}
-				className="m-0"
-				variant={theme}
-				onClick={async () => {
-					tableType === "collection" &&
-						collectionElement &&
-						dispatch(
-							DeleteCollectionFromDb(
-								collectionElement._id
-									? collectionElement._id
-									: ""
-							)
-						);
-					tableType === "item" &&
+			<ButtonGroup>
+				<Button
+					size="sm"
+					hidden={hidden}
+					className="m-0"
+					variant={theme}
+					onClick={() => {
+						tableType === "collection" &&
+							setFormState({
+								show: true,
+								forEdit: true,
+								collection: collectionElement,
+							});
+						tableType === "item" &&
+							setFormState({
+								show: true,
+								forEdit: true,
+								item: itemElement,
+							});
+						callback && callback(false);
+					}}
+				>
+					✍🏼
+				</Button>
+				<Button
+					size="sm"
+					hidden={hidden}
+					className="m-0"
+					variant={theme}
+					onClick={async () => {
+						tableType === "collection" &&
+							collectionElement &&
+							dispatch(
+								DeleteCollectionFromDb(
+									collectionElement._id
+										? collectionElement._id
+										: ""
+								)
+							);
+						tableType === "item" &&
+							itemElement &&
+							dispatch(
+								DeleteItemFromDb(
+									itemElement._id ? itemElement._id : ""
+								)
+							);
 						itemElement &&
-						dispatch(
-							DeleteItemFromDb(
-								itemElement._id ? itemElement._id : ""
-							)
-						);
-					itemElement &&
-						dispatch(
-							DeleteItemFromCollection({
-								collectionId: itemElement?.owner
-									? itemElement.owner
-									: "",
-								itemId: itemElement?._id ? itemElement._id : "",
-							})
-						);
+							dispatch(
+								DeleteItemFromCollection({
+									collectionId: itemElement?.owner
+										? itemElement.owner
+										: "",
+									itemId: itemElement?._id
+										? itemElement._id
+										: "",
+								})
+							);
 
-					callback && callback(false);
-				}}
-			>
-				❌
-			</Button>
+						callback && callback(false);
+					}}
+				>
+					❌
+				</Button>
+			</ButtonGroup>
 		</td>
 	);
 }

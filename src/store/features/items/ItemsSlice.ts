@@ -1,4 +1,4 @@
-import ItemSchemaIF from "../../../interfaces/ItemDataIF";
+import ItemSchemaIF from "../../../interfaces/ItemSchemaIF";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import serverUrl from "../../serverUrl";
 
@@ -16,12 +16,18 @@ export const emptyItem = {
 const initialState = {
 	collectionItems: <ItemSchemaIF[]>[],
 	lastItems: <ItemSchemaIF[]>[],
+	tagItems: <ItemSchemaIF[]>[],
 };
 
 export const GetItemsFromDb = createAsyncThunk(
 	"items/get",
-	async (collectionId: string) => {
-		return await fetch(`${serverUrl}items/getall/${collectionId}`)
+	async (props: { collectionName: string; filterText: string }) => {
+		const { collectionName, filterText } = props;
+		return await fetch(
+			`${serverUrl}items/getall/${collectionName}${
+				filterText !== "" ? "/" + filterText : ""
+			}`
+		)
 			.then((res) => res.json())
 			.then((data: ItemSchemaIF[]) => {
 				return data;
@@ -36,6 +42,17 @@ export const GetLastItems = createAsyncThunk("items/lastadded", async () => {
 			return data;
 		});
 });
+
+export const GetTagItems = createAsyncThunk(
+	"items/tagitems",
+	async (tagName: string) => {
+		return await fetch(`${serverUrl}items/tagitems/${tagName}`)
+			.then((res) => res.json())
+			.then((data: ItemSchemaIF[]) => {
+				return data;
+			});
+	}
+);
 
 export const AddItemToDb = createAsyncThunk(
 	"items/add",
@@ -154,11 +171,17 @@ const ItemsSlice = createSlice({
 		deleteItems: (state) => {
 			state.collectionItems = [];
 		},
+		deleteTagItems: (state) => {
+			state.tagItems = [];
+		},
 	},
 	extraReducers(builder) {
 		builder
 			.addCase(GetItemsFromDb.fulfilled, (state, action) => {
 				state.collectionItems = action.payload;
+			})
+			.addCase(GetTagItems.fulfilled, (state, action) => {
+				state.tagItems = action.payload;
 			})
 			.addCase(GetLastItems.fulfilled, (state, action) => {
 				state.lastItems = action.payload;
@@ -188,12 +211,22 @@ const ItemsSlice = createSlice({
 				);
 				if (activeItem)
 					activeItem.comments.push(action.payload.comment);
+				const activeTagItem = state.tagItems.find(
+					(i) => i._id === action.payload.data._id
+				);
+				if (activeTagItem)
+					activeTagItem.comments.push(action.payload.comment);
 			})
 			.addCase(AddLikeToDb.fulfilled, (state, action) => {
 				const activeItem = state.collectionItems.find(
 					(i) => i._id === action.payload.data._id
 				);
 				if (activeItem) activeItem.likes.push(action.payload.loginUser);
+				const activeTagItem = state.tagItems.find(
+					(i) => i._id === action.payload.data._id
+				);
+				if (activeTagItem)
+					activeTagItem.likes.push(action.payload.loginUser);
 			})
 			.addCase(UnLikeFromDb.fulfilled, (state, action) => {
 				const activeItem = state.collectionItems.find(
@@ -203,10 +236,17 @@ const ItemsSlice = createSlice({
 					activeItem.likes = activeItem.likes.filter(
 						(l) => l !== action.payload.loginUser
 					);
+				const activeTagItem = state.tagItems.find(
+					(i) => i._id === action.payload.data._id
+				);
+				if (activeTagItem)
+					activeTagItem.likes = activeTagItem.likes.filter(
+						(l) => l !== action.payload.loginUser
+					);
 			});
 	},
 });
 
-export const { deleteItems } = ItemsSlice.actions;
+export const { deleteItems , deleteTagItems} = ItemsSlice.actions;
 
 export default ItemsSlice.reducer;

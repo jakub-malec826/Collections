@@ -5,7 +5,7 @@ import { StoreState, useStoreDispatch } from "../../../store/Store";
 
 import { Badge, Button, Form, OverlayTrigger, Tooltip } from "react-bootstrap";
 
-import ItemSchemaIF from "../../../interfaces/ItemDataIF";
+import ItemSchemaIF from "../../../interfaces/ItemSchemaIF";
 import { AddCommentToDb } from "../../../store/features/items/ItemsSlice";
 import {
 	AddLikeToDb,
@@ -35,6 +35,7 @@ export default function LikesAndCommentsForm({ actualItem }: CommentsIF) {
 		<>
 			<td>
 				<Button
+					size="sm"
 					className="w-auto"
 					variant={
 						actualItem.likes?.includes(loginUser)
@@ -92,21 +93,10 @@ export default function LikesAndCommentsForm({ actualItem }: CommentsIF) {
 					</OverlayTrigger>
 				</Button>
 			</td>
-			<td
-				colSpan={fieldsLenght + 4}
-			>
-				<Form.Control
-					className="d-block"
-					type="text"
-					name="comment"
-					placeholder="Type your comment..."
-					value={comment}
-					onChange={(e) => setComment(e.target.value)}
-				/>
-				<Button
-					variant={theme}
-					className="w-auto d-block me-auto"
-					onClick={() => {
+			<td colSpan={fieldsLenght + 4}>
+				<Form
+					onSubmit={(e) => {
+						e.preventDefault();
 						dispatch(
 							AddCommentToDb({
 								itemId: actualItem._id ? actualItem._id : "",
@@ -119,8 +109,24 @@ export default function LikesAndCommentsForm({ actualItem }: CommentsIF) {
 						setComment("");
 					}}
 				>
-					Comment
-				</Button>
+					<Form.Control
+						size="sm"
+						className="d-inline w-auto"
+						type="text"
+						name="comment"
+						placeholder="Type your comment..."
+						value={comment}
+						onChange={(e) => setComment(e.target.value)}
+					/>
+					<Button
+						size="sm"
+						variant={theme}
+						className="w-auto d-inline me-auto"
+						type="submit"
+					>
+						Comment
+					</Button>
+				</Form>
 			</td>
 		</>
 	);

@@ -16,7 +16,7 @@ import {
 
 import ValidateFormWithDb from "../../functions/ValidateFormWithDb";
 
-import UserDataIF from "../../interfaces/UserDataIF";
+import UserSchemaIF from "../../interfaces/UserSchemaIF";
 import HandleChange from "../../functions/HandleChange";
 
 export interface valuesIF {
@@ -48,7 +48,7 @@ export default function SignForms({
 
 	const SetErrMessCallback = (data: {
 		message: string;
-		body: UserDataIF | null;
+		body: UserSchemaIF | null;
 	}) => {
 		if (data.message !== "OK") setErr(data.message);
 		else {
@@ -93,6 +93,7 @@ export default function SignForms({
 						: "Sign Up"}
 				</h4>
 				<Button
+					size="sm"
 					className="d-inline mb-2"
 					variant={theme}
 					onClick={() =>
@@ -113,6 +114,7 @@ export default function SignForms({
 				)}
 				{signFormState.formType === "signup" && (
 					<Form.Control
+						size="sm"
 						className="w-auto mx-auto m-2"
 						type="email"
 						name="email"
@@ -123,6 +125,7 @@ export default function SignForms({
 					/>
 				)}
 				<Form.Control
+					size="sm"
 					className="w-auto mx-auto m-2"
 					type="text"
 					name="userName"
@@ -132,6 +135,7 @@ export default function SignForms({
 					required
 				/>
 				<Form.Control
+					size="sm"
 					className="w-auto mx-auto m-2"
 					type="password"
 					name="password"
@@ -140,7 +144,12 @@ export default function SignForms({
 					onChange={(e) => HandleChange(e, setState, state)}
 					required
 				/>
-				<Button type="submit" variant={theme} className="m-1 d-inline">
+				<Button
+					size="sm"
+					type="submit"
+					variant={theme}
+					className="m-1 d-inline"
+				>
 					{signFormState.formType === "signin"
 						? "Sign In"
 						: "Sign up"}

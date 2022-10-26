@@ -2,10 +2,10 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import serverUrl from "../../serverUrl";
 
-import UserDataIF from "../../../interfaces/UserDataIF";
+import UserSchemaIF from "../../../interfaces/UserSchemaIF";
 
 const initialState = {
-	users: <UserDataIF[]>[],
+	users: <UserSchemaIF[]>[],
 };
 
 export const GetAllDataUsers = createAsyncThunk("users/get", async () => {
@@ -18,7 +18,7 @@ export const GetAllDataUsers = createAsyncThunk("users/get", async () => {
 
 export const SetDataUsers = createAsyncThunk(
 	"users/set",
-	async (user: UserDataIF) => {
+	async (user: UserSchemaIF) => {
 		await fetch(`${serverUrl}users/set/${user._id}`, {
 			method: "put",
 			mode: "cors",

@@ -17,6 +17,7 @@ import { FileUploader } from "react-drag-drop-files";
 import CollectionSchemaIF from "../../interfaces/CollectionSchemaIF";
 import HandleChange from "../../functions/HandleChange";
 import { sendImageToCloud } from "../../functions/SendImageToCloud";
+import { useTranslation } from "react-i18next";
 
 interface CollectionFormIF {
 	collectionFormState: {
@@ -32,6 +33,7 @@ export default function CollectionForm({
 	setCollectionsFormState,
 }: CollectionFormIF) {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
+	const { t } = useTranslation();
 
 	const topicList = useSelector(
 		(state: StoreState) => state.CollectionsTopicReducer.topicsList
@@ -95,8 +97,8 @@ export default function CollectionForm({
 			<OffcanvasHeader className="border-bottom border-secondary m-3">
 				<h3 className="d-inline">
 					{collectionFormState.forEdit
-						? "Edit collection"
-						: "Add new collection"}
+						? (t("collectionPage.collectionForm.edit") as string)
+						: (t("collectionPage.collectionForm.add") as string)}
 				</h3>
 				<Button
 					size="sm"
@@ -118,10 +120,10 @@ export default function CollectionForm({
 					data-color-mode={theme}
 				>
 					<Form.Label className="mx-auto w-auto m-2" htmlFor="desc">
-						Description
+						{t("collectionPage.description") as string}
 					</Form.Label>
 					<MarkdownEditor
-						className="m-3"
+						className="m-3 mt-0"
 						id="desc"
 						value={coll.description}
 						onChange={(v) =>
@@ -149,7 +151,7 @@ export default function CollectionForm({
 						type="text"
 						name="name"
 						value={coll.name}
-						placeholder="Name"
+						placeholder={t("collectionPage.name") as string}
 						onChange={(e) => {
 							HandleChange(e, setColl, coll);
 						}}
@@ -160,7 +162,6 @@ export default function CollectionForm({
 					<Form.Select
 						size="sm"
 						className="mx-auto w-auto m-2"
-						placeholder="Topic"
 						name="topic"
 						required
 						value={coll.topic}
@@ -176,7 +177,11 @@ export default function CollectionForm({
 				<Form.Group className="m-3">
 					<FileUploader
 						name="image"
-						label="Upload/drop image here"
+						label={
+							t(
+								"collectionPage.collectionForm.uploadImage"
+							) as string
+						}
 						hoverTitle="Drop here"
 						types={["JPG", "JPEG", "PNG", "GIF", "HEIF"]}
 						handleChange={(e: File) => {
@@ -186,7 +191,9 @@ export default function CollectionForm({
 				</Form.Group>
 
 				<Button size="sm" variant={theme} type="submit">
-					Send
+					{collectionFormState.forEdit
+						? (t("edit") as string)
+						: (t("add") as string)}
 				</Button>
 			</Form>
 		</Offcanvas>

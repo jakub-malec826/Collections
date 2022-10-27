@@ -1,0 +1,82 @@
+{
+	"navigationBar": {
+		"home": "Strona Główna",
+		"searchBar": "Szukaj...",
+		"adminPage": "Panel Admina",
+		"helloUser": "Cześć ",
+		"logOut": "Wyloguj się"
+	},
+	"signForms": {
+		"error": {
+			"isNotExist": "Użytkownik nie istnieje / niepoprawna nazwa użytkownika",
+			"userIsExist": "Użytkownik z tą nazwą użytkownika już istnieje",
+			"emailIsExist": "Użytkownik z tym emailem już istnieje",
+			"blocked": "Użytkownik jest zablokowany",
+			"wrongPass": "Niepoprawne hasło"
+		}
+	},
+	"adminPage": {
+		"topicButton": "Zarządzaj tematami kolekcji",
+		"userManagementButton": "Zarządzaj użytkownikami",
+		"topics": {
+			"addNew": "Dodaj nowy temat kolekcji",
+			"addNewFormName": "Nowy temat kolekcji",
+			"topicName": "Nazwa tematu"
+		},
+		"userManagement": {
+			"changeAdminPrivilege": "Zmień uprawnienia admina",
+			"changeUserStatus": "Zablokuj / odblokuj",
+			"isAdmin": "Uprawnienia admina",
+			"status": "Stan",
+			"statusActive": "aktywny",
+			"statusBlocked": "zablokowany"
+		}
+	},
+	"homePage": {
+		"last5": "Ostatnio dodane przedmioty",
+		"top5": "Największe kolekcje"
+	},
+	"collectionPage": {
+		"visit": "Kolekcje użytkownika ",
+		"name": "Nazwa",
+		"owner": "Właściciel",
+		"description": "Opis",
+		"topic": "Temat",
+		"image": "Obraz",
+		"noImage": "Nie dodano obrazu",
+		"createNew": "Utwórz nową kolekcję",
+		"noCollections": "Nie znaleziono kolekcji 😏",
+		"collectionForm": {
+			"edit": "Edytuj kolekcję",
+			"add": "Dodaj nową kolekcję",
+			"uploadImage": "Dodaj/upuść obraz tutaj"
+		}
+	},
+	"itemPage": {
+		"author": "Autor",
+		"addNew": "Dodaj nowy przedmiot",
+		"addField": "Dodaj pole",
+		"fieldName": "Nazwa pola",
+		"tags": "Tagi",
+		"noItems": "Nie znaleziono przedmiotów 😏",
+		"itemForm": {
+			"edit": "Edytuj przedmiot",
+			"add": "Dodaj nowy przedmiot"
+		},
+		"comments": {
+			"input": "Twój komentarz",
+			"comment": "Skomentuj"
+		}
+	},
+	"signIn": "Zaloguj się",
+	"signUp": "Załóż konto",
+	"send": "Wyślij",
+	"add": "Dodaj",
+	"edit": "Edytuj",
+	"filter": "Filtruj...",
+	"name": "Nazwa",
+	"item": "Przedmiot ",
+	"collection": "Kolekcja ",
+	"user": "Użytkownik ",
+	"password": "Hasło "
+}

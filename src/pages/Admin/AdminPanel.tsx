@@ -9,9 +9,12 @@ import { Button } from "react-bootstrap";
 
 import UserManagement from "./UserManagement/UserManagement";
 import CollectionsTopicManagement from "./TopicManagement/CollectionsTopicManagement";
+import { useTranslation } from "react-i18next";
 
 export default function AdminPanel() {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
+
+	const { t } = useTranslation();
 
 	const activeUser = useSelector(
 		(state: StoreState) => state.LoginUserReducer.loginUser
@@ -35,7 +38,9 @@ export default function AdminPanel() {
 				variant={theme}
 				className="mt-3"
 			>
-				{showItem ? "User Management" : "Collection's Topic Management"}
+				{showItem
+					? (t("adminPage.userManagementButton") as string)
+					: (t("adminPage.topicButton") as string)}
 			</Button>
 			<div hidden={showItem}>
 				<UserManagement />

@@ -10,9 +10,12 @@ import {
 import { Button, OverlayTrigger, Popover, Form, Table } from "react-bootstrap";
 
 import TopicOnList from "./TopicOnList";
+import { useTranslation } from "react-i18next";
 
 export default function CollectionsTopicManagement() {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
+
+	const { t } = useTranslation();
 
 	const topicList = useSelector(
 		(state: StoreState) => state.CollectionsTopicReducer.topicsList
@@ -43,9 +46,10 @@ export default function CollectionsTopicManagement() {
 									: {}
 							}
 						>
-							Add new Topic
+							{t("adminPage.topics.addNewFormName") as string}
 						</Popover.Header>
 						<Popover.Body
+							className="text-center"
 							style={
 								theme === "dark"
 									? {
@@ -56,26 +60,32 @@ export default function CollectionsTopicManagement() {
 							}
 						>
 							<Form.Control
+								size="sm"
 								type="text"
+								name="topicName"
 								value={topic}
 								onChange={(e) => setTopic(e.target.value)}
-								placeholder="Type topic"
+								placeholder={
+									t("adminPage.topics.topicName") as string
+								}
 							/>
 							<Button
+								size="sm"
+								className="mt-2"
 								variant={theme}
 								onClick={() => {
 									dispatch(AddTopicToDb(topic));
 									setTopic("");
 								}}
 							>
-								Add
+								{t("add") as string}
 							</Button>
 						</Popover.Body>
 					</Popover>
 				}
 			>
 				<Button className="m-3" variant={theme}>
-					Add new Topic
+					{t("adminPage.topics.addNew") as string}
 				</Button>
 			</OverlayTrigger>
 			<Table
@@ -87,7 +97,7 @@ export default function CollectionsTopicManagement() {
 				<thead>
 					<tr>
 						<th>#</th>
-						<th>Name</th>
+						<th>{t("name") as string}</th>
 					</tr>
 				</thead>
 				<tbody>

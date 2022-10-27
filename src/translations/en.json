@@ -1,0 +1,82 @@
+{
+	"navigationBar": {
+		"home": "Main Page",
+		"searchBar": "Search...",
+		"adminPage": "Admin Panel",
+		"helloUser": "Hi ",
+		"logOut": "Logout"
+	},
+	"signForms": {
+		"error": {
+			"isNotExist": "User does not exist / wrong user name",
+			"userIsExist": "User with this name already exist",
+			"emailIsExist": "User with this email already exist",
+			"blocked": "User is blocked",
+			"wrongPass": "Wrong password"
+		}
+	},
+	"adminPage": {
+		"topicButton": "Manage collection's topics",
+		"userManagementButton": "Manage users",
+		"topics": {
+			"addNew": "Add new collection's topic",
+			"addNewFormName": "New collection's topic",
+			"topicName": "Topic name"
+		},
+		"userManagement": {
+			"changeAdminPrivilege": "Change admin's privilege",
+			"changeUserStatus": "Block / unblock",
+			"isAdmin": "Admin privilege",
+			"status": "Status",
+			"statusActive": "active",
+			"statusBlocked": "blocked"
+		}
+	},
+	"homePage": {
+		"last5": "Last added items",
+		"top5": "Top biggest collections"
+	},
+	"collectionPage": {
+		"visit": "'s collections",
+		"name": "Name",
+		"owner": "Owner",
+		"description": "Description",
+		"topic": "Topic",
+		"image": "Image",
+		"noImage": "No image added",
+		"createNew": "Create new collection",
+		"noCollections": "No collections found 😏",
+		"collectionForm": {
+			"edit": "Edit collection",
+			"add": "Add new collection",
+			"uploadImage": "Upload/drop image here"
+		}
+	},
+	"itemPage": {
+		"author": "Author",
+		"addNew": "Add new item",
+		"addField": "Add field",
+		"fieldName": "Field name",
+		"tags": "Tags",
+		"noItems": "Items not found 😏",
+		"itemForm": {
+			"edit": "Edit item",
+			"add": "Add new item"
+		},
+		"comments": {
+			"input": "Your comment",
+			"comment": "Comment"
+		}
+	},
+	"signIn": "Sign in",
+	"signUp": "Sign up",
+	"send": "Send",
+	"add": "Add",
+	"edit": "Edit",
+	"filter": "Filter...",
+	"name": "Name",
+	"collection": "Collection ",
+	"item": "Item ",
+	"user": "User name ",
+	"password": "Password "
+}

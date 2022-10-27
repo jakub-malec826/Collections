@@ -16,9 +16,13 @@ import CollectionForm from "./CollectionForm";
 import CollectionTableView from "./CollectionTableView";
 
 import CollectionSchemaIF from "../../interfaces/CollectionSchemaIF";
+import { useTranslation } from "react-i18next";
+import i18n from "i18next";
 
 export default function UserCollectionsPage() {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
+
+	const { t } = useTranslation();
 
 	const collections = useSelector(
 		(state: StoreState) => state.CollectionsReducer.collections
@@ -71,7 +75,11 @@ export default function UserCollectionsPage() {
 				setCollectionsFormState={setCollectionFormState}
 			/>
 
-			<h4 className="m-3">Hey "{userName}"</h4>
+			<h4 className="m-3">
+				{i18n.language === "en"
+					? userName + t("collectionPage.visit")
+					: t("collectionPage.visit") + userName}
+			</h4>
 			<Container className="mb-3">
 				<Button
 					size="sm"
@@ -90,13 +98,13 @@ export default function UserCollectionsPage() {
 						})
 					}
 				>
-					Create new collection
+					{t("collectionPage.createNew") as string}
 				</Button>
 				<Form.Control
 					size="sm"
 					className="w-auto mx-1 d-inline"
 					type="text"
-					placeholder="Filter collections..."
+					placeholder={t("filter") as string}
 					value={filterText}
 					onChange={(e) => setFilterText(e.target.value)}
 				/>
@@ -124,13 +132,23 @@ export default function UserCollectionsPage() {
 											value={cf}
 											key={collectionField.indexOf(cf)}
 										>
-											{cf}
+											{
+												t(
+													`collectionPage.${cf.toLowerCase()}`
+												) as string
+											}
 										</option>
 									))}
 							</Form.Select>
 						</th>
 						{collectionField.map((cf) => (
-							<th key={collectionField.indexOf(cf)}>{cf}</th>
+							<th key={collectionField.indexOf(cf)}>
+								{
+									t(
+										`collectionPage.${cf.toLowerCase()}`
+									) as string
+								}
+							</th>
 						))}
 					</tr>
 				</thead>
@@ -141,11 +159,12 @@ export default function UserCollectionsPage() {
 								key={collections.indexOf(coll)}
 								collectionElement={coll}
 								setCollectionFormState={setCollectionFormState}
+								showButtons={true}
 							/>
 						))
 					) : (
 						<tr>
-							<td colSpan={5}>No collections found 😏</td>
+						<td colSpan={5}>{t("collectionPage.noCollections") as string}</td>
 						</tr>
 					)}
 				</tbody>

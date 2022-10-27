@@ -18,6 +18,7 @@ import ValidateFormWithDb from "../../functions/ValidateFormWithDb";
 
 import UserSchemaIF from "../../interfaces/UserSchemaIF";
 import HandleChange from "../../functions/HandleChange";
+import { useTranslation } from "react-i18next";
 
 export interface valuesIF {
 	email: string;
@@ -34,6 +35,8 @@ export default function SignForms({
 	setSignFormState,
 }: SignFormPropsIF) {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
+
+	const { t } = useTranslation();
 
 	const dispatch = useStoreDispatch();
 
@@ -89,8 +92,8 @@ export default function SignForms({
 			<OffcanvasHeader className="border-bottom border-secondary m-3">
 				<h4 className="d-inline">
 					{signFormState.formType === "signin"
-						? "Sign In"
-						: "Sign Up"}
+						? (t("signIn") as string)
+						: (t("signUp") as string)}
 				</h4>
 				<Button
 					size="sm"
@@ -109,7 +112,7 @@ export default function SignForms({
 						className="mx-auto w-50 m-1 text-center"
 						variant="danger"
 					>
-						{err}
+						{t(`signForms.error.${err}`) as string}
 					</Alert>
 				)}
 				{signFormState.formType === "signup" && (
@@ -130,7 +133,7 @@ export default function SignForms({
 					type="text"
 					name="userName"
 					value={state.userName}
-					placeholder="UserName"
+					placeholder={t("user") as string}
 					onChange={(e) => HandleChange(e, setState, state)}
 					required
 				/>
@@ -140,7 +143,7 @@ export default function SignForms({
 					type="password"
 					name="password"
 					value={state.password}
-					placeholder="Password"
+					placeholder={t("password") as string}
 					onChange={(e) => HandleChange(e, setState, state)}
 					required
 				/>
@@ -151,8 +154,8 @@ export default function SignForms({
 					className="m-1 d-inline"
 				>
 					{signFormState.formType === "signin"
-						? "Sign In"
-						: "Sign up"}
+						? (t("signIn") as string)
+						: (t("signUp") as string)}
 				</Button>
 			</Form>
 		</Offcanvas>

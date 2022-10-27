@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 import { useSelector } from "react-redux";
 import { StoreState, useStoreDispatch } from "../../store/Store";
@@ -7,6 +7,11 @@ import {
 	setFields,
 	showFieldsForm,
 } from "../../store/features/collectionFields/CollectionFieldsSlice";
+import {
+	deleteItems,
+	emptyItem,
+	GetItemsFromDb,
+} from "../../store/features/items/ItemsSlice";
 
 import { useParams } from "react-router-dom";
 
@@ -23,12 +28,8 @@ import ItemForm from "./ItemForm";
 import LikesAdnCollectionFieldForm from "./CollectionFieldForm";
 
 import ItemSchemaIF from "../../interfaces/ItemSchemaIF";
-import {
-	deleteItems,
-	emptyItem,
-	GetItemsFromDb,
-} from "../../store/features/items/ItemsSlice";
 import ItemsTableView from "./ItemsTableView";
+import { useTranslation } from "react-i18next";
 
 export interface ItemStateIF extends ItemSchemaIF {
 	[key: string]: any;
@@ -36,6 +37,7 @@ export interface ItemStateIF extends ItemSchemaIF {
 
 export default function CollectionItemsPage() {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
+	const { t } = useTranslation();
 
 	const fields = useSelector(
 		(state: StoreState) => state.CollectionFieldsReducer.fields
@@ -102,7 +104,9 @@ export default function CollectionItemsPage() {
 				setItemFormState={setItemFormState}
 			/>
 
-			<h4 className="m-3">Collection: {collectionName}</h4>
+			<h4 className="m-3">
+				{t("collection") as string}: {collectionName}
+			</h4>
 			<Container className="mb-3">
 				<Button
 					size="sm"
@@ -116,13 +120,13 @@ export default function CollectionItemsPage() {
 						});
 					}}
 				>
-					Add new Item
+					{t("itemPage.addNew") as string}
 				</Button>
 				<Form.Control
 					size="sm"
 					className="w-auto d-inline"
 					type="text"
-					placeholder="Filter items..."
+					placeholder={t("filter") as string}
 					name="filteringItems"
 					value={filterText}
 					onChange={(e) => setFilterText(e.target.value)}
@@ -145,9 +149,13 @@ export default function CollectionItemsPage() {
 								value={sortMethod}
 								onChange={(e) => setSortMethod(e.target.value)}
 							>
-								<option value="id">id</option>
-								<option value="name">name</option>
-								<option value="tag">tags</option>
+								<option value="id">Id</option>
+								<option value="name">
+									{t("name") as string}
+								</option>
+								<option value="tag">
+									{t("itemPage.tags") as string}
+								</option>
 								{fields.map((cf) => {
 									if (cf.fieldType !== "checkbox")
 										return (
@@ -161,9 +169,9 @@ export default function CollectionItemsPage() {
 								})}
 							</Form.Select>
 						</th>
-						<th>id</th>
-						<th>name</th>
-						<th>tags</th>
+						<th>Id</th>
+						<th> {t("name") as string}</th>
+						<th> {t("itemPage.tags") as string}</th>
 						{fields !== undefined &&
 							fields.map((f) => (
 								<th key={fields.indexOf(f)}>{f.fieldName}</th>
@@ -182,7 +190,9 @@ export default function CollectionItemsPage() {
 									}
 								>
 									<Button size="sm" variant={theme}>
-										Add Field
+										<strong>
+											{t("itemPage.addField") as string}
+										</strong>
 									</Button>
 								</OverlayTrigger>
 							</th>
@@ -202,7 +212,7 @@ export default function CollectionItemsPage() {
 					) : (
 						<tr>
 							<td colSpan={fields.length ? fields.length + 5 : 5}>
-								No items found 😏
+								{t("itemPage.noItems") as string}
 							</td>
 						</tr>
 					)}

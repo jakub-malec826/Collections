@@ -10,9 +10,10 @@ import { TagCloud } from "react-tagcloud";
 
 import LastItemsView from "./LastItemsView";
 
-import BiggestCollectionsView from "./BiggestCollectionsView";
 import { GetTagsList } from "../../store/features/tags/TagsSlice";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import CollectionTableView from "../Collections/CollectionTableView";
 
 interface tag {
 	value: string;
@@ -24,6 +25,8 @@ export default function HomePage() {
 	const lastItems = useSelector(
 		(state: StoreState) => state.ItemsReducer.lastItems
 	);
+
+	const { t } = useTranslation();
 
 	const tagList = useSelector(
 		(state: StoreState) => state.TagsReducer.tagsList
@@ -46,7 +49,7 @@ export default function HomePage() {
 	return (
 		<div className="mx-auto text-center m-3">
 			<div>
-				<h4>Last added items</h4>
+				<h4>{t("homePage.last5") as string}</h4>
 				<Table
 					variant={theme}
 					responsive="sm"
@@ -55,9 +58,9 @@ export default function HomePage() {
 				>
 					<thead>
 						<tr>
-							<th>Name</th>
-							<th>Collection</th>
-							<th>Author</th>
+							<th>{t("name") as string}</th>
+							<th>{t("collection") as string}</th>
+							<th>{t("itemPage.author") as string}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -72,7 +75,7 @@ export default function HomePage() {
 				</Table>
 			</div>
 			<div>
-				<h4>Top 5 biggest collections</h4>
+				<h4>{t("homePage.top5") as string}</h4>
 				<Table
 					variant={theme}
 					responsive="sm"
@@ -81,19 +84,20 @@ export default function HomePage() {
 				>
 					<thead>
 						<tr>
-							<th>Name</th>
-							<th>Owner</th>
-							<th>Description</th>
-							<th>Topic</th>
-							<th>Image</th>
+							<th>{t("name") as string}</th>
+							<th>{t("collectionPage.owner") as string}</th>
+							<th>{t("collectionPage.description") as string}</th>
+							<th>{t("collectionPage.topic") as string}</th>
+							<th>{t("collectionPage.image") as string}</th>
 						</tr>
 					</thead>
 					<tbody>
 						{biggestCollections.length !== 0 &&
 							biggestCollections.map((bC) => (
-								<BiggestCollectionsView
+								<CollectionTableView
 									key={biggestCollections.indexOf(bC)}
 									collectionElement={bC}
+									showButtons={false}
 								/>
 							))}
 					</tbody>

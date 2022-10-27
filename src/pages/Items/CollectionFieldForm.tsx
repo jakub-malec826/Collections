@@ -7,13 +7,14 @@ import {
 	setFields,
 } from "../../store/features/collectionFields/CollectionFieldsSlice";
 
-import { Button, Form, Popover, Container } from "react-bootstrap";
+import { Button, Form, Popover } from "react-bootstrap";
 
 import HandleChange from "../../functions/HandleChange";
+import { useTranslation } from "react-i18next";
 
 export default function CollectionFieldForm() {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
-
+	const { t } = useTranslation();
 	const [state, setState] = useState({
 		fieldName: "",
 		fieldType: "",
@@ -35,7 +36,6 @@ export default function CollectionFieldForm() {
 					: {}
 			}
 		>
-			<h4 className="mb-3">Add field</h4>
 			<Form
 				className="text-center"
 				onSubmit={(e) => {
@@ -49,7 +49,7 @@ export default function CollectionFieldForm() {
 					className="w-auto mx-auto m-2"
 					type="text"
 					name="fieldName"
-					placeholder="Field Name"
+					placeholder={t("itemPage.fieldName") as string}
 					style={{ textTransform: "lowercase" }}
 					required
 					value={state.fieldName}
@@ -70,7 +70,7 @@ export default function CollectionFieldForm() {
 					))}
 				</Form.Select>
 				<Button size="sm" variant={theme} type="submit" className="m-1">
-					Add
+					{t("add") as string}
 				</Button>
 			</Form>
 		</Popover.Body>

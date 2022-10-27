@@ -7,6 +7,7 @@ import { Badge, Button, Form, OverlayTrigger, Tooltip } from "react-bootstrap";
 
 import ItemSchemaIF from "../../../interfaces/ItemSchemaIF";
 import { AddCommentToDb } from "../../../store/features/items/ItemsSlice";
+import { useTranslation } from "react-i18next";
 import {
 	AddLikeToDb,
 	UnLikeFromDb,
@@ -18,6 +19,7 @@ interface CommentsIF {
 
 export default function LikesAndCommentsForm({ actualItem }: CommentsIF) {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
+	const { t } = useTranslation();
 
 	const fieldsLenght = useSelector(
 		(state: StoreState) => state.CollectionFieldsReducer.fields.length
@@ -114,7 +116,7 @@ export default function LikesAndCommentsForm({ actualItem }: CommentsIF) {
 						className="d-inline w-auto"
 						type="text"
 						name="comment"
-						placeholder="Type your comment..."
+						placeholder={t("itemPage.comments.input") as string}
 						value={comment}
 						onChange={(e) => setComment(e.target.value)}
 					/>
@@ -124,7 +126,7 @@ export default function LikesAndCommentsForm({ actualItem }: CommentsIF) {
 						className="w-auto d-inline me-auto"
 						type="submit"
 					>
-						Comment
+						{t("itemPage.comments.comment") as string}
 					</Button>
 				</Form>
 			</td>

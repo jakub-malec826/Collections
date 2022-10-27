@@ -11,9 +11,12 @@ import {
 import { Button, ButtonGroup, Form, Table } from "react-bootstrap";
 
 import UserInAdminPanel from "./UserInAdminPanel";
+import { useTranslation } from "react-i18next";
 
 export default function UserManagement() {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
+
+	const { t } = useTranslation();
 
 	const users = useSelector((state: StoreState) => state.UserReducer.users);
 
@@ -45,13 +48,17 @@ export default function UserManagement() {
 					variant={theme}
 					onClick={async () => dispatch(changeAdmin(isCheck))}
 				>
-					Change Admin Status
+					{
+						t(
+							"adminPage.userManagement.changeAdminPrivilege"
+						) as string
+					}
 				</Button>
 				<Button
 					variant={theme}
 					onClick={async () => dispatch(changeStatus(isCheck))}
 				>
-					Block / Unblock
+					{t("adminPage.userManagement.changeUserStatus") as string}
 				</Button>
 			</ButtonGroup>
 
@@ -70,9 +77,11 @@ export default function UserManagement() {
 								onChange={handleSelectAll}
 							/>
 						</th>
-						<th>User Name</th>
-						<th>Is Admin</th>
-						<th>Status</th>
+						<th>{t("user") as string}</th>
+						<th>
+							{t("adminPage.userManagement.isAdmin") as string}
+						</th>
+						<th>{t("adminPage.userManagement.status") as string}</th>
 					</tr>
 				</thead>
 				<tbody>

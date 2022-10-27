@@ -16,9 +16,19 @@ import {
 	SearchInBase,
 	deleteSearching,
 } from "../../store/features/searching/SearchBarSlice";
+import { useTranslation } from "react-i18next";
+import i18n from "../../translations/i18n";
 
 export default function NavigationBar() {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
+
+	const { t } = useTranslation();
+
+	const localStorageLang = localStorage.getItem("language");
+
+	const [language, setLanguage] = useState(
+		localStorageLang ? localStorageLang : "en"
+	);
 
 	const searchInput = useSelector(
 		(state: StoreState) => state.SearchBarReducer.searchInput
@@ -28,7 +38,8 @@ export default function NavigationBar() {
 		(state: StoreState) => state.SearchBarReducer.searchOutput
 	);
 
-	document.body.style.backgroundColor = theme === "dark" ? "black" : "white";
+	document.body.style.backgroundColor =
+		theme === "dark" ? "rgb(12,20,29)" : "white";
 	document.body.style.color = theme === "dark" ? "rgb(230,230,230)" : "black";
 
 	const [isHidden, setIsHidden] = useState(true);
@@ -46,6 +57,11 @@ export default function NavigationBar() {
 	);
 
 	const sessUser = sessionStorage.getItem("user");
+
+	useEffect(() => {
+		localStorage.setItem("language", language);
+		i18n.changeLanguage(language);
+	}, [language]);
 
 	useEffect(() => {
 		if (searchInput !== "") dispatch(SearchInBase(searchInput));
@@ -66,8 +82,10 @@ export default function NavigationBar() {
 				signFormState={signFormState}
 				setSignFormState={setSignFormState}
 			/>
-			<Navbar expand="sm" bg={theme} variant={theme}>
-				<Navbar.Brand onClick={() => nav("/")}>Home</Navbar.Brand>
+			<Navbar fixed="top" expand="sm" bg={theme} variant={theme}>
+				<Navbar.Brand onClick={() => nav("/")}>
+					{t("navigationBar.home") as string}
+				</Navbar.Brand>
 
 				<div style={{ width: "8rem" }}>
 					<Form.Control
@@ -78,7 +96,7 @@ export default function NavigationBar() {
 						onChange={(e) => {
 							dispatch(searchInputChange(e.target.value));
 						}}
-						placeholder="Search..."
+						placeholder={t("navigationBar.searchBar")}
 						autoComplete="off"
 					/>
 
@@ -88,9 +106,7 @@ export default function NavigationBar() {
 								onClick={() => {
 									dispatch(deleteSearching());
 									o.tag
-										? nav(
-												`/items/${searchInput}`
-										  )
+										? nav(`/items/${searchInput}`)
 										: o.userName
 										? nav(`/${o.userName}`)
 										: nav(`/${o.owner}/${o.name}`);
@@ -99,16 +115,24 @@ export default function NavigationBar() {
 							>
 								<strong>
 									{o.tag
-										? "Item " + o.name
+										? (t("item") as string) + o.name
 										: o.userName
-										? "User " + o.userName
-										: "Collection " + o.name}
+										? (t("user") as string) + o.userName
+										: (t("collection") as string) + o.name}
 								</strong>
 							</Dropdown.Item>
 						))}
 					</Dropdown.Menu>
 				</div>
 				<div>
+					<Button
+						variant={theme}
+						onClick={() =>
+							setLanguage((old) => (old === "en" ? "pl" : "en"))
+						}
+					>
+						{language === "en" ? "English" : "Polski"}
+					</Button>
 					<Button
 						className="w-auto mx-1"
 						variant={theme}
@@ -138,7 +162,7 @@ export default function NavigationBar() {
 								eventKey={`/${sessUser}/admin`}
 								hidden={user ? !user.isAdmin : false}
 							>
-								Admin Panel
+								{t("navigationBar.adminPage") as string}
 							</Nav.Link>
 						</Nav.Item>
 					</Nav>
@@ -151,7 +175,7 @@ export default function NavigationBar() {
 					>
 						{sessUser && (
 							<Navbar.Text>
-								Hi{" "}
+								{t("navigationBar.helloUser") as string}
 								<Link to={`/${sessUser}`}>{user.userName}</Link>
 							</Navbar.Text>
 						)}
@@ -165,7 +189,7 @@ export default function NavigationBar() {
 								}
 								hidden={!isHidden}
 							>
-								Sign in
+								{t("signIn") as string}
 							</Nav.Link>
 						</Nav.Item>
 						<Nav.Item>
@@ -178,7 +202,7 @@ export default function NavigationBar() {
 								}
 								hidden={!isHidden}
 							>
-								Sign up
+								{t("signUp") as string}
 							</Nav.Link>
 						</Nav.Item>
 						<Nav.Item>
@@ -190,7 +214,7 @@ export default function NavigationBar() {
 								}}
 								hidden={isHidden}
 							>
-								Log out
+								{t("navigationBar.logOut") as string}
 							</Nav.Link>
 						</Nav.Item>
 					</Nav>

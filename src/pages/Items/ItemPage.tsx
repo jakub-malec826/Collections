@@ -4,6 +4,7 @@ import { StoreState, useStoreDispatch } from "../../store/Store";
 import ItemsTableView from "./ItemsTableView";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
 	deleteTagItems,
 	GetTagItems,
@@ -11,7 +12,7 @@ import {
 
 export default function ItemPage() {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
-
+	const { t } = useTranslation();
 	const { tagName } = useParams();
 
 	const dispatch = useStoreDispatch();
@@ -31,9 +32,6 @@ export default function ItemPage() {
 	}, [dispatch, tagName]);
 
 	tagItems.map((t) => (fieldList = fieldList.concat(t.additionalField)));
-	useEffect(() => {
-		console.log(fieldList);
-	}, [fieldList]);
 
 	return (
 		<Table
@@ -46,9 +44,9 @@ export default function ItemPage() {
 		>
 			<thead>
 				<tr>
-					<th>id</th>
-					<th>name</th>
-					<th>tags</th>
+					<th>Id</th>
+					<th>{t("name") as string}</th>
+					<th>{t("itemPage.tags") as string}</th>
 					{tagItems.map((t) =>
 						t.additionalField.map((tF) => (
 							<th key={t.additionalField.indexOf(tF)}>

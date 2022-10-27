@@ -17,6 +17,7 @@ import {
 } from "../../store/features/items/ItemsSlice";
 
 import objectID from "bson-objectid";
+import { useTranslation } from "react-i18next";
 
 interface propsIF {
 	owner: string;
@@ -30,7 +31,7 @@ export default function ItemForm({
 	setItemFormState,
 }: propsIF) {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
-
+	const { t } = useTranslation();
 	const loginUser = useSelector(
 		(state: StoreState) => state.LoginUserReducer.loginUser.userName
 	);
@@ -99,7 +100,9 @@ export default function ItemForm({
 		>
 			<OffcanvasHeader className="border-bottom border-secondary m-3">
 				<h3 className="d-inline">
-					{itemFormState.forEdit ? "Edit Item" : "Add Item"}
+					{itemFormState.forEdit
+						? (t("itemPage.itemForm.edit") as string)
+						: (t("itemPage.itemForm.add") as string)}
 				</h3>
 				<Button
 					size="sm"
@@ -118,7 +121,9 @@ export default function ItemForm({
 				style={{ overflow: "auto" }}
 			>
 				<Form.Group className="m-1">
-					<Form.Label className="w-auto mx-auto m-2">Name</Form.Label>
+					<Form.Label className="w-auto mx-auto m-2">
+						{t("name") as string}
+					</Form.Label>
 					<Form.Control
 						size="sm"
 						className="w-auto mx-auto m-2"
@@ -129,7 +134,9 @@ export default function ItemForm({
 					/>
 				</Form.Group>
 				<Form.Group className="m-1">
-					<Form.Label className="w-auto mx-auto m-2">Tags</Form.Label>
+					<Form.Label className="w-auto mx-auto m-2">
+						{t("itemPage.tags") as string}
+					</Form.Label>
 					<Form.Control
 						size="sm"
 						className="w-auto mx-auto m-2"
@@ -213,7 +220,9 @@ export default function ItemForm({
 						setItem({ ...item, additionalField: fields })
 					}
 				>
-					Send
+					{itemFormState.forEdit
+						? (t("edit") as string)
+						: (t("add") as string)}
 				</Button>
 			</Form>
 		</Offcanvas>

@@ -9,6 +9,9 @@ import Router from "./app/Router";
 import store from "./store/Store";
 import { Provider } from "react-redux";
 
+import "./translations/i18n";
+import { Container } from "react-bootstrap";
+
 const rootDiv = document.getElementById("root") as HTMLElement;
 
 const root = ReactDOM.createRoot(rootDiv);
@@ -17,7 +20,9 @@ root.render(
 	<Provider store={store}>
 		<HashRouter basename={"/"}>
 			<NavigationBar />
-			<Router />
+			<Container style={{ marginTop: "5rem" }}>
+				<Router />
+			</Container>
 		</HashRouter>
 	</Provider>
 );

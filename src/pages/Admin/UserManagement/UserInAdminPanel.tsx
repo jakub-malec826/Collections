@@ -9,6 +9,7 @@ import { Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import UserSchemaIF from "../../../interfaces/UserSchemaIF";
+import { useTranslation } from "react-i18next";
 
 interface UserInAdminPanelIF {
 	user: UserSchemaIF;
@@ -22,6 +23,7 @@ export default function UserInAdminPanel({
 	handleCheck,
 }: UserInAdminPanelIF) {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
+	const { t } = useTranslation();
 
 	const dispatch = useStoreDispatch();
 
@@ -58,8 +60,12 @@ export default function UserInAdminPanel({
 					{user.userName}
 				</Link>
 			</td>
-			<td>{user.isAdmin ? "True" : "False"}</td>
-			<td>{user.status}</td>
+			<td>{user.isAdmin ? "✅" : "❌"}</td>
+			<td>
+				{user.status === "active"
+					? (t("adminPage.userManagement.statusActive") as string)
+					: (t("adminPage.userManagement.statusBlocked") as string)}
+			</td>
 		</tr>
 	);
 }

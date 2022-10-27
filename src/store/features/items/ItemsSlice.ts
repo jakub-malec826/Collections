@@ -247,6 +247,6 @@ const ItemsSlice = createSlice({
 	},
 });
 
-export const { deleteItems , deleteTagItems} = ItemsSlice.actions;
+export const { deleteItems, deleteTagItems } = ItemsSlice.actions;
 
 export default ItemsSlice.reducer;

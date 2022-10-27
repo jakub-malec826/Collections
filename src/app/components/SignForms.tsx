@@ -18,6 +18,7 @@ import ValidateFormWithDb from "../../functions/ValidateFormWithDb";
 
 import UserSchemaIF from "../../interfaces/UserSchemaIF";
 import HandleChange from "../../functions/HandleChange";
+
 import { useTranslation } from "react-i18next";
 
 export interface valuesIF {
@@ -53,6 +54,7 @@ export default function SignForms({
 		message: string;
 		body: UserSchemaIF | null;
 	}) => {
+		console.log(data);
 		if (data.message !== "OK") setErr(data.message);
 		else {
 			setErr("");

@@ -1,3 +1,6 @@
+declare var AUTH0_DOMAIN: string;
+declare var AUTH0_CLIENTID: string;
+
 import ReactDOM from "react-dom/client";
 import { HashRouter } from "react-router-dom";
 

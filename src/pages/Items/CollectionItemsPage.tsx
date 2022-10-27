@@ -13,7 +13,7 @@ import {
 	GetItemsFromDb,
 } from "../../store/features/items/ItemsSlice";
 
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import {
 	Button,
@@ -30,6 +30,7 @@ import LikesAdnCollectionFieldForm from "./CollectionFieldForm";
 import ItemSchemaIF from "../../interfaces/ItemSchemaIF";
 import ItemsTableView from "./ItemsTableView";
 import { useTranslation } from "react-i18next";
+import ExportToCsv from "../../functions/ExportToCsv";
 
 export interface ItemStateIF extends ItemSchemaIF {
 	[key: string]: any;
@@ -75,10 +76,12 @@ export default function CollectionItemsPage() {
 
 	const dispatch = useStoreDispatch();
 
+	const nav = useNavigate();
+
 	useEffect(() => {
 		dispatch(
 			GetItemsFromDb({
-				collectionName: collectionName ? collectionName : "",
+				collectionName: collectionName || "",
 				filterText,
 			})
 		);
@@ -99,7 +102,7 @@ export default function CollectionItemsPage() {
 	return (
 		<div className="mx-auto text-center">
 			<ItemForm
-				owner={collectionName ? collectionName : ""}
+				owner={collectionName || ""}
 				itemFormState={itemFormState}
 				setItemFormState={setItemFormState}
 			/>
@@ -131,6 +134,15 @@ export default function CollectionItemsPage() {
 					value={filterText}
 					onChange={(e) => setFilterText(e.target.value)}
 				/>
+				<Button
+					size="sm"
+					variant={theme}
+					onClick={async () =>
+						ExportToCsv(collectionName || "", items)
+					}
+				>
+					Export to csv
+				</Button>
 			</Container>
 
 			<Table

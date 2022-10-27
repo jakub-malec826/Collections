@@ -55,7 +55,7 @@ export default function CollectionForm({
 	useEffect(() => {
 		setColl({
 			...collectionFormState.collection,
-			owner: userName ? userName : "",
+			owner: userName || "",
 		});
 	}, [collectionFormState, setColl]);
 

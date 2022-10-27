@@ -24,7 +24,7 @@ export default function ItemPage() {
 	let fieldList: { fieldName: string; fieldType: string }[] = [];
 
 	useEffect(() => {
-		dispatch(GetTagItems(tagName ? tagName : ""));
+		dispatch(GetTagItems(tagName || ""));
 
 		return () => {
 			dispatch(deleteTagItems());

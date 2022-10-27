@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { Navbar, Nav, Button, Form, Dropdown } from "react-bootstrap";
+import {
+	Navbar,
+	Nav,
+	Button,
+	Form,
+	Dropdown,
+	Container,
+} from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 
 import { useSelector } from "react-redux";
@@ -82,7 +89,13 @@ export default function NavigationBar() {
 				signFormState={signFormState}
 				setSignFormState={setSignFormState}
 			/>
-			<Navbar fixed="top" expand="sm" bg={theme} variant={theme}>
+			<Navbar
+				collapseOnSelect
+				fixed="top"
+				expand="md"
+				bg={theme}
+				variant={theme}
+			>
 				<Navbar.Brand onClick={() => nav("/")}>
 					{t("navigationBar.home") as string}
 				</Navbar.Brand>
@@ -166,21 +179,32 @@ export default function NavigationBar() {
 							</Nav.Link>
 						</Nav.Item>
 					</Nav>
-
 					<Nav
-						className="ms-auto me-1"
+						className="ms-auto"
 						onSelect={(selectedKey) =>
-							selectedKey && nav(selectedKey)
+							selectedKey &&
+							nav(selectedKey, {
+								state: { name: sessUser },
+							})
 						}
 					>
 						{sessUser && (
-							<Navbar.Text>
-								{t("navigationBar.helloUser") as string}
-								<Link to={`/${sessUser}`}>{user.userName}</Link>
-							</Navbar.Text>
+							<Nav.Item>
+								<Nav.Link eventKey={`/${sessUser}`}>
+									{i18n.language === "pl"
+										? (t(
+												"navigationBar.userPage"
+										  ) as string) + sessUser
+										: ((sessUser +
+												t(
+													"navigationBar.userPage"
+												)) as string)}
+								</Nav.Link>
+							</Nav.Item>
 						)}
 						<Nav.Item>
 							<Nav.Link
+								eventKey="/"
 								onClick={() =>
 									setSignFormState({
 										show: true,
@@ -194,6 +218,7 @@ export default function NavigationBar() {
 						</Nav.Item>
 						<Nav.Item>
 							<Nav.Link
+								eventKey="/"
 								onClick={() =>
 									setSignFormState({
 										show: true,

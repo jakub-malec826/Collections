@@ -60,9 +60,7 @@ export default function ItemsTableView({
 				{hideComments && (
 					<ButtonsInTableView
 						tableType="item"
-						setFormState={
-							setItemFormState ? setItemFormState : () => {}
-						}
+						setFormState={setItemFormState || (() => {})}
 						itemElement={itemElement}
 						callback={(value: boolean) => (hideComment = value)}
 					/>

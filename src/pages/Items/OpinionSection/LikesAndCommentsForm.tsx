@@ -48,17 +48,13 @@ export default function LikesAndCommentsForm({ actualItem }: CommentsIF) {
 						!actualItem.likes?.includes(loginUser)
 							? dispatch(
 									AddLikeToDb({
-										itemId: actualItem._id
-											? actualItem._id
-											: "",
+										itemId: actualItem._id || "",
 										loginUser,
 									})
 							  )
 							: dispatch(
 									UnLikeFromDb({
-										itemId: actualItem._id
-											? actualItem._id
-											: "",
+										itemId: actualItem._id || "",
 										loginUser,
 									})
 							  );
@@ -101,7 +97,7 @@ export default function LikesAndCommentsForm({ actualItem }: CommentsIF) {
 						e.preventDefault();
 						dispatch(
 							AddCommentToDb({
-								itemId: actualItem._id ? actualItem._id : "",
+								itemId: actualItem._id || "",
 								comment: {
 									user: loginUser,
 									comment,

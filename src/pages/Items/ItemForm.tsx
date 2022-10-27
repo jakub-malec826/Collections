@@ -75,7 +75,7 @@ export default function ItemForm({
 			dispatch(
 				AddItemToCollection({
 					collectionId: owner,
-					itemId: item._id ? item._id : "",
+					itemId: item._id || "",
 				})
 			);
 		}

@@ -61,7 +61,7 @@ export default function UserCollectionsPage() {
 
 	useEffect(() => {
 		dispatch(
-			GetCollectionData({ userId: userName ? userName : "", filterText })
+			GetCollectionData({ userId: userName || "", filterText })
 		);
 		return () => {
 			dispatch(deleteCollections());

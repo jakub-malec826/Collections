@@ -31,7 +31,6 @@ export default function CollectionTableView({
 	return (
 		<tr
 			onClick={() => {
-				console.log(collectionElement.owner);
 				showItem &&
 					nav(
 						`/${collectionElement.owner}/${collectionElement.name}`

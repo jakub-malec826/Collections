@@ -100,7 +100,7 @@ export default function NavigationBar() {
 					{t("navigationBar.home") as string}
 				</Navbar.Brand>
 
-				<div style={{ width: "8rem" }}>
+				<div style={{ width: "7rem" }}>
 					<Form.Control
 						size="sm"
 						type="text"
@@ -144,7 +144,7 @@ export default function NavigationBar() {
 							setLanguage((old) => (old === "en" ? "pl" : "en"))
 						}
 					>
-						{language === "en" ? "English" : "Polski"}
+						{language === "en" ? "EN" : "PL"}
 					</Button>
 					<Button
 						className="w-auto mx-1"

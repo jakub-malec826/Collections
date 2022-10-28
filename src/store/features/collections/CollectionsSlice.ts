@@ -24,7 +24,8 @@ export const GetCollectionData = createAsyncThunk(
 		return await fetch(
 			`${serverUrl}collections/getall/${userId}${
 				filterText !== "" ? "/" + filterText : ""
-			}`
+			}`,
+			{ mode: "cors" }
 		)
 			.then((res) => res.json())
 			.then((data: CollectionSchemaIF[]) => {
@@ -36,7 +37,7 @@ export const GetCollectionData = createAsyncThunk(
 export const GetBiggestCollectionsData = createAsyncThunk(
 	"collection/biggest",
 	async () => {
-		return await fetch(`${serverUrl}collections/getbiggest`)
+		return await fetch(`${serverUrl}collections/getbiggest`, {mode:"cors"})
 			.then((res) => res.json())
 			.then((data: CollectionSchemaIF[]) => {
 				return data;

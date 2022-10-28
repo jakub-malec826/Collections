@@ -26,7 +26,8 @@ export const GetItemsFromDb = createAsyncThunk(
 		return await fetch(
 			`${serverUrl}items/getall/${collectionName}${
 				filterText !== "" ? "/" + filterText : ""
-			}`
+			}`,
+			{ mode: "cors" }
 		)
 			.then((res) => res.json())
 			.then((data: ItemSchemaIF[]) => {
@@ -36,7 +37,7 @@ export const GetItemsFromDb = createAsyncThunk(
 );
 
 export const GetLastItems = createAsyncThunk("items/lastadded", async () => {
-	return await fetch(`${serverUrl}items/lastadded`)
+	return await fetch(`${serverUrl}items/lastadded`, { mode: "cors" })
 		.then((res) => res.json())
 		.then((data: ItemSchemaIF[]) => {
 			return data;
@@ -46,7 +47,7 @@ export const GetLastItems = createAsyncThunk("items/lastadded", async () => {
 export const GetTagItems = createAsyncThunk(
 	"items/tagitems",
 	async (tagName: string) => {
-		return await fetch(`${serverUrl}items/tagitems/${tagName}`)
+		return await fetch(`${serverUrl}items/tagitems/${tagName}`, {mode:"cors"})
 			.then((res) => res.json())
 			.then((data: ItemSchemaIF[]) => {
 				return data;

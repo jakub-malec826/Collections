@@ -30,10 +30,13 @@ export default function CollectionTableView({
 
 	return (
 		<tr
-			onClick={() =>
+			onClick={() => {
+				console.log(collectionElement.owner);
 				showItem &&
-				nav(`/${collectionElement.owner}/${collectionElement.name}`)
-			}
+					nav(
+						`/${collectionElement.owner}/${collectionElement.name}`
+					);
+			}}
 		>
 			{showButtons && (
 				<ButtonsInTableView

@@ -29,7 +29,12 @@ export default function CollectionTableView({
 	let showItem = true;
 
 	return (
-		<tr onClick={() => showItem && nav(`${collectionElement.name}`)}>
+		<tr
+			onClick={() =>
+				showItem &&
+				nav(`/${collectionElement.owner}/${collectionElement.name}`)
+			}
+		>
 			{showButtons && (
 				<ButtonsInTableView
 					tableType="collection"

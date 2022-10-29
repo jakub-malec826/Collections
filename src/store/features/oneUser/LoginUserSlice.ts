@@ -89,8 +89,10 @@ const LoginUserSlice = createSlice({
 			})
 			.addCase(ValidateFormWithDb.fulfilled, (state, action) => {
 				state.status = "success";
-				console.log(action.payload);
-				state.errMess = action.payload.message;
+				state.errMess =
+					action.payload.message === "OK"
+						? ""
+						: action.payload.message;
 				if (action.payload.body) state.loginUser = action.payload.body;
 			})
 			.addCase(getUserData.fulfilled, (state, action) => {

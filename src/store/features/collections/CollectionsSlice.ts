@@ -22,7 +22,7 @@ export const emptyColl = {
 const initialState = {
 	collections: <CollectionSchemaIF[]>[],
 	biggestCollections: <CollectionSchemaIF[]>[],
-	loading: "idle",
+	status: "idle",
 };
 
 const CollectionsSlice = createSlice({
@@ -35,13 +35,16 @@ const CollectionsSlice = createSlice({
 	},
 	extraReducers(builder) {
 		builder
+			.addCase(GetCollectionData.pending, (state) => {
+				state.status = "loading";
+			})
 			.addCase(GetCollectionData.fulfilled, (state, action) => {
 				state.collections = action.payload;
+				state.status = "success";
 			})
 			.addCase(GetBiggestCollectionsData.fulfilled, (state, action) => {
 				state.biggestCollections = action.payload;
 			})
-
 			.addCase(AddCollectionData.fulfilled, (state, action) => {
 				state.collections.push(action.payload);
 			})

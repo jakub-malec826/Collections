@@ -3,10 +3,6 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { StoreState, useStoreDispatch } from "../../store/Store";
 import { getTopicListFromDb } from "../../store/features/topic/CollectionsTopicSlice";
-import {
-	EditCollection,
-	AddCollectionData,
-} from "../../store/features/collections/CollectionsSlice";
 
 import { useParams } from "react-router-dom";
 
@@ -18,6 +14,7 @@ import CollectionSchemaIF from "../../interfaces/CollectionSchemaIF";
 import HandleChange from "../../functions/HandleChange";
 import { sendImageToCloud } from "../../functions/SendImageToCloud";
 import { useTranslation } from "react-i18next";
+import { EditCollection, AddCollectionData } from "../../store/features/collections/CollectionsThunks";
 
 interface CollectionFormIF {
 	collectionFormState: {

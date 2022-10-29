@@ -100,7 +100,7 @@ export default function NavigationBar() {
 					{t("navigationBar.home") as string}
 				</Navbar.Brand>
 
-				<div style={{ width: "7rem" }}>
+				<div style={{ width: "50vw", maxWidth: "9rem" }}>
 					<Form.Control
 						size="sm"
 						type="text"
@@ -137,7 +137,7 @@ export default function NavigationBar() {
 						))}
 					</Dropdown.Menu>
 				</div>
-				<div>
+				<div className="ms-auto">
 					<Button
 						variant={theme}
 						onClick={() =>

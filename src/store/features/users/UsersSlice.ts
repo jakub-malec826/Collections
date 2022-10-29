@@ -6,6 +6,7 @@ import UserSchemaIF from "../../../interfaces/UserSchemaIF";
 
 const initialState = {
 	users: <UserSchemaIF[]>[],
+	status: "idle",
 };
 
 export const GetAllDataUsers = createAsyncThunk("users/get", async () => {
@@ -51,9 +52,14 @@ const UsersSlice = createSlice({
 		},
 	},
 	extraReducers(builder) {
-		builder.addCase(GetAllDataUsers.fulfilled, (state, action) => {
-			state.users = action.payload;
-		});
+		builder
+			.addCase(GetAllDataUsers.pending, (state) => {
+				state.status = "loading";
+			})
+			.addCase(GetAllDataUsers.fulfilled, (state, action) => {
+				state.users = action.payload;
+				state.status = "success";
+			});
 	},
 });
 

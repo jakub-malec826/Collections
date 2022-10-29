@@ -5,7 +5,7 @@ import { StoreState } from "../../store/Store";
 
 import { useNavigate } from "react-router-dom";
 
-import { Button } from "react-bootstrap";
+import { Button, Container, Spinner } from "react-bootstrap";
 
 import UserManagement from "./UserManagement/UserManagement";
 import CollectionsTopicManagement from "./TopicManagement/CollectionsTopicManagement";
@@ -19,6 +19,7 @@ export default function AdminPanel() {
 	const activeUser = useSelector(
 		(state: StoreState) => state.LoginUserReducer.loginUser
 	);
+
 	const sess = sessionStorage.getItem("user");
 	const nav = useNavigate();
 
@@ -30,24 +31,25 @@ export default function AdminPanel() {
 	// 		nav("/");
 	// 	}
 	// }, [activeUser]);
+	
+		return (
+			<div className="mx-auto text-center">
+				<Button
+					onClick={() => setShowItem((old) => !old)}
+					variant={theme}
+					className="mt-3"
+				>
+					{showItem
+						? (t("adminPage.userManagementButton") as string)
+						: (t("adminPage.topicButton") as string)}
+				</Button>
 
-	return (
-		<div className="mx-auto text-center">
-			<Button
-				onClick={() => setShowItem((old) => !old)}
-				variant={theme}
-				className="mt-3"
-			>
-				{showItem
-					? (t("adminPage.userManagementButton") as string)
-					: (t("adminPage.topicButton") as string)}
-			</Button>
-			<div hidden={showItem}>
-				<UserManagement />
+				<div hidden={showItem}>
+					<UserManagement />
+				</div>
+				<div hidden={!showItem}>
+					<CollectionsTopicManagement />
+				</div>
 			</div>
-			<div hidden={!showItem}>
-				<CollectionsTopicManagement />
-			</div>
-		</div>
-	);
+		);
 }

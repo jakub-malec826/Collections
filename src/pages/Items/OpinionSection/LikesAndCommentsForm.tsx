@@ -6,12 +6,12 @@ import { StoreState, useStoreDispatch } from "../../../store/Store";
 import { Badge, Button, Form, OverlayTrigger, Tooltip } from "react-bootstrap";
 
 import ItemSchemaIF from "../../../interfaces/ItemSchemaIF";
-import { AddCommentToDb } from "../../../store/features/items/ItemsSlice";
 import { useTranslation } from "react-i18next";
 import {
+	AddCommentToDb,
 	AddLikeToDb,
 	UnLikeFromDb,
-} from "../../../store/features/items/ItemsSlice";
+} from "../../../store/features/items/ItemsThunk";
 
 interface CommentsIF {
 	actualItem: ItemSchemaIF;

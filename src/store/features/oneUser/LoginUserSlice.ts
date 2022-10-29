@@ -1,7 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { bold } from "@uiw/react-md-editor";
+import HashPassword from "../../../functions/HashPassword";
 
 import UserSchemaIF from "../../../interfaces/UserSchemaIF";
+import UserSendingDataIF from "../../../interfaces/UserSendingDataIF";
 import serverUrl from "../../serverUrl";
+import { useStoreDispatch } from "../../Store";
+import { useNavigate } from "react-router-dom";
 
 const tempUser: UserSchemaIF = {
 	_id: "",
@@ -15,7 +20,36 @@ const tempUser: UserSchemaIF = {
 
 const initialState = {
 	loginUser: <UserSchemaIF>{},
+	status: "idle",
+	errMess: "",
 };
+
+export const ValidateFormWithDb = createAsyncThunk(
+	"user/sign",
+	async (params: {
+		userData: UserSendingDataIF;
+		formType: string;
+		callback?: Function;
+	}) => {
+		const { userData, formType, callback } = params;
+
+		userData.password = HashPassword(userData.password);
+		return await fetch(`${serverUrl}auth/${formType}`, {
+			method: "Post",
+			mode: "cors",
+			headers: {
+				"Content-type": "application/json",
+			},
+			body: JSON.stringify(userData),
+		})
+			.then((res) => res.json())
+			.then((data: { message: string; body: UserSchemaIF | null }) => {
+				if (data.message === "OK") callback && callback(data);
+
+				return data;
+			});
+	}
+);
 
 export const getUserData = createAsyncThunk(
 	"user/equaluser",
@@ -38,6 +72,9 @@ const LoginUserSlice = createSlice({
 	name: "user",
 	initialState,
 	reducers: {
+		setError: (state, action) => {
+			state.errMess = action.payload;
+		},
 		setLoginUser: (state, action) => {
 			state.loginUser = action.payload;
 		},
@@ -46,12 +83,23 @@ const LoginUserSlice = createSlice({
 		},
 	},
 	extraReducers(builder) {
-		builder.addCase(getUserData.fulfilled, (state, action) => {
-			state.loginUser = action.payload;
-		});
+		builder
+			.addCase(ValidateFormWithDb.pending, (state) => {
+				state.status = "loading";
+			})
+			.addCase(ValidateFormWithDb.fulfilled, (state, action) => {
+				state.status = "success";
+				console.log(action.payload);
+				state.errMess = action.payload.message;
+				if (action.payload.body) state.loginUser = action.payload.body;
+			})
+			.addCase(getUserData.fulfilled, (state, action) => {
+				state.loginUser = action.payload;
+			});
 	},
 });
 
-export const { setLoginUser, deleteloginUser } = LoginUserSlice.actions;
+export const { setLoginUser, deleteloginUser, setError } =
+	LoginUserSlice.actions;
 
 export default LoginUserSlice.reducer;

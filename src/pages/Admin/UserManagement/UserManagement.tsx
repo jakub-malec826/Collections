@@ -8,7 +8,7 @@ import {
 	GetAllDataUsers,
 } from "../../../store/features/users/UsersSlice";
 
-import { Button, ButtonGroup, Form, Table } from "react-bootstrap";
+import { Button, ButtonGroup, Container, Form, Spinner, Table } from "react-bootstrap";
 
 import UserInAdminPanel from "./UserInAdminPanel";
 import { useTranslation } from "react-i18next";
@@ -19,6 +19,8 @@ export default function UserManagement() {
 	const { t } = useTranslation();
 
 	const users = useSelector((state: StoreState) => state.UserReducer.users);
+
+	const status = useSelector((state: StoreState) => state.UserReducer.status);
 
 	const dispatch = useStoreDispatch();
 
@@ -40,61 +42,77 @@ export default function UserManagement() {
 		setIsCheck([...isCheck, id]);
 		if (!checked) setIsCheck(isCheck.filter((i) => i !== id));
 	};
+	if (status === "loading")
+		return (
+			<Container style={{marginTop: "2rem"}}>
+				<Spinner animation="grow" variant="primary" role="status" />
+			</Container>
+		);
+	else
+		return (
+			<div className="mx-auto text-center">
+				<ButtonGroup className="mx-auto mx-3 m-3">
+					<Button
+						variant={theme}
+						onClick={async () => dispatch(changeAdmin(isCheck))}
+					>
+						{
+							t(
+								"adminPage.userManagement.changeAdminPrivilege"
+							) as string
+						}
+					</Button>
+					<Button
+						variant={theme}
+						onClick={async () => dispatch(changeStatus(isCheck))}
+					>
+						{
+							t(
+								"adminPage.userManagement.changeUserStatus"
+							) as string
+						}
+					</Button>
+				</ButtonGroup>
 
-	return (
-		<div className="mx-auto text-center">
-			<ButtonGroup className="mx-auto mx-3 m-3">
-				<Button
+				<Table
+					hover
+					responsive="sm"
 					variant={theme}
-					onClick={async () => dispatch(changeAdmin(isCheck))}
+					className="mx-auto w-auto"
 				>
-					{
-						t(
-							"adminPage.userManagement.changeAdminPrivilege"
-						) as string
-					}
-				</Button>
-				<Button
-					variant={theme}
-					onClick={async () => dispatch(changeStatus(isCheck))}
-				>
-					{t("adminPage.userManagement.changeUserStatus") as string}
-				</Button>
-			</ButtonGroup>
-
-			<Table
-				hover
-				responsive="sm"
-				variant={theme}
-				className="mx-auto w-auto"
-			>
-				<thead>
-					<tr>
-						<th>
-							<Form.Check.Input
-								type="checkbox"
-								checked={checkAll}
-								onChange={handleSelectAll}
+					<thead>
+						<tr>
+							<th>
+								<Form.Check.Input
+									type="checkbox"
+									checked={checkAll}
+									onChange={handleSelectAll}
+								/>
+							</th>
+							<th>{t("user") as string}</th>
+							<th>
+								{
+									t(
+										"adminPage.userManagement.isAdmin"
+									) as string
+								}
+							</th>
+							<th>
+								{t("adminPage.userManagement.status") as string}
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						{users.map((u) => (
+							<UserInAdminPanel
+								key={users.indexOf(u)}
+								user={u}
+								isCheck={isCheck}
+								handleCheck={handleCheck}
 							/>
-						</th>
-						<th>{t("user") as string}</th>
-						<th>
-							{t("adminPage.userManagement.isAdmin") as string}
-						</th>
-						<th>{t("adminPage.userManagement.status") as string}</th>
-					</tr>
-				</thead>
-				<tbody>
-					{users.map((u) => (
-						<UserInAdminPanel
-							key={users.indexOf(u)}
-							user={u}
-							isCheck={isCheck}
-							handleCheck={handleCheck}
-						/>
-					))}
-				</tbody>
-			</Table>
-		</div>
-	);
+						))}
+					</tbody>
+				</Table>
+			</div>
+		);
 }

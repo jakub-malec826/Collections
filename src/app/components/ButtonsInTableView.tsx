@@ -1,16 +1,13 @@
 import { useSelector } from "react-redux";
 import { StoreState, useStoreDispatch } from "../../store/Store";
-import {
-	DeleteCollectionFromDb,
-	DeleteItemFromCollection,
-} from "../../store/features/collections/CollectionsSlice";
 
 import { useParams } from "react-router-dom";
 
 import { Button, ButtonGroup } from "react-bootstrap";
 import CollectionSchemaIF from "../../interfaces/CollectionSchemaIF";
 import ItemSchemaIF from "../../interfaces/ItemSchemaIF";
-import { DeleteItemFromDb } from "../../store/features/items/ItemsSlice";
+import { DeleteCollectionFromDb, DeleteItemFromCollection } from "../../store/features/collections/CollectionsThunks";
+import { DeleteItemFromDb } from "../../store/features/items/ItemsThunk";
 
 interface propsIF {
 	tableType: string;

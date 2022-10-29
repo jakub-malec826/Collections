@@ -1,6 +1,3 @@
-declare var AUTH0_DOMAIN: string;
-declare var AUTH0_CLIENTID: string;
-
 import ReactDOM from "react-dom/client";
 import { HashRouter } from "react-router-dom";
 
@@ -23,7 +20,7 @@ root.render(
 	<Provider store={store}>
 		<HashRouter basename={"/"}>
 			<NavigationBar />
-			<Container style={{ marginTop: "5rem" }}>
+			<Container style={{ marginTop: "13vh" }}>
 				<Router />
 			</Container>
 		</HashRouter>

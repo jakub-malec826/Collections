@@ -9,15 +9,13 @@ import { Button, Form, Offcanvas, OffcanvasHeader } from "react-bootstrap";
 import HandleChange from "../../functions/HandleChange";
 
 import { ItemStateIF } from "./CollectionItemsPage";
-import { AddItemToCollection } from "../../store/features/collections/CollectionsSlice";
-import {
-	emptyItem,
-	EditItemInDb,
-	AddItemToDb,
-} from "../../store/features/items/ItemsSlice";
+
 
 import objectID from "bson-objectid";
 import { useTranslation } from "react-i18next";
+import { AddItemToCollection } from "../../store/features/collections/CollectionsThunks";
+import { emptyItem } from "../../store/features/items/ItemsSlice";
+import { EditItemInDb, AddItemToDb } from "../../store/features/items/ItemsThunk";
 
 interface propsIF {
 	owner: string;

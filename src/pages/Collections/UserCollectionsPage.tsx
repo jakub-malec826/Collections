@@ -5,7 +5,6 @@ import { StoreState, useStoreDispatch } from "../../store/Store";
 import {
 	deleteCollections,
 	emptyColl,
-	GetCollectionData,
 } from "../../store/features/collections/CollectionsSlice";
 
 import { useParams } from "react-router-dom";
@@ -18,6 +17,7 @@ import CollectionTableView from "./CollectionTableView";
 import CollectionSchemaIF from "../../interfaces/CollectionSchemaIF";
 import { useTranslation } from "react-i18next";
 import i18n from "i18next";
+import { GetCollectionData } from "../../store/features/collections/CollectionsThunks";
 
 export default function UserCollectionsPage() {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);

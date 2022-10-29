@@ -1,14 +1,12 @@
-import { Table } from "react-bootstrap";
+import { Container, Spinner, Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { StoreState, useStoreDispatch } from "../../store/Store";
 import ItemsTableView from "./ItemsTableView";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import {
-	deleteTagItems,
-	GetTagItems,
-} from "../../store/features/items/ItemsSlice";
+import { deleteTagItems } from "../../store/features/items/ItemsSlice";
+import { GetTagItems } from "../../store/features/items/ItemsThunk";
 
 export default function ItemPage() {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
@@ -19,6 +17,9 @@ export default function ItemPage() {
 
 	const tagItems = useSelector(
 		(state: StoreState) => state.ItemsReducer.tagItems
+	);
+	const status = useSelector(
+		(state: StoreState) => state.ItemsReducer.status
 	);
 
 	let fieldList: { fieldName: string; fieldType: string }[] = [];
@@ -32,6 +33,13 @@ export default function ItemPage() {
 	}, [dispatch, tagName]);
 
 	tagItems.map((t) => (fieldList = fieldList.concat(t.additionalField)));
+
+	if (status === "loading")
+		return (
+			<Container className="text-center" style={{ marginTop: "50vh" }}>
+				<Spinner animation="grow" variant="primary" role="status" />
+			</Container>
+		);
 
 	return (
 		<Table

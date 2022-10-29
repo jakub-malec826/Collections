@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { useSelector } from "react-redux";
 import { StoreState, useStoreDispatch } from "../../store/Store";
-import { setLoginUser } from "../../store/features/oneUser/LoginUserSlice";
-
-import { useNavigate } from "react-router-dom";
+import {
+	getUserData,
+	ValidateFormWithDb,
+} from "../../store/features/oneUser/LoginUserSlice";
 
 import {
 	Form,
@@ -12,20 +13,16 @@ import {
 	Alert,
 	Offcanvas,
 	OffcanvasHeader,
+	Container,
+	Spinner,
 } from "react-bootstrap";
 
-import ValidateFormWithDb from "../../functions/ValidateFormWithDb";
-
-import UserSchemaIF from "../../interfaces/UserSchemaIF";
 import HandleChange from "../../functions/HandleChange";
 
 import { useTranslation } from "react-i18next";
+import UserSendingDataIF from "../../interfaces/UserSendingDataIF";
+import { useNavigate } from "react-router-dom";
 
-export interface valuesIF {
-	email: string;
-	userName: string;
-	password: string;
-}
 interface SignFormPropsIF {
 	signFormState: { show: boolean; formType: string };
 	setSignFormState: Function;
@@ -41,40 +38,47 @@ export default function SignForms({
 
 	const dispatch = useStoreDispatch();
 
-	const [err, setErr] = useState("");
-	const stateObj: valuesIF = {
+	const nav = useNavigate();
+
+	const stateObj: UserSendingDataIF = {
 		email: "",
 		userName: "",
 		password: "",
 	};
-	const [state, setState] = useState<valuesIF>({ ...stateObj });
-	const nav = useNavigate();
 
-	const SetErrMessCallback = (data: {
-		message: string;
-		body: UserSchemaIF | null;
-	}) => {
-		console.log(data);
-		if (data.message !== "OK") setErr(data.message);
-		else {
-			setErr("");
-			sessionStorage.setItem("user", state.userName);
-			nav(`/${state.userName}`, {
-				state: { name: sessionStorage.getItem("user") },
-			});
-			dispatch(setLoginUser(data.body));
-			setSignFormState({ ...signFormState, show: false });
-		}
-	};
+	const status = useSelector(
+		(state: StoreState) => state.LoginUserReducer.status
+	);
+	const login = useSelector(
+		(state: StoreState) => state.LoginUserReducer.loginUser
+	);
 
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+	const err = useSelector(
+		(state: StoreState) => state.LoginUserReducer.errMess
+	);
+
+	const [state, setState] = useState<UserSendingDataIF>({ ...stateObj });
+
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		await ValidateFormWithDb(
-			state,
-			signFormState.formType,
-			SetErrMessCallback
+		dispatch(
+			ValidateFormWithDb({
+				userData: state,
+				formType: signFormState.formType,
+				callback: (data: {
+					message: string;
+					body: UserSendingDataIF | null;
+				}) => {
+					console.log(data.body?.userName);
+					sessionStorage.setItem("user", data.body?.userName || "");
+					nav(`/${data.body?.userName}`, {
+						state: { name: data.body?.userName },
+					});
+					setSignFormState({ ...signFormState, show: false });
+					setState({ ...stateObj });
+				},
+			})
 		);
-		setState({ ...stateObj });
 	};
 
 	return (
@@ -160,6 +164,11 @@ export default function SignForms({
 						: (t("signUp") as string)}
 				</Button>
 			</Form>
+			{status === "loading" && (
+				<Container className="text-center">
+					<Spinner animation="grow" variant="primary" role="status" />
+				</Container>
+			)}
 		</Offcanvas>
 	);
 }

@@ -60,7 +60,12 @@ export default function HomePage() {
 			<div className="mx-auto text-center mx-3">
 				<div>
 					<h4>{t("homePage.last5") as string}</h4>
-					<Table variant={theme} striped className="w-75 mx-auto m-3">
+					<Table
+						style={{ minWidth: "29rem" }}
+						variant={theme}
+						striped
+						className="w-75 mx-auto m-3"
+					>
 						<thead>
 							<tr>
 								<th>{t("name") as string}</th>

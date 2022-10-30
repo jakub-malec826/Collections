@@ -100,43 +100,6 @@ export default function NavigationBar() {
 					{t("navigationBar.home") as string}
 				</Navbar.Brand>
 
-				<div style={{ width: "50vw", maxWidth: "9rem" }}>
-					<Form.Control
-						size="sm"
-						type="text"
-						name="search"
-						value={searchInput}
-						onChange={(e) => {
-							dispatch(searchInputChange(e.target.value));
-						}}
-						placeholder={t("navigationBar.searchBar")}
-						autoComplete="off"
-					/>
-
-					<Dropdown.Menu show={searchInput !== ""}>
-						{searchOutput.map((o) => (
-							<Dropdown.Item
-								onClick={() => {
-									dispatch(deleteSearching());
-									o.tag
-										? nav(`/items/${searchInput}`)
-										: o.userName
-										? nav(`/${o.userName}`)
-										: nav(`/${o.owner}/${o.name}`);
-								}}
-								key={searchOutput.indexOf(o)}
-							>
-								<strong>
-									{o.tag
-										? (t("item") as string) + o.name
-										: o.userName
-										? (t("user") as string) + o.userName
-										: (t("collection") as string) + o.name}
-								</strong>
-							</Dropdown.Item>
-						))}
-					</Dropdown.Menu>
-				</div>
 				<div className="ms-auto">
 					<Button
 						variant={theme}
@@ -161,7 +124,7 @@ export default function NavigationBar() {
 					</Button>
 					<Navbar.Toggle aria-controls="navbar-collapse-id" />
 				</div>
-				<Navbar.Collapse id="navbar-collapse-id">
+				<Navbar.Collapse id="navbar-collapse-id" className="text-center me-2 mt-2">
 					<Nav
 						onSelect={(selectedKey) =>
 							selectedKey &&
@@ -169,7 +132,47 @@ export default function NavigationBar() {
 								state: { name: sessUser },
 							})
 						}
+
 					>
+						<div style={{ width: "50vw", maxWidth: "9rem"}} className="mx-auto">
+							<Form.Control
+								size="sm"
+								type="text"
+								name="search"
+								value={searchInput}
+								onChange={(e) => {
+									dispatch(searchInputChange(e.target.value));
+								}}
+								placeholder={t("navigationBar.searchBar")}
+								autoComplete="off"
+							/>
+
+							<Dropdown.Menu show={searchInput !== ""}>
+								{searchOutput.map((o) => (
+									<Dropdown.Item
+										onClick={() => {
+											dispatch(deleteSearching());
+											o.tag
+												? nav(`/items/${searchInput}`)
+												: o.userName
+												? nav(`/${o.userName}`)
+												: nav(`/${o.owner}/${o.name}`);
+										}}
+										key={searchOutput.indexOf(o)}
+									>
+										<strong>
+											{o.tag
+												? (t("item") as string) + o.name
+												: o.userName
+												? (t("user") as string) +
+												  o.userName
+												: (t("collection") as string) +
+												  o.name}
+										</strong>
+									</Dropdown.Item>
+								))}
+							</Dropdown.Menu>
+						</div>
 						<Nav.Item>
 							<Nav.Link
 								eventKey={`/${sessUser}/admin`}

@@ -59,12 +59,16 @@ export default function CollectionTableView({
 			</td>
 			<td>{collectionElement.topic}</td>
 			<td>
-				<img
-					src={collectionElement.image.url}
-					alt={t("collectionPage.noImage") as string}
-					width={150}
-					height={100}
-				/>
+				{collectionElement.image.url !== "" ? (
+					<img
+						src={collectionElement.image.url}
+						alt={t("collectionPage.noImage") as string}
+						width={120}
+						height={80}
+					/>
+				) : (
+					<span>{t("collectionPage.noImage") as string}</span>
+				)}
 			</td>
 		</tr>
 	);

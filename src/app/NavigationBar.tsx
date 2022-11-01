@@ -18,7 +18,7 @@ import {
 import { useTranslation } from "react-i18next";
 import i18n from "../translations/i18n";
 
-import { Navbar, Nav, Button, Form, Dropdown, Modal } from "react-bootstrap";
+import { Navbar, Nav, Button, Form, Dropdown } from "react-bootstrap";
 
 import SignForms from "./SignForms";
 import WarningModal from "../components/WarningModal";
@@ -81,7 +81,7 @@ export default function NavigationBar() {
 		if (user.status === "blocked") {
 			setShowModal(true);
 		}
-		if (sessUser !== null && user.userName === undefined) {
+		if (sessUser !== null && user && user.userName === undefined) {
 			handleCloseModal();
 		}
 	}, [user]);

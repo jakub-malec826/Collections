@@ -59,6 +59,8 @@ export default function NavigationBar() {
 	const handleCloseModal = () => {
 		setShowModal(false);
 		sessionStorage.clear();
+		nav("/");
+		dispatch(deleteloginUser());
 	};
 
 	useEffect(() => {

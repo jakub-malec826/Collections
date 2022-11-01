@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { useSelector } from "react-redux";
-import { StoreState, useStoreDispatch } from "../../store/Store";
-import {
-	getUserData,
-	ValidateFormWithDb,
-} from "../../store/features/oneUser/LoginUserSlice";
+import { StoreState, useStoreDispatch } from "../store/Store";
+import { ValidateFormWithDb } from "../store/features/oneUser/LoginUserSlice";
+
+import { useNavigate } from "react-router-dom";
+
+import { useTranslation } from "react-i18next";
 
 import {
 	Form,
@@ -17,40 +18,28 @@ import {
 	Spinner,
 } from "react-bootstrap";
 
-import HandleChange from "../../functions/HandleChange";
-
-import { useTranslation } from "react-i18next";
-import UserSendingDataIF from "../../interfaces/UserSendingDataIF";
-import { useNavigate } from "react-router-dom";
+import UserSendingDataIF from "../interfaces/UserSendingDataIF";
+import HandleChange from "../functions/HandleChange";
+import WaitingSpinner from "../components/WaitingSpinner";
 
 interface SignFormPropsIF {
 	signFormState: { show: boolean; formType: string };
 	setSignFormState: Function;
 }
 
+const stateObj: UserSendingDataIF = {
+	email: "",
+	userName: "",
+	password: "",
+};
+
 export default function SignForms({
 	signFormState,
 	setSignFormState,
 }: SignFormPropsIF) {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
-
-	const { t } = useTranslation();
-
-	const dispatch = useStoreDispatch();
-
-	const nav = useNavigate();
-
-	const stateObj: UserSendingDataIF = {
-		email: "",
-		userName: "",
-		password: "",
-	};
-
 	const status = useSelector(
 		(state: StoreState) => state.LoginUserReducer.status
-	);
-	const login = useSelector(
-		(state: StoreState) => state.LoginUserReducer.loginUser
 	);
 
 	const err = useSelector(
@@ -58,6 +47,10 @@ export default function SignForms({
 	);
 
 	const [state, setState] = useState<UserSendingDataIF>({ ...stateObj });
+
+	const { t } = useTranslation();
+	const dispatch = useStoreDispatch();
+	const nav = useNavigate();
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -69,7 +62,6 @@ export default function SignForms({
 					message: string;
 					body: UserSendingDataIF | null;
 				}) => {
-					console.log(data.body?.userName);
 					sessionStorage.setItem("user", data.body?.userName || "");
 					nav(`/${data.body?.userName}`, {
 						state: { name: data.body?.userName },
@@ -101,6 +93,7 @@ export default function SignForms({
 						? (t("signIn") as string)
 						: (t("signUp") as string)}
 				</h4>
+
 				<Button
 					size="sm"
 					className="d-inline mb-2"
@@ -112,6 +105,7 @@ export default function SignForms({
 					ｘ
 				</Button>
 			</OffcanvasHeader>
+
 			<Form onSubmit={handleSubmit} className="text-center">
 				{err !== "" && (
 					<Alert
@@ -121,6 +115,7 @@ export default function SignForms({
 						{t(`signForms.error.${err}`) as string}
 					</Alert>
 				)}
+
 				{signFormState.formType === "signup" && (
 					<Form.Control
 						size="sm"
@@ -133,6 +128,7 @@ export default function SignForms({
 						required
 					/>
 				)}
+
 				<Form.Control
 					size="sm"
 					className="w-auto mx-auto m-2"
@@ -143,6 +139,7 @@ export default function SignForms({
 					onChange={(e) => HandleChange(e, setState, state)}
 					required
 				/>
+
 				<Form.Control
 					size="sm"
 					className="w-auto mx-auto m-2"
@@ -153,6 +150,7 @@ export default function SignForms({
 					onChange={(e) => HandleChange(e, setState, state)}
 					required
 				/>
+
 				<Button
 					size="sm"
 					type="submit"
@@ -164,11 +162,8 @@ export default function SignForms({
 						: (t("signUp") as string)}
 				</Button>
 			</Form>
-			{status === "loading" && (
-				<Container className="text-center">
-					<Spinner animation="grow" variant="primary" role="status" />
-				</Container>
-			)}
+
+			{status === "loading" && <WaitingSpinner margin="0.1rem" />}
 		</Offcanvas>
 	);
 }

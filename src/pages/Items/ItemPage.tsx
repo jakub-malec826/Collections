@@ -1,45 +1,52 @@
-import { Container, Spinner, Table } from "react-bootstrap";
-import { useSelector } from "react-redux";
-import { StoreState, useStoreDispatch } from "../../store/Store";
-import ItemsTableView from "./ItemsTableView";
-import { useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { deleteTagItems } from "../../store/features/items/ItemsSlice";
+
+import { useSelector } from "react-redux";
 import { GetTagItems } from "../../store/features/items/ItemsThunk";
+import { deleteTagItems } from "../../store/features/items/ItemsSlice";
+import { StoreState, useStoreDispatch } from "../../store/Store";
+
+import { useParams } from "react-router-dom";
+
+import { useTranslation } from "react-i18next";
+
+import { Container, Spinner, Table } from "react-bootstrap";
+
+import ItemsTableView from "./ItemsTableView";
+import WaitingSpinner from "../../components/WaitingSpinner";
 
 export default function ItemPage() {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
-	const { t } = useTranslation();
-	const { tagName } = useParams();
-
-	const dispatch = useStoreDispatch();
-
 	const tagItems = useSelector(
 		(state: StoreState) => state.ItemsReducer.tagItems
 	);
-	const status = useSelector(
-		(state: StoreState) => state.ItemsReducer.status
-	);
+
+	const { t } = useTranslation();
+	const { tagName } = useParams();
+	const dispatch = useStoreDispatch();
 
 	let fieldList: { fieldName: string; fieldType: string }[] = [];
 
+	tagItems.map((t) => {
+		t.additionalField.map((tF) => {
+			!fieldList.find((f) => f.fieldName === tF.fieldName) &&
+				fieldList.push(tF);
+		});
+	});
+
 	useEffect(() => {
-		dispatch(GetTagItems(tagName || ""));
+		dispatch(deleteTagItems());
+	}, [tagName]);
 
+	useEffect(() => {
+		const timer = setInterval(() => {
+			dispatch(GetTagItems(tagName || ""));
+		}, 500);
 		return () => {
-			dispatch(deleteTagItems());
+			clearInterval(timer);
 		};
-	}, [dispatch, tagName]);
+	});
 
-	tagItems.map((t) => (fieldList = fieldList.concat(t.additionalField)));
-
-	if (status === "loading")
-		return (
-			<Container className="text-center" style={{ marginTop: "50vh" }}>
-				<Spinner animation="grow" variant="primary" role="status" />
-			</Container>
-		);
+	if (tagItems.length === 0) return <WaitingSpinner margin="50vh" />;
 
 	return (
 		<Table
@@ -55,15 +62,12 @@ export default function ItemPage() {
 					<th>Id</th>
 					<th>{t("name") as string}</th>
 					<th>{t("itemPage.tags") as string}</th>
-					{tagItems.map((t) =>
-						t.additionalField.map((tF) => (
-							<th key={t.additionalField.indexOf(tF)}>
-								{tF.fieldName}
-							</th>
-						))
-					)}
+					{fieldList.map((f) => (
+						<th key={fieldList.indexOf(f)}>{f.fieldName}</th>
+					))}
 				</tr>
 			</thead>
+
 			<tbody>
 				{tagItems.map((t) => (
 					<ItemsTableView

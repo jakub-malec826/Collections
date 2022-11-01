@@ -1,5 +1,3 @@
-import CollectionSchemaIF from "./CollectionSchemaIF";
-
 export default interface UserSchemaIF {
 	_id: string;
 	userName: string;

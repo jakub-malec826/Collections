@@ -1,17 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { useSelector } from "react-redux";
 import { StoreState, useStoreDispatch } from "../../../store/Store";
-
-import { Badge, Button, Form, OverlayTrigger, Tooltip } from "react-bootstrap";
-
-import ItemSchemaIF from "../../../interfaces/ItemSchemaIF";
-import { useTranslation } from "react-i18next";
 import {
 	AddCommentToDb,
 	AddLikeToDb,
 	UnLikeFromDb,
 } from "../../../store/features/items/ItemsThunk";
+
+import { useTranslation } from "react-i18next";
+
+import { Badge, Button, Form, OverlayTrigger, Tooltip } from "react-bootstrap";
+
+import ItemSchemaIF from "../../../interfaces/ItemSchemaIF";
 
 interface CommentsIF {
 	actualItem: ItemSchemaIF;
@@ -19,19 +20,17 @@ interface CommentsIF {
 
 export default function LikesAndCommentsForm({ actualItem }: CommentsIF) {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
-	const { t } = useTranslation();
-
 	const fieldsLenght = useSelector(
 		(state: StoreState) => state.CollectionFieldsReducer.fields.length
 	);
-
 	const loginUser = useSelector(
 		(state: StoreState) => state.LoginUserReducer.loginUser.userName
 	);
 
-	const dispatch = useStoreDispatch();
-
 	const [comment, setComment] = useState<string>("");
+
+	const dispatch = useStoreDispatch();
+	const { t } = useTranslation();
 
 	return (
 		<>
@@ -91,6 +90,7 @@ export default function LikesAndCommentsForm({ actualItem }: CommentsIF) {
 					</OverlayTrigger>
 				</Button>
 			</td>
+
 			<td colSpan={fieldsLenght + 4}>
 				<Form
 					onSubmit={(e) => {
@@ -116,6 +116,7 @@ export default function LikesAndCommentsForm({ actualItem }: CommentsIF) {
 						value={comment}
 						onChange={(e) => setComment(e.target.value)}
 					/>
+
 					<Button
 						size="sm"
 						variant={theme}

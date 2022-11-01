@@ -4,12 +4,13 @@ import { DeleteTopicFromDb } from "../../../store/features/topic/CollectionsTopi
 
 import { Button } from "react-bootstrap";
 
-export default function TopicOnList({
-	t,
-}: {
+interface propsIF {
 	t: { _id?: string; topic: string };
-}) {
+}
+
+export default function TopicOnList({ t }: propsIF) {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
+
 	const dispatch = useStoreDispatch();
 
 	return (
@@ -24,6 +25,7 @@ export default function TopicOnList({
 					❌
 				</Button>
 			</td>
+			
 			<td>{t.topic}</td>
 		</tr>
 	);

@@ -3,7 +3,7 @@ import { HashRouter } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.css";
 
-import NavigationBar from "./app/components/NavigationBar";
+import NavigationBar from "./app/NavigationBar";
 import Router from "./app/Router";
 
 import store from "./store/Store";

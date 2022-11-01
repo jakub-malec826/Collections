@@ -5,33 +5,46 @@ import { StoreState } from "../../store/Store";
 
 import { useNavigate } from "react-router-dom";
 
-import { Button, Container, Spinner } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
+
+import { Button } from "react-bootstrap";
 
 import UserManagement from "./UserManagement/UserManagement";
 import CollectionsTopicManagement from "./TopicManagement/CollectionsTopicManagement";
-import { useTranslation } from "react-i18next";
+import WarningModal from "../../components/WarningModal";
 
 export default function AdminPanel() {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
-
-	const { t } = useTranslation();
-
 	const activeUser = useSelector(
 		(state: StoreState) => state.LoginUserReducer.loginUser
 	);
 
 	const sess = sessionStorage.getItem("user");
-	const nav = useNavigate();
 
+	const [showModal, setShowModal] = useState(false);
 	const [showItem, setShowItem] = useState(false);
 
-	// useEffect(() => {
-	// 	if (sess === null || !activeUser.isAdmin) {
-	// 		alert("Nope");
-	// 		nav("/");
-	// 	}
-	// }, [activeUser]);
-	
+	const { t } = useTranslation();
+	const nav = useNavigate();
+
+	const handleHide = () => {
+		setShowModal(false);
+		nav("/");
+	};
+
+	useEffect(() => {
+		if (sess === null || activeUser.isAdmin === false) setShowModal(true);
+	});
+
+	if (showModal)
+		return (
+			<WarningModal
+				type="Admin"
+				showModal={showModal}
+				handleHide={handleHide}
+			/>
+		);
+	else
 		return (
 			<div className="mx-auto text-center">
 				<Button
@@ -47,6 +60,7 @@ export default function AdminPanel() {
 				<div hidden={showItem}>
 					<UserManagement />
 				</div>
+
 				<div hidden={!showItem}>
 					<CollectionsTopicManagement />
 				</div>

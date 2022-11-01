@@ -1,32 +1,25 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { useSelector } from "react-redux";
 import { StoreState, useStoreDispatch } from "../../../store/Store";
-import {
-	getTopicListFromDb,
-	AddTopicToDb,
-} from "../../../store/features/topic/CollectionsTopicSlice";
+import { AddTopicToDb } from "../../../store/features/topic/CollectionsTopicSlice";
+
+import { useTranslation } from "react-i18next";
 
 import { Button, OverlayTrigger, Popover, Form, Table } from "react-bootstrap";
 
 import TopicOnList from "./TopicOnList";
-import { useTranslation } from "react-i18next";
 
 export default function CollectionsTopicManagement() {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
-
-	const { t } = useTranslation();
-
 	const topicList = useSelector(
 		(state: StoreState) => state.CollectionsTopicReducer.topicsList
 	);
-	const dispatch = useStoreDispatch();
-
-	useEffect(() => {
-		dispatch(getTopicListFromDb());
-	}, [dispatch]);
-
+	
 	const [topic, setTopic] = useState("");
+
+	const { t } = useTranslation();
+	const dispatch = useStoreDispatch();
 
 	return (
 		<div>
@@ -69,6 +62,7 @@ export default function CollectionsTopicManagement() {
 									t("adminPage.topics.topicName") as string
 								}
 							/>
+
 							<Button
 								size="sm"
 								className="mt-2"
@@ -88,9 +82,10 @@ export default function CollectionsTopicManagement() {
 					{t("adminPage.topics.addNew") as string}
 				</Button>
 			</OverlayTrigger>
+
 			<Table
 				hover
-				responsive="sm"
+				responsive
 				variant={theme}
 				className="w-25 mx-auto m-3"
 			>

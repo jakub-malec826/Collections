@@ -1,46 +1,48 @@
-import { useEffect } from "react";
-
 import { useSelector } from "react-redux";
 import { StoreState, useStoreDispatch } from "../../../store/Store";
-import { SetDataUsers } from "../../../store/features/users/UsersSlice";
+import {
+	DeleteUser,
+	SetUserPrivileges,
+} from "../../../store/features/users/UsersSlice";
+import { SetUserStatus } from "../../../store/features/users/UsersSlice";
 
-import { Form } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
 
-import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+
+import { Button, Tooltip, OverlayTrigger } from "react-bootstrap";
 
 import UserSchemaIF from "../../../interfaces/UserSchemaIF";
-import { useTranslation } from "react-i18next";
 
 interface UserInAdminPanelIF {
 	user: UserSchemaIF;
-	isCheck: string[];
-	handleCheck: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-export default function UserInAdminPanel({
-	user,
-	isCheck,
-	handleCheck,
-}: UserInAdminPanelIF) {
+export default function UserInAdminPanel({ user }: UserInAdminPanelIF) {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
-	const { t } = useTranslation();
 
 	const dispatch = useStoreDispatch();
-
-	useEffect(() => {
-		dispatch(SetDataUsers(user));
-	}, [dispatch, user]);
+	const nav = useNavigate();
+	const { t } = useTranslation();
 
 	return (
 		<tr>
 			<td>
-				<Form.Check.Input
-					type="checkbox"
-					id={user._id}
-					checked={isCheck.includes(user._id)}
-					onChange={handleCheck}
-				/>
+				<Button
+					onClick={() => {
+						if (user.userName === sessionStorage.getItem("user")) {
+							sessionStorage.clear();
+							nav("/");
+						}
+						dispatch(DeleteUser(user._id));
+					}}
+					variant={theme}
+					size="sm"
+				>
+					❌
+				</Button>
 			</td>
+
 			<td
 				className={
 					sessionStorage.getItem("user") === user.userName
@@ -60,11 +62,74 @@ export default function UserInAdminPanel({
 					{user.userName}
 				</Link>
 			</td>
-			<td>{user.isAdmin ? "✅" : "❌"}</td>
+
 			<td>
-				{user.status === "active"
-					? (t("adminPage.userManagement.statusActive") as string)
-					: (t("adminPage.userManagement.statusBlocked") as string)}
+				<OverlayTrigger
+					placement="bottom"
+					overlay={
+						<Tooltip>
+							{
+								t(
+									"adminPage.userManagement.changeAdminPrivilege"
+								) as string
+							}
+						</Tooltip>
+					}
+				>
+					<Button
+						onClick={() =>
+							dispatch(
+								SetUserPrivileges({
+									user,
+									privileges: !user.isAdmin,
+								})
+							)
+						}
+						variant={theme}
+						size="sm"
+					>
+						{user.isAdmin ? "✅" : "❌"}
+					</Button>
+				</OverlayTrigger>
+			</td>
+			
+			<td>
+				<OverlayTrigger
+					placement="bottom"
+					overlay={
+						<Tooltip>
+							{
+								t(
+									"adminPage.userManagement.changeUserStatus"
+								) as string
+							}
+						</Tooltip>
+					}
+				>
+					<Button
+						onClick={() =>
+							dispatch(
+								SetUserStatus({
+									user,
+									status:
+										user.status === "active"
+											? "blocked"
+											: "active",
+								})
+							)
+						}
+						variant={theme}
+						size="sm"
+					>
+						{user.status === "active"
+							? (t(
+									"adminPage.userManagement.statusActive"
+							  ) as string)
+							: (t(
+									"adminPage.userManagement.statusBlocked"
+							  ) as string)}
+					</Button>
+				</OverlayTrigger>
 			</td>
 		</tr>
 	);

@@ -17,40 +17,57 @@ export const GetAllDataUsers = createAsyncThunk("users/get", async () => {
 		});
 });
 
-export const SetDataUsers = createAsyncThunk(
-	"users/set",
-	async (user: UserSchemaIF) => {
-		await fetch(`${serverUrl}users/set/${user._id}`, {
+export const SetUserPrivileges = createAsyncThunk(
+	"users/setprivileges",
+	async (props: { user: UserSchemaIF; privileges: boolean }) => {
+		const { user, privileges } = props;
+		await fetch(`${serverUrl}users/setprivileges/${user._id}`, {
 			method: "put",
 			mode: "cors",
 			headers: {
 				"Content-type": "application/json",
 			},
-			body: JSON.stringify(user),
+			body: JSON.stringify({ privileges }),
 		});
+		return { user, privileges };
+	}
+);
+
+export const SetUserStatus = createAsyncThunk(
+	"users/setstatus",
+	async (props: { user: UserSchemaIF; status: string }) => {
+		const { user, status } = props;
+
+		await fetch(`${serverUrl}users/setstatus/${user._id}`, {
+			method: "put",
+			mode: "cors",
+			headers: {
+				"Content-type": "application/json",
+			},
+			body: JSON.stringify({ status }),
+		});
+		return { user, status };
+	}
+);
+
+export const DeleteUser = createAsyncThunk(
+	"users/delete",
+	async (userId: string) => {
+		await fetch(`${serverUrl}users/delete/${userId}`, {
+			method: "delete",
+			mode: "cors",
+			headers: {
+				"Content-type": "application/json",
+			},
+		});
+		return userId;
 	}
 );
 
 const UsersSlice = createSlice({
 	name: "users",
 	initialState,
-	reducers: {
-		changeStatus: (state, action) => {
-			action.payload.map((u: string) => {
-				const actualUser = state.users.find((user) => user._id === u);
-				if (actualUser)
-					actualUser.status === "active"
-						? (actualUser.status = "blocked")
-						: (actualUser.status = "active");
-			});
-		},
-		changeAdmin: (state, action) => {
-			action.payload.map((u: string) => {
-				const actualUser = state.users.find((user) => user._id === u);
-				if (actualUser) actualUser.isAdmin = !actualUser.isAdmin;
-			});
-		},
-	},
+	reducers: {},
 	extraReducers(builder) {
 		builder
 			.addCase(GetAllDataUsers.pending, (state) => {
@@ -59,10 +76,25 @@ const UsersSlice = createSlice({
 			.addCase(GetAllDataUsers.fulfilled, (state, action) => {
 				state.users = action.payload;
 				state.status = "success";
+			})
+			.addCase(SetUserPrivileges.fulfilled, (state, action) => {
+				const actualUser = state.users.find(
+					(user) => user._id === action.payload.user._id
+				);
+				if (actualUser) actualUser.isAdmin = action.payload.privileges;
+			})
+			.addCase(SetUserStatus.fulfilled, (state, action) => {
+				const actualUser = state.users.find(
+					(user) => user._id === action.payload.user._id
+				);
+				if (actualUser) actualUser.status = action.payload.status;
+			})
+			.addCase(DeleteUser.fulfilled, (state, action) => {
+				state.users = state.users.filter(
+					(u) => u._id !== action.payload
+				);
 			});
 	},
 });
-
-export const { changeStatus, changeAdmin } = UsersSlice.actions;
 
 export default UsersSlice.reducer;

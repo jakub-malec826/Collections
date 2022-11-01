@@ -50,12 +50,30 @@ const ItemsSlice = createSlice({
 				state.collectionItems = action.payload;
 				state.status = "success";
 			})
-			.addCase(GetTagItems.pending, (state) => {
-				state.status = "loading";
-			})
 			.addCase(GetTagItems.fulfilled, (state, action) => {
-				state.tagItems = action.payload;
-				state.status = "success"
+				if (state.tagItems.length > 0)
+					for (let i in state.tagItems) {
+						const tempState = state.tagItems[i];
+						const tempPayload = action.payload[i];
+						if (
+							tempState.comments &&
+							tempPayload.comments &&
+							tempState.comments.length !==
+								tempPayload.comments.length
+						) {
+							tempState.comments = tempPayload.comments;
+						}
+						if (
+							tempState.likes &&
+							tempPayload.likes &&
+							tempState.likes.length !== tempPayload.likes.length
+						) {
+							tempState.likes = tempPayload.likes;
+						}
+					}
+				else {
+					state.tagItems = action.payload;
+				}
 			})
 			.addCase(GetLastItems.pending, (state) => {
 				state.status = "loading";
@@ -64,24 +82,9 @@ const ItemsSlice = createSlice({
 				state.lastItems = action.payload;
 				state.status = "success";
 			})
+
 			.addCase(AddItemToDb.fulfilled, (state, action) => {
 				state.collectionItems.push(action.payload);
-			})
-			.addCase(EditItemInDb.fulfilled, (state, action) => {
-				const activeItem = state.collectionItems.find(
-					(i) => i._id === action.payload._id
-				);
-				if (activeItem)
-					state.collectionItems.splice(
-						state.collectionItems.indexOf(activeItem),
-						1,
-						action.payload
-					);
-			})
-			.addCase(DeleteItemFromDb.fulfilled, (state, action) => {
-				state.collectionItems = state.collectionItems.filter(
-					(i) => i._id !== action.payload
-				);
 			})
 			.addCase(AddCommentToDb.fulfilled, (state, action) => {
 				const activeItem = state.collectionItems.find(
@@ -105,6 +108,23 @@ const ItemsSlice = createSlice({
 				);
 				if (activeTagItem)
 					activeTagItem.likes.push(action.payload.loginUser);
+			})
+
+			.addCase(EditItemInDb.fulfilled, (state, action) => {
+				const activeItem = state.collectionItems.find(
+					(i) => i._id === action.payload._id
+				);
+				if (activeItem)
+					state.collectionItems.splice(
+						state.collectionItems.indexOf(activeItem),
+						1,
+						action.payload
+					);
+			})
+			.addCase(DeleteItemFromDb.fulfilled, (state, action) => {
+				state.collectionItems = state.collectionItems.filter(
+					(i) => i._id !== action.payload
+				);
 			})
 			.addCase(UnLikeFromDb.fulfilled, (state, action) => {
 				const activeItem = state.collectionItems.find(

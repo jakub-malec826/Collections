@@ -1,69 +1,65 @@
 import { useEffect, useState } from "react";
-import {
-	Navbar,
-	Nav,
-	Button,
-	Form,
-	Dropdown,
-	Container,
-} from "react-bootstrap";
-import { useNavigate, Link } from "react-router-dom";
+
+import { useNavigate } from "react-router-dom";
 
 import { useSelector } from "react-redux";
-import { StoreState, useStoreDispatch } from "../../store/Store";
-
-import SignForms from "./SignForms";
+import { StoreState, useStoreDispatch } from "../store/Store";
 import {
 	deleteloginUser,
 	getUserData,
-} from "../../store/features/oneUser/LoginUserSlice";
-import { changeTheme } from "../../store/features/theme/ThemeSlice";
+} from "../store/features/oneUser/LoginUserSlice";
+import { changeTheme } from "../store/features/theme/ThemeSlice";
 import {
 	searchInputChange,
 	SearchInBase,
 	deleteSearching,
-} from "../../store/features/searching/SearchBarSlice";
+} from "../store/features/searching/SearchBarSlice";
+
 import { useTranslation } from "react-i18next";
-import i18n from "../../translations/i18n";
+import i18n from "../translations/i18n";
+
+import { Navbar, Nav, Button, Form, Dropdown, Modal } from "react-bootstrap";
+
+import SignForms from "./SignForms";
+import WarningModal from "../components/WarningModal";
 
 export default function NavigationBar() {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
-
-	const { t } = useTranslation();
+	const searchInput = useSelector(
+		(state: StoreState) => state.SearchBarReducer.searchInput
+	);
+	const searchOutput = useSelector(
+		(state: StoreState) => state.SearchBarReducer.searchOutput
+	);
+	const user = useSelector(
+		(state: StoreState) => state.LoginUserReducer.loginUser
+	);
 
 	const localStorageLang = localStorage.getItem("language");
+	const sessUser = sessionStorage.getItem("user");
 
 	const [language, setLanguage] = useState(
 		localStorageLang ? localStorageLang : "en"
 	);
+	const [isHidden, setIsHidden] = useState(true);
+	const [signFormState, setSignFormState] = useState({
+		show: false,
+		formType: "",
+	});
+	const [showModal, setShowModal] = useState(false);
 
-	const searchInput = useSelector(
-		(state: StoreState) => state.SearchBarReducer.searchInput
-	);
-
-	const searchOutput = useSelector(
-		(state: StoreState) => state.SearchBarReducer.searchOutput
-	);
+	const dispatch = useStoreDispatch();
+	const nav = useNavigate();
+	const { t } = useTranslation();
 
 	document.body.style.backgroundColor =
 		theme === "dark" ? "rgb(12,20,29)" : "white";
 	document.body.style.color = theme === "dark" ? "rgb(230,230,230)" : "black";
 
-	const [isHidden, setIsHidden] = useState(true);
-	const nav = useNavigate();
-
-	const dispatch = useStoreDispatch();
-
-	const [signFormState, setSignFormState] = useState({
-		show: false,
-		formType: "",
-	});
-
-	const user = useSelector(
-		(state: StoreState) => state.LoginUserReducer.loginUser
-	);
-
-	const sessUser = sessionStorage.getItem("user");
+	const handleCloseModal = () => {
+		setShowModal(false);
+		sessionStorage.clear();
+	};
 
 	useEffect(() => {
 		localStorage.setItem("language", language);
@@ -71,24 +67,40 @@ export default function NavigationBar() {
 	}, [language]);
 
 	useEffect(() => {
+		const timer = setInterval(() => {
+			sessUser !== null && dispatch(getUserData(sessUser));
+			if (user.status === "blocked") setShowModal(true);
+		}, 200);
+		return () => {
+			clearInterval(timer);
+		};
+	});
+
+	useEffect(() => {
 		if (searchInput !== "") dispatch(SearchInBase(searchInput));
 	}, [searchInput, dispatch]);
 
 	useEffect(() => {
-		if (sessUser === null) {
+		if (sessUser === null || user.userName === undefined) {
 			setIsHidden(true);
 		} else {
 			setIsHidden(false);
-			dispatch(getUserData(sessUser));
 		}
-	}, [sessUser, dispatch]);
+	}, [sessUser, user]);
 
 	return (
 		<>
+			<WarningModal
+				type="Status"
+				showModal={showModal}
+				handleHide={handleCloseModal}
+			/>
+
 			<SignForms
 				signFormState={signFormState}
 				setSignFormState={setSignFormState}
 			/>
+
 			<Navbar
 				collapseOnSelect
 				fixed="top"
@@ -122,9 +134,14 @@ export default function NavigationBar() {
 					>
 						{theme === "light" ? "🌕" : "🌑"}
 					</Button>
+
 					<Navbar.Toggle aria-controls="navbar-collapse-id" />
 				</div>
-				<Navbar.Collapse id="navbar-collapse-id" className="text-center me-2 mt-2">
+
+				<Navbar.Collapse
+					id="navbar-collapse-id"
+					className="text-center me-2 mt-2"
+				>
 					<Nav
 						onSelect={(selectedKey) =>
 							selectedKey &&
@@ -132,9 +149,15 @@ export default function NavigationBar() {
 								state: { name: sessUser },
 							})
 						}
-
 					>
-						<div style={{ width: "50vw", maxWidth: "9rem"}} className="mx-auto">
+						<div
+							style={{
+								width: "50vw",
+								maxWidth: "12rem",
+								position: "relative",
+							}}
+							className="mx-auto"
+						>
 							<Form.Control
 								size="sm"
 								type="text"
@@ -147,17 +170,26 @@ export default function NavigationBar() {
 								autoComplete="off"
 							/>
 
-							<Dropdown.Menu show={searchInput !== ""}>
+							<Dropdown.Menu
+								style={{
+									position: "absolute",
+									overflow: "auto",
+									maxWidth: "12rem",
+								}}
+								show={searchInput !== ""}
+							>
 								{searchOutput.map((o) => (
 									<Dropdown.Item
-										onClick={() => {
-											dispatch(deleteSearching());
+										eventKey={
 											o.tag
-												? nav(`/items/${searchInput}`)
+												? `/items/${o.name}`
 												: o.userName
-												? nav(`/${o.userName}`)
-												: nav(`/${o.owner}/${o.name}`);
-										}}
+												? `/${o.userName}`
+												: `/${o.owner}/${o.name}`
+										}
+										onClick={() =>
+											dispatch(deleteSearching())
+										}
 										key={searchOutput.indexOf(o)}
 									>
 										<strong>
@@ -173,6 +205,7 @@ export default function NavigationBar() {
 								))}
 							</Dropdown.Menu>
 						</div>
+
 						<Nav.Item>
 							<Nav.Link
 								eventKey={`/${sessUser}/admin`}
@@ -182,6 +215,7 @@ export default function NavigationBar() {
 							</Nav.Link>
 						</Nav.Item>
 					</Nav>
+
 					<Nav
 						className="ms-auto"
 						onSelect={(selectedKey) =>
@@ -205,6 +239,7 @@ export default function NavigationBar() {
 								</Nav.Link>
 							</Nav.Item>
 						)}
+
 						<Nav.Item>
 							<Nav.Link
 								eventKey="/"
@@ -219,6 +254,7 @@ export default function NavigationBar() {
 								{t("signIn") as string}
 							</Nav.Link>
 						</Nav.Item>
+
 						<Nav.Item>
 							<Nav.Link
 								eventKey="/"
@@ -233,12 +269,14 @@ export default function NavigationBar() {
 								{t("signUp") as string}
 							</Nav.Link>
 						</Nav.Item>
+
 						<Nav.Item>
 							<Nav.Link
 								eventKey="/"
 								onClick={() => {
 									sessionStorage.clear();
 									dispatch(deleteloginUser());
+									setIsHidden(true);
 								}}
 								hidden={isHidden}
 							>

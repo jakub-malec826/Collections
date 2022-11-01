@@ -1,8 +1,8 @@
-import { useRoutes, useParams } from "react-router-dom";
+import { useRoutes } from "react-router-dom";
 
 import HomePage from "../pages/Home/HomePage";
-import UserCollectionsPage from "../pages/Collections/UserCollectionsPage";
 import AdminPanel from "../pages/Admin/AdminPanel";
+import UserCollectionsPage from "../pages/Collections/UserCollectionsPage";
 import CollectionItemsPage from "../pages/Items/CollectionItemsPage";
 import ItemPage from "../pages/Items/ItemPage";
 

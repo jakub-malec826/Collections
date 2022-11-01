@@ -36,9 +36,12 @@ export default async function ExportToCsv(
 			.join("\n");
 
 	const encodedUri = encodeURI(csv);
+
 	const link = document.createElement("a");
+
 	link.setAttribute("href", encodedUri);
 	link.setAttribute("download", `${collectionName}.csv`);
+
 	document.body.appendChild(link);
 
 	link.click();

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import MarkdownEditor from "@uiw/react-markdown-editor";
 
 import CollectionSchemaIF from "../../interfaces/CollectionSchemaIF";
-import ButtonsInTableView from "../../app/components/ButtonsInTableView";
+import ButtonsInTableView from "../../components/ButtonsInTableView";
 import { useTranslation } from "react-i18next";
 
 interface UserColViewIF {
@@ -22,9 +22,8 @@ export default function CollectionTableView({
 }: UserColViewIF) {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
 
-	const { t } = useTranslation();
-
 	const nav = useNavigate();
+	const { t } = useTranslation();
 
 	let showItem = true;
 

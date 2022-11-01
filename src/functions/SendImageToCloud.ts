@@ -1,6 +1,7 @@
-import CollectionSchemaIF from "../interfaces/CollectionSchemaIF";
 declare var REACT_APP_UPLOAD_PRESET: string;
 declare var REACT_APP_CLOUD_NAME: string;
+
+import CollectionSchemaIF from "../interfaces/CollectionSchemaIF";
 
 export const sendImageToCloud = async (
 	image: File,

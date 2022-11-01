@@ -3,12 +3,13 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { StoreState, useStoreDispatch } from "../../store/Store";
 
-import ButtonsInTableView from "../../app/components/ButtonsInTableView";
+import { useParams, useNavigate } from "react-router-dom";
+
+import ButtonsInTableView from "../../components/ButtonsInTableView";
 import CommentsView from "./OpinionSection/CommentsView";
 import LikesAndCommentsForm from "./OpinionSection/LikesAndCommentsForm";
 
 import ItemSchemaIF from "../../interfaces/ItemSchemaIF";
-import { useParams, useNavigate } from "react-router-dom";
 
 interface propsIF {
 	itemElement: ItemSchemaIF;
@@ -27,13 +28,11 @@ export default function ItemsTableView({
 		(state: StoreState) => state.LoginUserReducer.loginUser.userName
 	);
 
-	const dispatch = useStoreDispatch();
-
-	const nav = useNavigate();
-
-	const { itemName, tagName } = useParams();
-
 	const [showCommentForm, setShowCommentForm] = useState(true);
+
+	const dispatch = useStoreDispatch();
+	const nav = useNavigate();
+	const { itemName, tagName } = useParams();
 
 	let hideComment = true;
 
@@ -121,9 +120,11 @@ export default function ItemsTableView({
 					</>
 				)}
 			</tr>
+
 			<tr hidden={showCommentForm ? true : hideComments}>
 				<LikesAndCommentsForm actualItem={itemElement} />
 			</tr>
+
 			{itemElement?.comments?.map((com) => (
 				<tr
 					key={itemElement.comments?.indexOf(com)}

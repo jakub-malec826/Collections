@@ -7,23 +7,24 @@ import {
 	setFields,
 } from "../../store/features/collectionFields/CollectionFieldsSlice";
 
+import { useTranslation } from "react-i18next";
+
 import { Button, Form, Popover } from "react-bootstrap";
 
 import HandleChange from "../../functions/HandleChange";
-import { useTranslation } from "react-i18next";
+
+const types = ["text", "number", "textarea", "checkbox", "date"];
 
 export default function CollectionFieldForm() {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
-	const { t } = useTranslation();
 	const [state, setState] = useState({
 		fieldName: "",
 		fieldType: "",
 	});
 
 	const dispatch = useDispatch();
+	const { t } = useTranslation();
 
-	const types = ["text", "number", "textarea", "checkbox", "date"];
-	("use strict");
 	return (
 		<Popover.Body
 			style={
@@ -55,6 +56,7 @@ export default function CollectionFieldForm() {
 					value={state.fieldName}
 					onChange={(e) => HandleChange(e, setState, state)}
 				/>
+
 				<Form.Select
 					size="sm"
 					className="w-auto mx-auto m-2"
@@ -69,6 +71,7 @@ export default function CollectionFieldForm() {
 						</option>
 					))}
 				</Form.Select>
+
 				<Button size="sm" variant={theme} type="submit" className="m-1">
 					{t("add") as string}
 				</Button>

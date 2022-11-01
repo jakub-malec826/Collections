@@ -3,19 +3,23 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { StoreState, useStoreDispatch } from "../../store/Store";
 import { deleteFields } from "../../store/features/collectionFields/CollectionFieldsSlice";
+import { AddItemToCollection } from "../../store/features/collections/CollectionsThunks";
+import { emptyItem } from "../../store/features/items/ItemsSlice";
+import {
+	EditItemInDb,
+	AddItemToDb,
+} from "../../store/features/items/ItemsThunk";
+
+import { useParams } from "react-router-dom";
+
+import { useTranslation } from "react-i18next";
 
 import { Button, Form, Offcanvas, OffcanvasHeader } from "react-bootstrap";
 
-import HandleChange from "../../functions/HandleChange";
-
 import { ItemStateIF } from "./CollectionItemsPage";
 
-
+import HandleChange from "../../functions/HandleChange";
 import objectID from "bson-objectid";
-import { useTranslation } from "react-i18next";
-import { AddItemToCollection } from "../../store/features/collections/CollectionsThunks";
-import { emptyItem } from "../../store/features/items/ItemsSlice";
-import { EditItemInDb, AddItemToDb } from "../../store/features/items/ItemsThunk";
 
 interface propsIF {
 	owner: string;
@@ -29,39 +33,15 @@ export default function ItemForm({
 	setItemFormState,
 }: propsIF) {
 	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
-	const { t } = useTranslation();
-	const loginUser = useSelector(
-		(state: StoreState) => state.LoginUserReducer.loginUser.userName
-	);
-
-	const dispatch = useStoreDispatch();
-
 	const fields = useSelector(
 		(state: StoreState) => state.CollectionFieldsReducer.fields
 	);
 
 	const [item, setItem] = useState<ItemStateIF>(emptyItem);
 
-	useEffect(() => {
-		const tempItems: any = { ...itemFormState.item };
-		fields.map(
-			(f) =>
-				(tempItems[f.fieldName.toLowerCase()] =
-					f.fieldType !== "checkbox" ? "" : false)
-		);
-		itemFormState.forEdit
-			? setItem({
-					...tempItems,
-					owner,
-			  })
-			: setItem({
-					...tempItems,
-					_id: objectID(),
-					owner,
-					author: loginUser,
-					date: new Date().toLocaleString(),
-			  });
-	}, [itemFormState]);
+	const dispatch = useStoreDispatch();
+	const { t } = useTranslation();
+	const { userName } = useParams();
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -83,6 +63,27 @@ export default function ItemForm({
 		setItemFormState({ ...itemFormState, show: false });
 	};
 
+	useEffect(() => {
+		const tempItems: any = { ...itemFormState.item };
+		fields.map(
+			(f) =>
+				(tempItems[f.fieldName.toLowerCase()] =
+					f.fieldType !== "checkbox" ? "" : false)
+		);
+		itemFormState.forEdit
+			? setItem({
+					...tempItems,
+					owner,
+			  })
+			: setItem({
+					...tempItems,
+					_id: objectID(),
+					owner,
+					author: userName,
+					date: new Date().toLocaleString(),
+			  });
+	}, [itemFormState]);
+
 	return (
 		<Offcanvas
 			style={
@@ -102,6 +103,7 @@ export default function ItemForm({
 						? (t("itemPage.itemForm.edit") as string)
 						: (t("itemPage.itemForm.add") as string)}
 				</h3>
+
 				<Button
 					size="sm"
 					className="d-inline mb-2"
@@ -131,6 +133,7 @@ export default function ItemForm({
 						onChange={(e) => HandleChange(e, setItem, item)}
 					/>
 				</Form.Group>
+
 				<Form.Group className="m-1">
 					<Form.Label className="w-auto mx-auto m-2">
 						{t("itemPage.tags") as string}
@@ -150,6 +153,7 @@ export default function ItemForm({
 						}
 					/>
 				</Form.Group>
+
 				<Form.Group className="m-1">
 					{fields.map((f) =>
 						f.fieldType === "checkbox" ? (

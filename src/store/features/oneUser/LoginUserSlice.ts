@@ -1,12 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { bold } from "@uiw/react-md-editor";
 import HashPassword from "../../../functions/HashPassword";
 
 import UserSchemaIF from "../../../interfaces/UserSchemaIF";
 import UserSendingDataIF from "../../../interfaces/UserSendingDataIF";
 import serverUrl from "../../serverUrl";
-import { useStoreDispatch } from "../../Store";
-import { useNavigate } from "react-router-dom";
 
 const tempUser: UserSchemaIF = {
 	_id: "",
@@ -95,6 +92,7 @@ const LoginUserSlice = createSlice({
 						: action.payload.message;
 				if (action.payload.body) state.loginUser = action.payload.body;
 			})
+
 			.addCase(getUserData.fulfilled, (state, action) => {
 				state.loginUser = action.payload;
 			});

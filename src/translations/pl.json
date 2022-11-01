@@ -25,12 +25,17 @@
 		},
 		"userManagement": {
 			"changeAdminPrivilege": "Zmień uprawnienia admina",
-			"changeUserStatus": "Zablokuj / odblokuj",
+			"changeUserStatus": "Zmień stan użytkownika",
 			"isAdmin": "Uprawnienia admina",
 			"status": "Stan",
 			"statusActive": "aktywny",
 			"statusBlocked": "zablokowany"
 		}
+	},
+	"alert": {
+		"head": "Uwaga",
+		"bodyAdmin": "Odebrano Ci status admina. Nie masz uprawnień do zostania na tej stronie.",
+		"bodyStatus": "Zostałeś zablokowany. Skontaktuj się z jednym z adminów w celu wyjaśnienia."
 	},
 	"homePage": {
 		"last5": "Ostatnio dodane przedmioty",

@@ -25,12 +25,17 @@
 		},
 		"userManagement": {
 			"changeAdminPrivilege": "Change admin's privilege",
-			"changeUserStatus": "Block / unblock",
+			"changeUserStatus": "Change user status",
 			"isAdmin": "Admin privilege",
 			"status": "Status",
 			"statusActive": "active",
 			"statusBlocked": "blocked"
 		}
+	},
+	"alert": {
+		"head": "Warning",
+		"bodyAdmin": "You admin status has been revoked. You have not privleged to stay on this page.",
+		"bodyStatus": "You have been blocked. Contact one of admins to clarification"
 	},
 	"homePage": {
 		"last5": "Last added items",

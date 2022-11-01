@@ -3,11 +3,15 @@ import { useDispatch } from "react-redux";
 
 import UserReducer from "./features/users/UsersSlice";
 import LoginUserReducer from "./features/oneUser/LoginUserSlice";
+
 import CollectionFieldsReducer from "./features/collectionFields/CollectionFieldsSlice";
 import CollectionsTopicReducer from "./features/topic/CollectionsTopicSlice";
+
 import ThemeReducer from "./features/theme/ThemeSlice";
+
 import CollectionsReducer from "./features/collections/CollectionsSlice";
 import ItemsReducer from "./features/items/ItemsSlice";
+
 import TagsReducer from "./features/tags/TagsSlice";
 import SearchBarReducer from "./features/searching/SearchBarSlice";
 

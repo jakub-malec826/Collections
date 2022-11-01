@@ -1,13 +1,17 @@
 import { useSelector } from "react-redux";
-import { StoreState, useStoreDispatch } from "../../store/Store";
+import { StoreState, useStoreDispatch } from "../store/Store";
+import {
+	DeleteCollectionFromDb,
+	DeleteItemFromCollection,
+} from "../store/features/collections/CollectionsThunks";
+import { DeleteItemFromDb } from "../store/features/items/ItemsThunk";
 
 import { useParams } from "react-router-dom";
 
 import { Button, ButtonGroup } from "react-bootstrap";
-import CollectionSchemaIF from "../../interfaces/CollectionSchemaIF";
-import ItemSchemaIF from "../../interfaces/ItemSchemaIF";
-import { DeleteCollectionFromDb, DeleteItemFromCollection } from "../../store/features/collections/CollectionsThunks";
-import { DeleteItemFromDb } from "../../store/features/items/ItemsThunk";
+
+import CollectionSchemaIF from "../interfaces/CollectionSchemaIF";
+import ItemSchemaIF from "../interfaces/ItemSchemaIF";
 
 interface propsIF {
 	tableType: string;
@@ -24,14 +28,12 @@ export default function ButtonsInTableView({
 	itemElement,
 	callback,
 }: propsIF) {
+	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
 	const actualUser = useSelector(
 		(state: StoreState) => state.LoginUserReducer.loginUser
 	);
 
 	const dispatch = useStoreDispatch();
-
-	const theme = useSelector((state: StoreState) => state.ThemeReducer.theme);
-
 	const { userName } = useParams();
 
 	const hidden =

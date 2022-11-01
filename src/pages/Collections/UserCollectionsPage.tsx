@@ -47,12 +47,13 @@ export default function UserCollectionsPage() {
 	const { t } = useTranslation();
 	const { userName } = useParams();
 
-	let sortedCollections = [...collections].sort((a, b) =>
-		a[sortMethod.toLowerCase()].toLowerCase() <
-		b[sortMethod.toLowerCase()].toLowerCase()
-			? -1
-			: 1
-	);
+	let sortedCollections = [...collections].sort((a, b) => {
+		if (typeof a[sortMethod] !== "number")
+			return a[sortMethod].toLowerCase() < b[sortMethod].toLowerCase()
+				? -1
+				: 1;
+		else return a[sortMethod] - b[sortMethod];
+	});
 
 	useEffect(() => {
 		dispatch(GetCollectionData({ userId: userName || "", filterText }));

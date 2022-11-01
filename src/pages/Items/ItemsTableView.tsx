@@ -84,13 +84,13 @@ export default function ItemsTableView({
 										{itemElement[f.fieldName] === undefined
 											? ""
 											: typeof itemElement[
-													f.fieldName.toLowerCase()
+													f.fieldName
 											  ] !== "boolean"
 											? itemElement[
-													f.fieldName.toLowerCase()
+													f.fieldName
 											  ]
 											: itemElement[
-													f.fieldName.toLowerCase()
+													f.fieldName
 											  ] === true
 											? "✅"
 											: "❌"}
@@ -105,13 +105,13 @@ export default function ItemsTableView({
 										{itemElement[f.fieldName] === undefined
 											? ""
 											: typeof itemElement[
-													f.fieldName.toLowerCase()
+													f.fieldName
 											  ] !== "boolean"
 											? itemElement[
-													f.fieldName.toLowerCase()
+													f.fieldName
 											  ]
 											: itemElement[
-													f.fieldName.toLowerCase()
+													f.fieldName
 											  ] === true
 											? "✅"
 											: "❌"}

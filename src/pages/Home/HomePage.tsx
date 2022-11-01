@@ -112,7 +112,7 @@ export default function HomePage() {
 					</Table>
 				</div>
 
-				<div className="w-50 mx-auto">
+				<div className="w-75 mx-auto">
 					<TagCloud
 						tags={tagList}
 						maxSize={40}

@@ -53,7 +53,7 @@ export default function CollectionFieldForm() {
 					placeholder={t("itemPage.fieldName") as string}
 					style={{ textTransform: "lowercase" }}
 					required
-					value={state.fieldName}
+					value={state.fieldName.toLowerCase()}
 					onChange={(e) => HandleChange(e, setState, state)}
 				/>
 

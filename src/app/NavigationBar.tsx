@@ -91,12 +91,12 @@ export default function NavigationBar() {
 	}, [searchInput, dispatch]);
 
 	useEffect(() => {
-		if (sessUser === null || user.userName === undefined) {
+		if (sessUser === null) {
 			setIsHidden(true);
 		} else {
 			setIsHidden(false);
 		}
-	}, [sessUser, user]);
+	}, [sessUser]);
 
 	return (
 		<>

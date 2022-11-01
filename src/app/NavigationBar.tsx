@@ -81,9 +81,6 @@ export default function NavigationBar() {
 		if (user.status === "blocked") {
 			setShowModal(true);
 		}
-		if (sessUser !== null && user && user.userName === undefined) {
-			handleCloseModal();
-		}
 	}, [user]);
 
 	useEffect(() => {
@@ -96,7 +93,7 @@ export default function NavigationBar() {
 		} else {
 			setIsHidden(false);
 		}
-	}, [sessUser]);
+	}, [user]);
 
 	return (
 		<>

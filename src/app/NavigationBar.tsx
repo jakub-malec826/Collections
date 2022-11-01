@@ -71,12 +71,20 @@ export default function NavigationBar() {
 	useEffect(() => {
 		const timer = setInterval(() => {
 			sessUser !== null && dispatch(getUserData(sessUser));
-			if (user.status === "blocked") setShowModal(true);
 		}, 200);
 		return () => {
 			clearInterval(timer);
 		};
 	});
+
+	useEffect(() => {
+		if (user.status === "blocked") {
+			setShowModal(true);
+		}
+		if (sessUser !== null && user.userName === undefined) {
+			handleCloseModal();
+		}
+	}, [user]);
 
 	useEffect(() => {
 		if (searchInput !== "") dispatch(SearchInBase(searchInput));

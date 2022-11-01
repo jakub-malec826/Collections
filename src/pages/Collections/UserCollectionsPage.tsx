@@ -27,7 +27,7 @@ export default function UserCollectionsPage() {
 	const collections = useSelector(
 		(state: StoreState) => state.CollectionsReducer.collections
 	);
-	const actualUser = useSelector(
+	const user = useSelector(
 		(state: StoreState) => state.LoginUserReducer.loginUser
 	);
 
@@ -77,11 +77,7 @@ export default function UserCollectionsPage() {
 				<Button
 					size="sm"
 					className="d-inline w-auto mx-1"
-					hidden={
-						userName === actualUser.userName
-							? false
-							: !actualUser.isAdmin
-					}
+					hidden={userName === user.userName ? false : !user.isAdmin}
 					variant="primary"
 					onClick={() =>
 						setCollectionFormState({

@@ -35,7 +35,8 @@
 	"alert": {
 		"head": "Warning",
 		"bodyAdmin": "You admin status has been revoked. You have not privleged to stay on this page.",
-		"bodyStatus": "You have been blocked. Contact one of admins to clarification"
+		"bodyStatus": "You have been blocked. Contact one of admins to clarification",
+		"bodyDeleted": "Your account have been deleted."
 	},
 	"homePage": {
 		"last5": "Last added items",

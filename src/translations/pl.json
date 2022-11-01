@@ -35,7 +35,8 @@
 	"alert": {
 		"head": "Uwaga",
 		"bodyAdmin": "Odebrano Ci status admina. Nie masz uprawnień do zostania na tej stronie.",
-		"bodyStatus": "Zostałeś zablokowany. Skontaktuj się z jednym z adminów w celu wyjaśnienia."
+		"bodyStatus": "Zostałeś zablokowany. Skontaktuj się z jednym z adminów w celu wyjaśnienia.",
+		"bodyDeleted": "Twoje konto zostało usunięte."
 	},
 	"homePage": {
 		"last5": "Ostatnio dodane przedmioty",

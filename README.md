@@ -1,5 +1,4 @@
 # Collections
-
 *Frontend* for web application with **authorizations** for sharing collections with another users, like your collection of books, post-cards etc.
 
 # Stack

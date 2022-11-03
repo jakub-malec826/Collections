@@ -4,7 +4,7 @@ export default async function ExportToCsv(
 	collectionName: string,
 	items: ItemSchemaIF[]
 ) {
-	let i = -1;
+	let i = 0;
 	const csv =
 		"data:text/csv;charset=utf-8," +
 		[
@@ -19,17 +19,17 @@ export default async function ExportToCsv(
 					i < item.additionalField.length - 1 &&
 					item.additionalField.length < items.length
 				)
-					i = i + 1;
+					i++;
 				let tempTags: string = "";
 				item.tag.map((tag) => (tempTags += tag + "."));
-				if (item.additionalField.length !== 0)
+				if (item.additionalField.length !== 0) {
 					return [
 						item._id,
 						item.name,
 						tempTags.slice(0, -1),
-						item[item.additionalField[i].fieldName],
+						item.additionalField.map((m) => item[m.fieldName]),
 					];
-				else return [item._id, item.name, tempTags.slice(0, -1)];
+				} else return [item._id, item.name, tempTags.slice(0, -1)];
 			}),
 		]
 			.map((e) => e.join(","))

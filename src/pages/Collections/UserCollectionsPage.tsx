@@ -49,7 +49,8 @@ export default function UserCollectionsPage() {
 
 	let sortedCollections = [...collections].sort((a, b) => {
 		if (typeof a[sortMethod] !== "number")
-			return a[sortMethod].toLowerCase() < b[sortMethod].toLowerCase()
+			return a[sortMethod.toLowerCase()].toLowerCase() <
+				b[sortMethod.toLowerCase()].toLowerCase()
 				? -1
 				: 1;
 		else return a[sortMethod] - b[sortMethod];

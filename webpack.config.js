@@ -8,7 +8,7 @@ const enviroment =
 	process.env.NODE_ENV === "development" ? "development" : "production";
 
 const apiUrls = {
-	production: "https://courseproject-back.herokuapp.com/",
+	production: "https://collections-backend.herokuapp.com/",
 	development: "http://localhost:9090/",
 };
 
@@ -63,6 +63,12 @@ module.exports = {
 		}),
 		new webpack.DefinePlugin({
 			API_URL: JSON.stringify(apiUrls[enviroment]),
+			REACT_APP_CLOUD_NAME: JSON.stringify(
+				process.env.REACT_APP_CLOUD_NAME
+			),
+			REACT_APP_UPLOAD_PRESET: JSON.stringify(
+				process.env.REACT_APP_UPLOAD_PRESET
+			),
 		}),
 	],
 };

@@ -8,7 +8,7 @@ const enviroment =
 	process.env.NODE_ENV === "development" ? "development" : "production";
 
 const apiUrls = {
-	production: "https://collections-backend.herokuapp.com/",
+	production: "https://collections-backend-h10w.onrender.com/",
 	development: "http://localhost:9090/",
 };
 
